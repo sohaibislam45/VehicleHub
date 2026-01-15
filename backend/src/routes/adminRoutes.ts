@@ -1,8 +1,8 @@
 import express from 'express';
-import { protect, adminOnly } from '../middleware/authMiddleware.ts';
-import User from '../models/User.ts';
-import Vehicle from '../models/Vehicle.ts';
-import Booking from '../models/Booking.ts';
+import { protect, adminOnly } from '../middleware/authMiddleware.js';
+import User from '../models/User.js';
+import Vehicle from '../models/Vehicle.js';
+import Booking from '../models/Booking.js';
 
 const router = express.Router();
 

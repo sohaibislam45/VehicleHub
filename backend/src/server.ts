@@ -1,16 +1,16 @@
 import express from 'express';
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import connectDB from './config/db';
+import connectDB from './config/db.js';
 
 // Routes
-import authRoutes from './routes/authRoutes';
-import vehicleRoutes from './routes/vehicleRoutes';
-import bookingRoutes from './routes/bookingRoutes';
-import adminRoutes from './routes/adminRoutes';
+import authRoutes from './routes/authRoutes.js';
+import vehicleRoutes from './routes/vehicleRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 dotenv.config();
 

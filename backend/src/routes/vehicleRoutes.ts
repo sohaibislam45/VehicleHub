@@ -1,6 +1,6 @@
 import express from 'express';
-import { getVehicles, getVehicleById, createVehicle, updateVehicle, deleteVehicle } from '../controllers/vehicleController.ts';
-import { protect } from '../middleware/authMiddleware.ts';
+import { getVehicles, getVehicleById, createVehicle, updateVehicle, deleteVehicle } from '../controllers/vehicleController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

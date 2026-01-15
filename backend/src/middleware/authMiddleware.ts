@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import admin from 'firebase-admin';
-import User from '../models/User.ts';
+import User from '../models/User.js';
 
 export interface AuthRequest extends Request {
     user?: any;
@@ -13,7 +13,7 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
             token = req.headers.authorization.split(' ')[1];
-            const decodedToken = await admin.auth().verifyIdToken(token);
+            const decodedToken = await admin.auth().verifyIdToken(token as string);
             req.firebaseUid = decodedToken.uid;
             
             // Find user in MongoDB

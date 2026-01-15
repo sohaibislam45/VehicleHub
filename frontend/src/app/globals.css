@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 selection:bg-primary/30;
+    @apply bg-[#121416] text-white selection:bg-[#17bfcf]/30;
     font-family: var(--font-space-grotesk), sans-serif;
   }
 }
@@ -22,6 +22,10 @@
   .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  .layout-padding {
+    @apply px-6 sm:px-8 lg:px-12;
   }
 }
 

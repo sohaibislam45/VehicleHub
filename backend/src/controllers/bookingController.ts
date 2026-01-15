@@ -1,7 +1,7 @@
-import { Response } from 'express';
-import Booking from '../models/Booking.ts';
-import Vehicle from '../models/Vehicle.ts';
-import { AuthRequest } from '../middleware/authMiddleware.ts';
+import type { Response } from 'express';
+import Booking from '../models/Booking.js';
+import Vehicle from '../models/Vehicle.js';
+import type { AuthRequest } from '../middleware/authMiddleware.js';
 
 // @desc Create a booking
 // @route POST /api/bookings

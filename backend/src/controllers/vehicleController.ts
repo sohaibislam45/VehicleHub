@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import Vehicle from '../models/Vehicle.ts';
-import { AuthRequest } from '../middleware/authMiddleware.ts';
+import type { Request, Response } from 'express';
+import Vehicle from '../models/Vehicle.js';
+import type { AuthRequest } from '../middleware/authMiddleware.js';
 
 // @desc Get all vehicles
 // @route GET /api/vehicles

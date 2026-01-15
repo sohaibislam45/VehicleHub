@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import User from '../models/User.ts';
+import type { Request, Response } from 'express';
+import User from '../models/User.js';
 import admin from 'firebase-admin';
 
 export const syncUser = async (req: Request, res: Response) => {
@@ -18,9 +18,9 @@ export const syncUser = async (req: Request, res: Response) => {
         if (!user) {
             user = await User.create({
                 firebaseId: uid,
-                email: email,
+                email: email || '',
                 name: name || 'User',
-                avatar: picture,
+                avatar: picture || '',
                 role: 'user', // Default role
             });
         }

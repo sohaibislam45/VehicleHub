@@ -35,3 +35,12 @@ yarn-error.log*
 # OS files
 .DS_Store
 Thumbs.db
+
+# Project-specific exclusions
+VehicleHub/
+
+# Agent
+.agent
+
+# Secrets
+backend/vehiclehub.json

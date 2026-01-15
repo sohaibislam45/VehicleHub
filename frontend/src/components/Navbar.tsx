@@ -8,7 +8,7 @@ export default function Navbar() {
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-background-dark/80 backdrop-blur-md">
-            <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div className="max-w-7xl mx-auto layout-padding h-20 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="text-primary">
                         <svg
@@ -23,7 +23,7 @@ export default function Navbar() {
                             ></path>
                         </svg>
                     </div>
-                    <Link href="/" className="text-xl font-bold tracking-tighter uppercase">
+                    <Link href="/" className="text-xl font-bold tracking-tighter uppercase text-slate-100">
                         VehicleHub
                     </Link>
                 </div>
@@ -31,25 +31,25 @@ export default function Navbar() {
                 <nav className="hidden md:flex items-center gap-10">
                     <Link
                         href="/fleet"
-                        className="text-sm font-medium hover:text-primary transition-colors"
+                        className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
                     >
                         Fleet
                     </Link>
                     <Link
                         href="/categories"
-                        className="text-sm font-medium hover:text-primary transition-colors"
+                        className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
                     >
                         Categories
                     </Link>
                     <Link
                         href="/concierge"
-                        className="text-sm font-medium hover:text-primary transition-colors"
+                        className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
                     >
                         Concierge
                     </Link>
                     <Link
                         href="/pricing"
-                        className="text-sm font-medium hover:text-primary transition-colors"
+                        className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
                     >
                         Pricing
                     </Link>
@@ -58,14 +58,14 @@ export default function Navbar() {
                 <div className="flex items-center gap-4">
                     {!user ? (
                         <>
-                            <Link href="/login" className="text-sm font-semibold px-5 py-2 hover:text-primary transition-colors">
+                            <Link href="/login" className="text-sm font-semibold px-5 py-2 text-slate-100 hover:text-primary transition-colors">
                                 Login
                             </Link>
                             <Link
                                 href="/register"
                                 className="bg-primary text-background-dark px-6 py-2.5 rounded-full text-sm font-bold tracking-wide hover:brightness-110 transition-all"
                             >
-                                Register
+                                Book Now
                             </Link>
                         </>
                     ) : (
