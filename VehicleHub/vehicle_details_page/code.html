@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vehicle Details | VehicleHub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#17bfcf",
+                        "background-light": "#f0f2f4",
+                        "background-dark": "#18181b",
+                        "surface-dark": "#262629",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-white/5 bg-background-dark/80 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-12">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-white text-xl font-bold tracking-tight">VehicleHub</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Browse</a>
+<a class="text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">Rentals</a>
+<a class="text-slate-400 hover:text-white text-sm font-medium transition-colors" href="#">List Your Vehicle</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center bg-white/5 rounded-full px-4 py-2 border border-white/10">
+<span class="material-symbols-outlined text-slate-400 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm placeholder:text-slate-500 w-48" placeholder="Search destinations..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-5 py-2.5 rounded-xl bg-primary text-background-dark text-sm font-bold transition-transform hover:scale-105">
+                        Sign Up
+                    </button>
+<div class="size-10 rounded-full border-2 border-primary/20 bg-cover bg-center" data-alt="User profile avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYBQX8YqBSRwt40I9YVdPNcNUzNRcOkmspKcHr3r2JzzdRLjOzTeue3tw_C4KSFRMTQogXB95eE_7yEpKoWnjfyafwAnXmiSH-F5z7hKZ73MJEQfSQ_N22fvpsNhp7YrEovrqyh4nmJ-23dEyo6WuM7ig7JU44x33zI3jK6gmYKoqEqsJ0r6hQxm90QlZcMPyX9FwDI-QssQMkjR9zkUh6wpZ_ShqbGxiSFvjWTbQ3Vc6olQFdfeYYwMqycigGv-E6bUeTmGGey1w')"></div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-8">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 mb-8 text-sm font-medium text-slate-500">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Luxury Vehicles</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-white">Tesla Model S Plaid</span>
+</nav>
+<!-- Hero Gallery -->
+<section class="grid grid-cols-12 gap-4 mb-12 h-[500px]">
+<div class="col-span-12 lg:col-span-8 relative group overflow-hidden rounded-3xl bg-surface-dark">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+<div class="absolute bottom-8 left-8 z-20">
+<span class="bg-primary/20 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border border-primary/30">Available Now</span>
+<h1 class="text-4xl font-bold text-white mt-4">Tesla Model S Plaid</h1>
+<p class="text-slate-300 mt-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">location_on</span> Los Angeles, CA
+                    </p>
+</div>
+<div class="w-full h-full bg-center bg-cover transition-transform duration-700 group-hover:scale-105" data-alt="High-end electric vehicle exterior front view" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBlrh9UwyBPsLZaBtVaWyplDKypacQLby3ItqimfIl4JDVisQuvW95wbNoFFOkwU9UymyCdvaGnYI9o1q9AUGeLdHyWgOru4sjUXnODUHfAnetkfnpczCeM_NW-VSnHg7l3PRw9jgrBBy7SI7IYoE9XrWky0AXpffpWk4NR6p5Lf2yY3IGrhdk12fsFH4I1S0ZcGuwYFz9BdrsljHEiCCHm7PsKudC9NM8SlbLJ9lOTqy1iO2t9CONeAd3Ufpgu5yErk-eMSRFTNi0')"></div>
+<div class="absolute top-6 right-6 z-20 flex gap-2">
+<button class="size-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black transition-all">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+<button class="size-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black transition-all">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</div>
+<div class="hidden lg:grid col-span-4 grid-rows-3 gap-4 h-full">
+<div class="rounded-2xl overflow-hidden bg-surface-dark bg-center bg-cover" data-alt="Luxury car interior cockpit view" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAHMQOMp1nBFwWShneArLSiOrmGdh74v3l1ok5pXbCnEYljT8nT3tvmP4nHjnUxfNf7q04Ohfp1scb3XV9gVkUeoz6K-Ver2RmUbymw94fX6ukD96RqEmcnHhR6BLwsqM6tdBET0qyHkBvT7UoUdDR7_DMwumQP_02WtfShRToyIDL4EOdlTCd3ndB9Pr8-JqJVk4bL7lxfBQ9pxjm6wBMADKxGVIqA8sCcyNvxCJEwDDRBx7HDun3nUY4FGvI8iQf_2T1a9IiFoPg')"></div>
+<div class="rounded-2xl overflow-hidden bg-surface-dark bg-center bg-cover" data-alt="Electric car side profile silhouette" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAKnUYqi56gyZV8hSZQp6gbjO4HjjjUBZfRUljiP0WNC_tgkEgG3pLMmTDpE8Bol2-thp_HEF0xSIPNosuwfOMNelx5UoCLd2pP18FlWuzMcV0xAGUYodqnLEzXGKCjpu2V0kmPPjPKw-cHJq-k9TtdhF5vsxVkj7x0z7xFcnPnZuF0OAO9rpnaxZI2UMrIyM0xpOIX8P4_VODqS_XL3NWZI5du3G5Fos0Ndx4cBckJg7rgE1Iw4mo8yDgaKghGY99IVj5S1Rbctz4')"></div>
+<div class="relative rounded-2xl overflow-hidden bg-surface-dark bg-center bg-cover" data-alt="High-performance car wheel detail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAexXHLWkwNAlSKxyvrAKbspqRR02EPD_qKFbrRXjUcdC6BvmO_qkN9oiLwrQMzDu2s6yWuczRz_CNJ7et0UkZ2menkRKM8VsVWY7SFoQp-vkJMktkfqF-rbh-Fijx7AHCOq11fn8PyJGSZOqENGGu1xAKjjU8T7r-MCv4C_NkjSNhlo5k-7b1QPZ0akWzZ_l4zmQdXn6cEwdRT-nUhy344f4RHQrF4tDl8S0xB-mreqcZNe4axc-tU75xC60yYIytDFqBW9yXfTx4')">
+<div class="absolute inset-0 bg-black/60 flex items-center justify-center text-white font-bold cursor-pointer hover:bg-black/40 transition-colors">
+<span class="flex flex-col items-center">
+<span class="material-symbols-outlined text-3xl">gallery_thumbnail</span>
+<span class="mt-2 text-sm">+12 Photos</span>
+</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Content Layout -->
+<div class="grid grid-cols-12 gap-12">
+<!-- Left Column: Details -->
+<div class="col-span-12 lg:col-span-8 space-y-12">
+<!-- Key Stats Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="p-6 rounded-2xl bg-surface-dark border border-white/5 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-3">speed</span>
+<p class="text-xs text-slate-500 uppercase font-bold tracking-widest">Performance</p>
+<p class="text-white font-bold text-lg">1,020 hp</p>
+</div>
+<div class="p-6 rounded-2xl bg-surface-dark border border-white/5 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-3">ev_station</span>
+<p class="text-xs text-slate-500 uppercase font-bold tracking-widest">Range</p>
+<p class="text-white font-bold text-lg">396 mi</p>
+</div>
+<div class="p-6 rounded-2xl bg-surface-dark border border-white/5 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-3">airline_seat_recline_extra</span>
+<p class="text-xs text-slate-500 uppercase font-bold tracking-widest">Seats</p>
+<p class="text-white font-bold text-lg">5 Adults</p>
+</div>
+<div class="p-6 rounded-2xl bg-surface-dark border border-white/5 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-3">settings</span>
+<p class="text-xs text-slate-500 uppercase font-bold tracking-widest">Drive</p>
+<p class="text-white font-bold text-lg">Tri-Motor</p>
+</div>
+</div>
+<!-- Vehicle Overview -->
+<section>
+<h2 class="text-2xl font-bold text-white mb-6">Vehicle Overview</h2>
+<p class="text-slate-400 leading-relaxed text-lg">
+                        The Tesla Model S Plaid is the quickest accelerating car in production today. With 0-60 mph in 1.99 seconds, this vehicle redefines the limits of electric performance. Our Plaid edition comes fully equipped with the 21" Arachnid wheels, Cream premium interior with carbon fiber decor, and the controversial yet futuristic yoke steering wheel. 
+                    </p>
+</section>
+<!-- Rules & Notes -->
+<section class="bg-surface-dark p-8 rounded-3xl border border-white/5">
+<h2 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">gavel</span> Rental Rules &amp; Notes
+                    </h2>
+<ul class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+<li class="flex items-start gap-3 text-slate-400">
+<span class="material-symbols-outlined text-green-500 text-sm mt-1">check_circle</span>
+<span>Supercharging costs are included up to 100 miles.</span>
+</li>
+<li class="flex items-start gap-3 text-slate-400">
+<span class="material-symbols-outlined text-red-500 text-sm mt-1">cancel</span>
+<span>Strictly no smoking or pets allowed inside.</span>
+</li>
+<li class="flex items-start gap-3 text-slate-400">
+<span class="material-symbols-outlined text-green-500 text-sm mt-1">check_circle</span>
+<span>Contactless pickup and dropoff available.</span>
+</li>
+<li class="flex items-start gap-3 text-slate-400">
+<span class="material-symbols-outlined text-red-500 text-sm mt-1">cancel</span>
+<span>Minimum age of 25 required for this category.</span>
+</li>
+</ul>
+</section>
+<!-- Reviews Section -->
+<section>
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-2xl font-bold text-white">Guest Reviews</h2>
+<button class="text-primary text-sm font-bold flex items-center gap-2 hover:underline">
+                            Write a review <span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+<div class="flex flex-col md:flex-row gap-12 p-8 rounded-3xl bg-surface-dark border border-white/5">
+<div class="flex flex-col items-center md:items-start">
+<p class="text-6xl font-black text-white">4.9</p>
+<div class="flex gap-1 my-3">
+<span class="material-symbols-outlined text-primary fill-[1]">star</span>
+<span class="material-symbols-outlined text-primary fill-[1]">star</span>
+<span class="material-symbols-outlined text-primary fill-[1]">star</span>
+<span class="material-symbols-outlined text-primary fill-[1]">star</span>
+<span class="material-symbols-outlined text-primary fill-[1]">star</span>
+</div>
+<p class="text-slate-500 text-sm">Based on 128 reviews</p>
+</div>
+<div class="flex-1 space-y-3">
+<div class="flex items-center gap-4">
+<span class="text-xs text-slate-500 w-4">5</span>
+<div class="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 90%"></div>
+</div>
+<span class="text-xs text-slate-500 w-8 text-right">90%</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs text-slate-500 w-4">4</span>
+<div class="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 6%"></div>
+</div>
+<span class="text-xs text-slate-500 w-8 text-right">6%</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs text-slate-500 w-4">3</span>
+<div class="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 2%"></div>
+</div>
+<span class="text-xs text-slate-500 w-8 text-right">2%</span>
+</div>
+</div>
+</div>
+<!-- Individual Comments -->
+<div class="mt-8 space-y-6">
+<div class="p-6 border-b border-white/5">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-white/5 overflow-hidden bg-cover bg-center" data-alt="Reviewer avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBSFfZsP3kPJ68qQ3ix20vVboo98S8eJkPKyLJLJaQISpVOrcD4yztkKu7E9kC3tDT-SBKCc38VGqc6U3tvG2FyUyf1E_37F5lNfB6BIDjxmaH0Zri7NkgEiz0VDEqU1Yhp8Uv7tA9m0bkwH6Sb5_-pLxVHzI_WQ_ErAURYH-Jed2S9CV05RJRAzD6KuewGdgo9wCMkm9YiFIzEeN2o_GC1pBFQBOJ35fHePd_7F0VM6_olxxatrqvmHAOEatmhQw1DsyMWdqNHSl0')"></div>
+<div>
+<p class="text-white font-bold text-sm">Marcus Thompson</p>
+<p class="text-slate-500 text-xs italic">March 2024</p>
+</div>
+</div>
+<div class="flex gap-0.5">
+<span class="material-symbols-outlined text-primary text-[16px] fill-[1]">star</span>
+<span class="material-symbols-outlined text-primary text-[16px] fill-[1]">star</span>
+<span class="material-symbols-outlined text-primary text-[16px] fill-[1]">star</span>
+<span class="material-symbols-outlined text-primary text-[16px] fill-[1]">star</span>
+<span class="material-symbols-outlined text-primary text-[16px] fill-[1]">star</span>
+</div>
+</div>
+<p class="text-slate-400 text-sm leading-relaxed">
+                                "Incredible experience. The car was spotless and the performance is just mind-blowing. The host was very communicative and the pick-up process was seamless. Highly recommend!"
+                            </p>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Booking Sidebar (Sticky) -->
+<aside class="col-span-12 lg:col-span-4">
+<div class="sticky top-28 bg-surface-dark border border-white/5 rounded-3xl p-8 shadow-2xl">
+<div class="flex items-end justify-between mb-8">
+<div>
+<p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Price</p>
+<p class="text-3xl font-bold text-white">$249 <span class="text-lg font-normal text-slate-500">/ day</span></p>
+</div>
+<div class="text-right">
+<div class="flex items-center gap-1 text-primary text-sm font-bold">
+<span class="material-symbols-outlined text-[18px] fill-[1]">star</span> 4.9
+                            </div>
+<p class="text-slate-500 text-xs">128 reviews</p>
+</div>
+</div>
+<div class="space-y-4 mb-8">
+<div class="grid grid-cols-2 gap-0 border border-white/10 rounded-2xl overflow-hidden">
+<div class="p-4 border-r border-white/10 bg-white/5">
+<p class="text-[10px] font-bold text-primary uppercase mb-1">Start Date</p>
+<p class="text-sm text-white font-medium">May 12, 2024</p>
+</div>
+<div class="p-4 bg-white/5">
+<p class="text-[10px] font-bold text-primary uppercase mb-1">End Date</p>
+<p class="text-sm text-white font-medium">May 15, 2024</p>
+</div>
+</div>
+<div class="p-4 border border-white/10 rounded-2xl bg-white/5">
+<p class="text-[10px] font-bold text-primary uppercase mb-1">Pick-up Location</p>
+<p class="text-sm text-white font-medium flex items-center justify-between">
+                                LAX International Airport
+                                <span class="material-symbols-outlined text-slate-500 text-sm">expand_more</span>
+</p>
+</div>
+</div>
+<div class="space-y-3 mb-8 border-b border-white/10 pb-6">
+<div class="flex justify-between text-sm text-slate-400">
+<span>$249 x 3 days</span>
+<span class="text-white font-medium">$747</span>
+</div>
+<div class="flex justify-between text-sm text-slate-400">
+<span>Premium Insurance</span>
+<span class="text-white font-medium">$45</span>
+</div>
+<div class="flex justify-between text-sm text-slate-400">
+<span>Service Fee</span>
+<span class="text-white font-medium">$28</span>
+</div>
+</div>
+<div class="flex justify-between items-center mb-8">
+<span class="text-lg font-bold text-white">Total</span>
+<span class="text-2xl font-bold text-primary">$820</span>
+</div>
+<button class="w-full py-4 rounded-2xl bg-primary text-background-dark font-black text-lg shadow-[0_0_20px_rgba(23,191,207,0.3)] hover:scale-[1.02] transition-transform active:scale-95 mb-4">
+                        Book Now
+                    </button>
+<p class="text-center text-xs text-slate-500 px-4">
+                        You won't be charged yet. Non-logged users will be redirected to the secure login portal.
+                    </p>
+</div>
+</aside>
+</div>
+<!-- Related Vehicles -->
+<section class="mt-24">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-2xl font-bold text-white">You Might Also Like</h2>
+<div class="flex gap-2">
+<button class="size-10 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="size-10 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 no-scrollbar overflow-x-auto pb-4">
+<!-- Vehicle Card 1 -->
+<div class="group bg-surface-dark border border-white/5 rounded-3xl overflow-hidden hover:border-primary/30 transition-all">
+<div class="h-48 bg-center bg-cover" data-alt="Modern sports sedan side view" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDd5Bw5fBBeZZU-rpQqLtBI4_ci04WRVYotlpkBdq3SiZTF_gCc3eyDX8FmtZdFeRu8M4DVtl9WjsyRqAdN0Waxh-Dyb6fU1AGusDHcogdQJZuffEP8Q3vnOa5sH0ntKYeWZUMqFC-m9s8agOiad-hLx4jWmMil-TPeJWzpr87Jf4Iob6wKla39OJEKjLZuPzgWiZDkk1bd88evLqtqvDWqio13unJhr_wPfmVAWIdGpkCElbn5tvSv0573ObKxTvdPpJsLsX1a7Tw')"></div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-white font-bold group-hover:text-primary transition-colors">Lucid Air Grand Touring</h3>
+<span class="text-xs text-slate-500">4.8 ★</span>
+</div>
+<p class="text-slate-500 text-xs mb-4 uppercase tracking-wider font-bold">Luxury Electric</p>
+<div class="flex justify-between items-center">
+<p class="text-white font-bold">$210 <span class="text-[10px] text-slate-500 font-normal">/ day</span></p>
+<button class="size-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-black transition-all">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Vehicle Card 2 -->
+<div class="group bg-surface-dark border border-white/5 rounded-3xl overflow-hidden hover:border-primary/30 transition-all">
+<div class="h-48 bg-center bg-cover" data-alt="High-performance SUV" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcuDKhgxPFuKjFJVfv81mH6ehk2m4Dl7iicS9V0JQnelBNpWEMuxpcZlW-QVF8_A8aErG4EZ5xmxsXN6J2PWU1J9Fshevf2k0yxMRdHGUsxcaxQjfPApEV6chSdOzPpU6h8NxrM4fI5B7XOrg4jVx1n63MjJGnv24v20uW8Xtc6dNw9aYH2lU4diZd-JSNr8PTd6LyJjot4SvM5bmWKSRcqp1CRS5TzGEvCQIRW1LARVomaWMGWeODyQ-4DtMf3KVwlpsclGzDVNU')"></div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-white font-bold group-hover:text-primary transition-colors">Rivian R1S</h3>
+<span class="text-xs text-slate-500">5.0 ★</span>
+</div>
+<p class="text-slate-500 text-xs mb-4 uppercase tracking-wider font-bold">Adventure SUV</p>
+<div class="flex justify-between items-center">
+<p class="text-white font-bold">$185 <span class="text-[10px] text-slate-500 font-normal">/ day</span></p>
+<button class="size-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-black transition-all">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Vehicle Card 3 -->
+<div class="group bg-surface-dark border border-white/5 rounded-3xl overflow-hidden hover:border-primary/30 transition-all">
+<div class="h-48 bg-center bg-cover" data-alt="Classic luxury convertible" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBl9JkFJlYHO-Z-Z-1C66eXKygiPlEDptN4I78BWsW2B_Qrc0uLwU6lSvkiT-qXZHpb1ZdC44zozVDIx55i3RTNOUcvTXqse40TqJnRcxzN1iXUA69hbweW1XLaIE9b5uB7B2ZGKN0xO9h-vugctgqzZN86x8v0WHMJV5Z-QyYbH8t_oRh4UsUenN_zB_2NCPVN3qmzdmWsJrHXWbL3Ce7T_DKIC7_TaDwtMNE-VHj7p0rEkXmuclDSJeO3UeLZ14rKr9H7jHd5irs')"></div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-white font-bold group-hover:text-primary transition-colors">Porsche Taycan 4S</h3>
+<span class="text-xs text-slate-500">4.9 ★</span>
+</div>
+<p class="text-slate-500 text-xs mb-4 uppercase tracking-wider font-bold">Sport Electric</p>
+<div class="flex justify-between items-center">
+<p class="text-white font-bold">$275 <span class="text-[10px] text-slate-500 font-normal">/ day</span></p>
+<button class="size-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-black transition-all">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Vehicle Card 4 -->
+<div class="group bg-surface-dark border border-white/5 rounded-3xl overflow-hidden hover:border-primary/30 transition-all">
+<div class="h-48 bg-center bg-cover" data-alt="Electric compact luxury car" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAFlG7bv1YhG0wxrLHOoBzJ9bjCzSWEiCAK5eqqWRQcA1k1gHT6rLLQuosuemrXFiPEqxybCGSyu19FJuZr2mEaWxQLPLUvoahYkJ_vn8ZC7_deCkQBik4ILlLI8jeO7g8-08osEDmeyrp5AdnZ6xK5JVRiTD2LCJHeoOEa-JaE176GXWVEP3GAXlZGwyaSuNTZWNgVXkncB3v9n5jEEYInjZqM4CeC-6xDj4duI2jk45Y9ofV2nPFruXqtsMHniDZfpwJ6GX0Yagc')"></div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-white font-bold group-hover:text-primary transition-colors">Polestar 3</h3>
+<span class="text-xs text-slate-500">4.7 ★</span>
+</div>
+<p class="text-slate-500 text-xs mb-4 uppercase tracking-wider font-bold">Crossover</p>
+<div class="flex justify-between items-center">
+<p class="text-white font-bold">$150 <span class="text-[10px] text-slate-500 font-normal">/ day</span></p>
+<button class="size-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-black transition-all">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="mt-24 border-t border-white/5 py-12 bg-surface-dark">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="col-span-1 md:col-span-2">
+<div class="flex items-center gap-2 text-primary mb-6">
+<div class="size-6">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-white text-lg font-bold">VehicleHub</h2>
+</div>
+<p class="text-slate-500 text-sm max-w-sm">
+                    Premium electric vehicle rentals for the modern traveler. Experience the future of transportation today.
+                </p>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Company</h4>
+<ul class="space-y-3 text-sm text-slate-500">
+<li><a class="hover:text-primary" href="#">About Us</a></li>
+<li><a class="hover:text-primary" href="#">Careers</a></li>
+<li><a class="hover:text-primary" href="#">Press</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Support</h4>
+<ul class="space-y-3 text-sm text-slate-500">
+<li><a class="hover:text-primary" href="#">Help Center</a></li>
+<li><a class="hover:text-primary" href="#">Safety</a></li>
+<li><a class="hover:text-primary" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-slate-600">© 2024 VehicleHub Inc. All rights reserved.</p>
+<div class="flex gap-6">
+<span class="material-symbols-outlined text-slate-600 hover:text-white cursor-pointer transition-colors">public</span>
+<span class="material-symbols-outlined text-slate-600 hover:text-white cursor-pointer transition-colors">share</span>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VehicleHub | Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#17bfcf",
+                        "background-light": "#f1f2f4",
+                        "background-dark": "#1c1f22",
+                        "surface-dark": "#2a2d31",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Space Grotesk", sans-serif;
+        }
+        .glass-panel {
+            background: rgba(42, 45, 49, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col text-slate-900 dark:text-slate-100">
+<!-- Top Navigation Bar (Simplified for Login) -->
+<header class="w-full px-6 py-5 flex items-center justify-between max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold tracking-tight">VehicleHub</h2>
+</div>
+<div class="hidden md:block">
+<span class="text-slate-500 dark:text-slate-400 text-sm">Need an account?</span>
+<a class="ml-2 text-primary font-bold hover:underline" href="#">Register</a>
+</div>
+</header>
+<main class="flex-1 flex items-center justify-center px-4 py-12">
+<div class="w-full max-w-[460px]">
+<!-- Login Card -->
+<div class="bg-white dark:bg-surface-dark p-8 md:p-10 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800">
+<div class="text-center mb-10">
+<h1 class="text-3xl font-bold tracking-tight mb-2">Welcome Back</h1>
+<p class="text-slate-500 dark:text-slate-400">Enter your credentials to access your fleet.</p>
+</div>
+<form class="space-y-5">
+<!-- Email Field -->
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Email Address</label>
+<div class="relative">
+<input class="w-full bg-slate-50 dark:bg-[#1c2626] border border-slate-200 dark:border-[#3c5153] rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-[#9db6b8]" placeholder="name@company.com" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center px-1">
+<label class="text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+<a class="text-xs text-primary hover:underline font-medium" href="#">Forgot Password?</a>
+</div>
+<div class="relative flex items-center">
+<input class="w-full bg-slate-50 dark:bg-[#1c2626] border border-slate-200 dark:border-[#3c5153] rounded-xl px-4 py-3.5 pr-12 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-[#9db6b8]" placeholder="••••••••" type="password"/>
+<button class="absolute right-4 text-slate-400 hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Login Button -->
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all transform active:scale-[0.98] mt-2" type="submit">
+                        Login to Dashboard
+                    </button>
+</form>
+<!-- Divider -->
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-slate-200 dark:border-slate-700"></div>
+</div>
+<div class="relative flex justify-center text-xs uppercase">
+<span class="bg-white dark:bg-surface-dark px-3 text-slate-500">Or continue with</span>
+</div>
+</div>
+<!-- Social Login -->
+<button class="w-full flex items-center justify-center gap-3 bg-white dark:bg-transparent border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 py-3.5 rounded-xl transition-colors font-medium">
+<img alt="" class="size-5" data-alt="Google logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBT16MG8q4VyfwEd4-KG1QqzqxcJRO5o5Zo2fgkmG_sDewSvy5xQvxcc0-mcE3nDqBdA_0gO4XmRWq6jWONI5LFIoWgwU_Qkv9sfAUfwaCCPhw-EHEHxM4V60cuQ_rqHn8iv5epduhzBz6HJcI4KthXSrqLVdNgYZOljif_U5HOFHjGcq50Nyfbu8T_ME2scfoka7cClXvpCG67JOPAscUBC1JYTEWr-SXT6Mw_unkVXH4HrFKTt6bBsaurD5wUMVjNE0CxtIGugII"/>
+<span>Google Account</span>
+</button>
+<!-- Quick Access / Demo Tools -->
+<div class="mt-10 pt-8 border-t border-dashed border-slate-200 dark:border-slate-700">
+<p class="text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-4 text-center">Quick Access for Testing</p>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 py-2 px-3 bg-slate-100 dark:bg-slate-800/50 hover:bg-primary/10 hover:text-primary rounded-lg text-xs font-semibold transition-all border border-transparent hover:border-primary/30">
+<span class="material-symbols-outlined text-sm">person</span>
+                            Demo User
+                        </button>
+<button class="flex items-center justify-center gap-2 py-2 px-3 bg-slate-100 dark:bg-slate-800/50 hover:bg-primary/10 hover:text-primary rounded-lg text-xs font-semibold transition-all border border-transparent hover:border-primary/30">
+<span class="material-symbols-outlined text-sm">admin_panel_settings</span>
+                            Demo Admin
+                        </button>
+</div>
+</div>
+</div>
+<!-- Mobile Footer Link -->
+<p class="md:hidden text-center mt-8 text-slate-500">
+                Don't have an account? 
+                <a class="text-primary font-bold" href="#">Register</a>
+</p>
+<p class="text-center mt-12 text-xs text-slate-400 dark:text-slate-600">
+                © 2024 VehicleHub Systems Inc. All rights reserved.
+                <br/>
+<span class="inline-flex gap-4 mt-2">
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+</span>
+</p>
+</div>
+</main>
+<!-- Background Decoration -->
+<div class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden">
+<div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px]"></div>
+</div>
+</body></html>

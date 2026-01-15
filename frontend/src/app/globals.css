@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 selection:bg-primary/30;
+    font-family: var(--font-space-grotesk), sans-serif;
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: rgba(43, 46, 54, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+:root {
+  --background-light: 249 250 251;
+  --background-dark: 18 20 22;
+}

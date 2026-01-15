@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Bookings History - VehicleHub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#17bfcf",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#191e24",
+                        "surface-dark": "#232930",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'cyber': '0 0 20px rgba(23, 191, 207, 0.05)',
+                        'cyber-hover': '0 0 25px rgba(23, 191, 207, 0.15)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav {
+            background: rgba(23, 191, 207, 0.1);
+            border-right: 3px solid #17bfcf;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-72 bg-white dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between py-8">
+<div class="flex flex-col gap-10">
+<div class="px-8 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark font-bold">directions_car</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">VehicleHub</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">PREMIUM RENTALS</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-4 px-8 py-4 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-primary active-nav" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">calendar_month</span>
+<span class="font-medium">My Bookings</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="font-medium">Vehicles</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-medium">Profile</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<div class="px-8 flex flex-col gap-4">
+<button class="w-full bg-primary/10 text-primary py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-primary/20 transition-all">
+<span class="material-symbols-outlined text-sm">help</span>
+                    Help Center
+                </button>
+<button class="flex items-center gap-4 px-2 py-2 text-slate-500 dark:text-slate-400 hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-medium">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark">
+<div class="max-w-5xl mx-auto px-10 py-12">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 text-sm font-medium text-slate-400 dark:text-slate-500 mb-6">
+<a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">User</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-slate-900 dark:text-white">My Bookings</span>
+</nav>
+<!-- Page Heading -->
+<div class="mb-12">
+<h2 class="text-5xl font-bold tracking-tight text-slate-900 dark:text-white mb-4">My Bookings History</h2>
+<p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl">Manage your upcoming journeys and review your past high-performance vehicle rentals.</p>
+</div>
+<!-- Bookings List -->
+<div class="flex flex-col gap-6">
+<!-- Booking Item 1 -->
+<div class="group bg-white dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between shadow-cyber hover:shadow-cyber-hover transition-all duration-300">
+<div class="flex items-center gap-8">
+<div class="w-48 h-28 rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Modern electric sedan parked in a futuristic garage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBT2WKeDMGXN1hK8OJc1LU_Z4_mSOPtNTK74Xqw1R1cYRKS8_oDBhY2FiwOIoA5emJsYy6rSUio3ORaT4DYLFXDvEfFY9cp57xSQDBIiYEuOePRD8vWVZ978sIzIgDT9CjU-1sKrL4n93EU-l86_Ox1k-fpT_pAWxADfuaVNalUEBYz1dI-PU4rSr2WlWS4d_UCEjcev1KXxlCU62JkoLTrQTYHGkcYeHFEglsQQD9lhnfUdh3BCfTa1EiamkCx2IC5ghdvAYHsHyQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<div>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-primary transition-colors">Tesla Model S Plaid</h3>
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<p class="text-sm font-medium tracking-wide">OCT 12 — OCT 15, 2023</p>
+</div>
+<div class="mt-4 flex items-center gap-4">
+<div class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-bold text-primary uppercase tracking-widest">Booked</span>
+</div>
+<span class="text-xs font-medium text-slate-400">Ref: #VH-99210</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined">description</span>
+</button>
+<button class="px-6 py-3 bg-slate-900 dark:bg-slate-800 text-white rounded-lg font-bold text-sm hover:bg-slate-700 transition-colors">
+                                View Details
+                            </button>
+</div>
+</div>
+<!-- Booking Item 2 -->
+<div class="group bg-white dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between shadow-cyber hover:shadow-cyber-hover transition-all duration-300">
+<div class="flex items-center gap-8">
+<div class="w-48 h-28 rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Rugged electric SUV in a mountainous landscape" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3K551iqmcPltKgp89KyEbNSCoAIZfwu4K6q5tefOINUAAj-FzbOnnRDQDDemlCvMcnQrmO14mh5qgMJMEh1r78bcTJZSF5CYYb8A9w_M8P6x2PrRo1qB6_hbgytFP7vd9eh90P1cVd23Z6-TxOEjI5UYpu9rDQAeTxvDrCSwfRezF_c71gEYdfWULxYwhiZT7KW9Hrv9DVHPrkGoSdW3fkRuKMLF2J-fOwBqchi8tTw0FShDpIlQC9zjHQbnjsoAXioBpylPjZHE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<div>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-primary transition-colors">Rivian R1S Adventure</h3>
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<p class="text-sm font-medium tracking-wide">NOV 02 — NOV 05, 2023</p>
+</div>
+<div class="mt-4 flex items-center gap-4">
+<div class="flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="text-xs font-bold text-amber-500 uppercase tracking-widest">Interested</span>
+</div>
+<span class="text-xs font-medium text-slate-400">Ref: #VH-10294</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined">delete</span>
+</button>
+<button class="px-6 py-3 bg-primary text-background-dark rounded-lg font-bold text-sm hover:opacity-90 transition-colors shadow-lg shadow-primary/20">
+                                Complete Booking
+                            </button>
+</div>
+</div>
+<!-- Empty State (Optional Visibility) -->
+<!-- To show empty state, hidden is removed -->
+<div class="hidden mt-10 py-20 px-6 bg-white/5 dark:bg-surface-dark/50 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl flex flex-col items-center justify-center text-center">
+<div class="w-24 h-24 mb-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600">no_accounts</span>
+</div>
+<h4 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">No bookings yet</h4>
+<p class="text-slate-500 dark:text-slate-400 mb-8 max-w-xs">Your future adventures are waiting for the right ride. Start exploring our fleet today.</p>
+<button class="bg-primary text-background-dark px-10 py-4 rounded-xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-xl shadow-primary/20">
+                            Start Exploring
+                        </button>
+</div>
+</div>
+<!-- Quick Stats / Footnote -->
+<div class="mt-20 flex justify-between items-center border-t border-slate-200 dark:border-slate-800 pt-8">
+<div class="flex gap-10">
+<div>
+<p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Total Distance</p>
+<p class="text-xl font-bold dark:text-white">1,240 <span class="text-sm font-medium text-primary">km</span></p>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Carbon Saved</p>
+<p class="text-xl font-bold dark:text-white">420 <span class="text-sm font-medium text-emerald-500">kg</span></p>
+</div>
+</div>
+<button class="text-sm font-bold text-primary flex items-center gap-2 hover:underline underline-offset-4">
+                        Download Full History (PDF)
+                        <span class="material-symbols-outlined text-base">download</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

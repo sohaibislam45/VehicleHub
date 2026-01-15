@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VehicleHub Admin - Manage Users</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#17bfcf",
+                        "background-light": "#fafafa",
+                        "background-dark": "#121416",
+                        "surface-dark": "#1a1d21",
+                        "border-dark": "#2d3238"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav {
+            background: linear-gradient(90deg, rgba(23, 191, 207, 0.15) 0%, rgba(23, 191, 207, 0) 100%);
+            border-left: 3px solid #17bfcf;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
+<!-- Sidebar Navigation -->
+<aside class="w-72 border-r border-border-dark flex flex-col h-screen sticky top-0 bg-background-light dark:bg-background-dark shrink-0">
+<div class="p-8 flex items-center gap-3">
+<div class="size-10 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark font-bold">directions_car</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-none">VehicleHub</h1>
+<p class="text-xs text-slate-500 dark:text-primary/70 font-medium uppercase tracking-widest mt-1">Admin Console</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-medium">Bookings</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">minor_crash</span>
+<span class="font-medium">Vehicles</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg active-nav text-primary bg-primary/10" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-medium">Manage Users</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-medium">Transactions</span>
+</a>
+</nav>
+<div class="p-6 border-t border-border-dark">
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+<div class="mt-6 flex items-center gap-3 px-4">
+<div class="size-10 rounded-full bg-cover bg-center border-2 border-primary/20" data-alt="Admin profile avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBNVz7gRVxGLWiHoEtzvmBMXI7gez0Fiu41WoUIYe0CsDKk_hAJjmbjvoWpqnl9TzEUlpSbLWq95K9z4DIedniVdP4V_hKdtY3V3yeIKLd3H5x4dQVBfDDesBq7TouaSFIxCyicFVaHiCXOCy5g5RyXtnqgA51mY7vC6TP8m3V7ILyh17yWJwEaP3k0wDVKClfxV-SeMzln6Ha7hsFk3aJUSKo-rMpoz5GaD7bLrCV0LA8ziZBz7HeRYQZ0XuZ3_F0mYcYQZwuEZjE')"></div>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">Marcus V.</p>
+<p class="text-xs text-slate-500 truncate">System Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- Top Bar / Header -->
+<header class="px-10 py-8 flex flex-wrap items-center justify-between gap-6">
+<div class="flex flex-col gap-1">
+<h2 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Manage Users</h2>
+<p class="text-slate-500 dark:text-slate-400 font-medium">Control access levels and monitor active sessions</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-5 h-12 rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark text-sm font-bold hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined text-lg">file_download</span>
+                    Export List
+                </button>
+<button class="flex items-center gap-2 px-6 h-12 rounded-xl bg-primary text-background-dark text-sm font-black hover:brightness-110 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-lg">person_add</span>
+                    Invite User
+                </button>
+</div>
+</header>
+<!-- Search and Filters Section -->
+<section class="px-10 mb-6">
+<div class="bg-white dark:bg-surface-dark p-2 rounded-2xl border border-slate-200 dark:border-border-dark flex items-center gap-2 shadow-sm">
+<div class="flex-1 flex items-center gap-3 px-4">
+<span class="material-symbols-outlined text-slate-400">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-slate-900 dark:text-white placeholder:text-slate-500 font-medium" placeholder="Search users by name, email or ID..." type="text"/>
+</div>
+<div class="h-8 w-px bg-slate-200 dark:bg-border-dark mx-2"></div>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5 text-sm font-bold transition-colors">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                    Filters
+                </button>
+</div>
+</section>
+<!-- User Table Section -->
+<section class="px-10 pb-10 flex-1 overflow-hidden">
+<div class="bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark rounded-2xl overflow-hidden shadow-xl flex flex-col h-full">
+<div class="overflow-x-auto flex-1">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-white/[0.02] border-bottom border-slate-200 dark:border-border-dark">
+<th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400">User</th>
+<th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400">Contact</th>
+<th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400">Role</th>
+<th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400">Status</th>
+<th class="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400 text-right">Access Management</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-border-dark">
+<!-- User Row 1 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-white/[0.01] transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-primary/10 shadow-inner" data-alt="User avatar for Sarah Chen" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuApjRaolU3c8gK36yi-TCaJ5UPpTMPPZb1LRH9sACd2pM_-_QHfq2spHJgH5nXL4FuarDZnI08mz-1XnImP-E1vJcpzJObzg-MD1QRj1sWzBT1LbQnck-3cmUnjV0bn9TJxs9XVt0uSYHni3HTifzy1aIH9RJP852EZj1jiwARDQ1MERPWsxpVMNpbhRGzXnHmTzc1SPzBSl20-4iHHh1SDkBP_WwIoeQQgf3Mw-HeOrLF5RXwlQgpxqrJVfTVxxZKM39k52YbjTKg')"></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">Sarah Chen</p>
+<p class="text-xs text-slate-500 font-medium">Joined Oct 2023</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-slate-600 dark:text-slate-400">
+                                    s.chen@vehiclehub.io
+                                </td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-primary/10 text-primary border border-primary/20">
+                                        ADMIN
+                                    </span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="text-sm font-bold text-emerald-500">Enabled</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center justify-end gap-3">
+<select class="bg-slate-100 dark:bg-background-dark border-none rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary py-1.5 pl-3 pr-8 cursor-pointer">
+<option>Change Role</option>
+<option selected="">Admin</option>
+<option>Standard User</option>
+<option>Editor</option>
+</select>
+<button class="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center" title="Disable User">
+<span class="material-symbols-outlined text-lg">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- User Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-white/[0.01] transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-slate-700/50 shadow-inner" data-alt="User avatar for Alex Rivera" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDV2HSjZNHu1Zjp-2BhqU3gZXbtTsvY9LOCHvYWJJswxy8fGvSMCQAXtJQZ4IxEk5wuSRBtpdjOvx8J23YB0G58f2Yj5eiKY8i7xFlqJ-bpKqDPFlE6qLE2oVKYyFfxToFPosk0OuWDqYmG5jhknxONbMLoLGhgRmMR1A7Go7_wtjNQF98gq9MKfuUR3QlPSjoEroupl7O8e-7NLX5gDT8AIeCqorFTMYcXD1yGlDmiSnjpYzuHMXCrXXXcol79hM5tWwrg5EJaX5I')"></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">Alex Rivera</p>
+<p class="text-xs text-slate-500 font-medium">Joined Dec 2023</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-slate-600 dark:text-slate-400">
+                                    alex.r@protonmail.com
+                                </td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-white/10">
+                                        USER
+                                    </span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-emerald-500"></span>
+<span class="text-sm font-bold text-emerald-500">Enabled</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center justify-end gap-3">
+<select class="bg-slate-100 dark:bg-background-dark border-none rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary py-1.5 pl-3 pr-8 cursor-pointer">
+<option>Change Role</option>
+<option>Admin</option>
+<option selected="">Standard User</option>
+<option>Editor</option>
+</select>
+<button class="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center" title="Disable User">
+<span class="material-symbols-outlined text-lg">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- User Row 3 (Disabled State) -->
+<tr class="hover:bg-slate-50 dark:hover:bg-white/[0.01] transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4 opacity-50">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-slate-700/50 shadow-inner" data-alt="User avatar for Jordan Smith" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDK22hmpt0DoEpBKGGkaN6QVtppXZ0Y3TWfyskTMOXhB2A_s0Zs1NV7pcbtI5N3vaiE8ufbFeNTpcqPbuRegvnzATa3SulgjTXJ10kg8_8dvQGfwEDdqt555rNMK6BySZaJ99IpxFBlulseXetsTwwZKwydcIu2vJo-v1Xn7diMyhY228AZ7fW8WFzQA0wTvt0y_J_OmGFrAKj-u2Pkx8B2KSqhrjRSmpDnldhXqtlmuDOwwXstITLxq7kC8j2lNTBEdme22TWcHAs')"></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">Jordan Smith</p>
+<p class="text-xs text-slate-500 font-medium">Joined Jan 2024</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-slate-600 dark:text-slate-400 opacity-50">
+                                    j.smith@corp.com
+                                </td>
+<td class="px-6 py-5 opacity-50">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-white/10">
+                                        USER
+                                    </span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-red-500"></span>
+<span class="text-sm font-bold text-red-500">Disabled</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center justify-end gap-3">
+<select class="bg-slate-100 dark:bg-background-dark/50 border-none rounded-lg text-xs font-bold py-1.5 pl-3 pr-8 opacity-30 cursor-not-allowed" disabled="">
+<option>Change Role</option>
+</select>
+<button class="px-4 py-2 rounded-lg bg-emerald-500 text-background-dark hover:brightness-110 transition-all text-xs font-black flex items-center gap-2" title="Enable User">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+                                            ENABLE
+                                        </button>
+</div>
+</td>
+</tr>
+<!-- User Row 4 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-white/[0.01] transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-slate-700/50 shadow-inner" data-alt="User avatar for Maria Garcia" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0mh61TBo3eEdfsGfwg5uWd-31ccrkJ8Xats2Kr-vMbkbvVreukOg0nHiklH4RVL6C-oV4PpMFL6hdMmD7-fqPCgdKH0D8S9KHCt177O5b0uA46BEqhcD8VmJl3XKACiSQctI9F8jjUokjci4aSw672RjS6R1Xdkt0VLjjoWQa6HO2wVB2QWziZ7lcdliv7k4SgmVS6h9JB7r0qTpZ5NSzK81bX4JaazGwWNjXp7zOhyrbqkvCkzxWmrlUpcdMRIiWJQBMCoyfUJc')"></div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">Maria Garcia</p>
+<p class="text-xs text-slate-500 font-medium">Joined Feb 2024</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-slate-600 dark:text-slate-400">
+                                    m.garcia@gmail.com
+                                </td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-white/10">
+                                        USER
+                                    </span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-emerald-500"></span>
+<span class="text-sm font-bold text-emerald-500">Enabled</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center justify-end gap-3">
+<select class="bg-slate-100 dark:bg-background-dark border-none rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary py-1.5 pl-3 pr-8 cursor-pointer">
+<option>Change Role</option>
+<option>Admin</option>
+<option selected="">Standard User</option>
+<option>Editor</option>
+</select>
+<button class="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center" title="Disable User">
+<span class="material-symbols-outlined text-lg">block</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footer Pagination -->
+<div class="px-6 py-4 bg-slate-50 dark:bg-white/[0.01] border-t border-slate-100 dark:border-border-dark flex items-center justify-between">
+<p class="text-sm font-medium text-slate-500">Showing <span class="text-slate-900 dark:text-white font-bold">4</span> of <span class="text-slate-900 dark:text-white font-bold">124</span> users</p>
+<div class="flex items-center gap-1">
+<button class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-white/5 text-slate-500 disabled:opacity-20 cursor-pointer" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="size-8 rounded-lg bg-primary text-background-dark text-xs font-black flex items-center justify-center">1</button>
+<button class="size-8 rounded-lg hover:bg-slate-200 dark:hover:bg-white/5 text-xs font-bold">2</button>
+<button class="size-8 rounded-lg hover:bg-slate-200 dark:hover:bg-white/5 text-xs font-bold">3</button>
+<button class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-white/5 text-slate-500 cursor-pointer">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Selection Summary Section (Sticky Bottom) -->
+<section class="px-10 py-6 bg-slate-100 dark:bg-white/[0.02] border-t border-slate-200 dark:border-border-dark flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="text-sm font-medium dark:text-slate-400">Selecting users will enable bulk action controls including mass role updates and system locks.</p>
+</div>
+<div class="flex items-center gap-3">
+<p class="text-xs uppercase font-black tracking-widest text-slate-500 mr-2">Quick Locks:</p>
+<button class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-white/5 text-xs font-black hover:bg-red-500 hover:text-white transition-all">FREEZE NEW SIGNUPS</button>
+<button class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-white/5 text-xs font-black hover:bg-primary hover:text-background-dark transition-all">MAINTENANCE MODE</button>
+</div>
+</section>
+</main>
+</body></html>
