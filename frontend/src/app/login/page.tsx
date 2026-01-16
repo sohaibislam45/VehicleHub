@@ -27,6 +27,7 @@ export default function LoginPage() {
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors },
     } = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
@@ -118,6 +119,27 @@ export default function LoginPage() {
                         <span className="relative z-10 px-4 bg-[#181a1d] text-slate-500 text-xs uppercase tracking-widest font-medium">
                             Or continue with
                         </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                        <button
+                            onClick={() => {
+                                setValue("email", "user@vehiclehub.com");
+                                setValue("password", "password123");
+                            }}
+                            className="h-10 text-[10px] uppercase font-bold tracking-widest border border-white/5 rounded-lg hover:bg-white/5 transition-all text-slate-400"
+                        >
+                            Demo User
+                        </button>
+                        <button
+                            onClick={() => {
+                                setValue("email", "admin@vehiclehub.com");
+                                setValue("password", "password123");
+                            }}
+                            className="h-10 text-[10px] uppercase font-bold tracking-widest border border-white/5 rounded-lg hover:bg-white/5 transition-all text-slate-400"
+                        >
+                            Demo Admin
+                        </button>
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">

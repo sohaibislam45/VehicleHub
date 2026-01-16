@@ -1,9 +1,8 @@
 "use client";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import FilterSidebar from "@/components/explore/FilterSidebar";
 import VehicleCard from "@/components/explore/VehicleCard";
+import CardSkeleton from "@/components/explore/CardSkeleton";
 import { useEffect, useState } from "react";
 import { vehicleService } from "@/services/vehicleService";
 import { Vehicle } from "@/types/vehicle";
@@ -127,18 +126,8 @@ export default function ExplorePage() {
                         {/* Vehicle Grid */}
                         {loading ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-                                {[1, 2, 3, 4].map((i) => (
-                                    <div key={i} className="bg-surface-dark border border-white/5 rounded-2xl overflow-hidden flex flex-col animate-pulse">
-                                        <div className="aspect-[16/10] bg-white/5"></div>
-                                        <div className="p-5 space-y-4">
-                                            <div className="h-6 w-3/4 bg-white/5 rounded-md"></div>
-                                            <div className="h-3 w-1/2 bg-white/5 rounded-md"></div>
-                                            <div className="pt-4 flex items-center justify-between">
-                                                <div className="h-8 w-20 bg-white/5 rounded-md"></div>
-                                                <div className="h-9 w-28 bg-white/5 rounded-xl"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                {[1, 2, 3, 4, 5, 6].map((i) => (
+                                    <CardSkeleton key={i} />
                                 ))}
                             </div>
                         ) : error ? (
