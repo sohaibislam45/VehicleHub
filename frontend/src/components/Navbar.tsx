@@ -91,7 +91,7 @@ export default function Navbar() {
                                         {user.displayName?.split(" ")[0] || "User"}
                                     </span>
                                     <span className="text-[10px] text-primary uppercase tracking-wider font-medium leading-none mt-1">
-                                        Member
+                                        {user.role === 'admin' ? 'Administrator' : 'Member'}
                                     </span>
                                 </div>
                                 <span className={`material-symbols-outlined text-slate-400 text-sm transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}>

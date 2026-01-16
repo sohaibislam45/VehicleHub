@@ -17,6 +17,31 @@ router.get('/users', protect, adminOnly, async (req, res) => {
     }
 });
 
+// @desc Get all vehicles
+// @route GET /api/admin/vehicles
+router.get('/vehicles', protect, adminOnly, async (req, res) => {
+    try {
+        const vehicles = await Vehicle.find({}).populate('ownerId', 'name email');
+        res.json(vehicles);
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
+
+// @desc Get all bookings
+// @route GET /api/admin/bookings
+router.get('/bookings', protect, adminOnly, async (req, res) => {
+    try {
+        const bookings = await Booking.find({})
+            .populate('userId', 'name email')
+            .populate('vehicleId', 'title')
+            .sort({ createdAt: -1 });
+        res.json(bookings);
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
+
 // @desc Get stats
 // @route GET /api/admin/stats
 router.get('/stats', protect, adminOnly, async (req, res) => {
@@ -25,7 +50,11 @@ router.get('/stats', protect, adminOnly, async (req, res) => {
         const vehicleCount = await Vehicle.countDocuments();
         const bookingCount = await Booking.countDocuments();
         
-        const recentBookings = await Booking.find().sort({ createdAt: -1 }).limit(5).populate('userId', 'name').populate('vehicleId', 'title');
+        const recentBookings = await Booking.find()
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .populate('userId', 'name email')
+            .populate('vehicleId', 'title price');
 
         res.json({
             users: userCount,

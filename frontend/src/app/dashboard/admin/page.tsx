@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import StatsCard from "@/components/dashboard/StatsCard";
+import api from "@/lib/api";
 
 export default function AdminDashboardPage() {
     const [loading, setLoading] = useState(true);
@@ -10,22 +9,39 @@ export default function AdminDashboardPage() {
         totalUsers: 0,
         totalVehicles: 0,
         totalBookings: 0,
+        recentActivity: [] as any[]
     });
 
     useEffect(() => {
-        // TODO: Fetch real data from API
-        setTimeout(() => {
-            setStats({
-                totalUsers: 12450,
-                totalVehicles: 840,
-                totalBookings: 45200,
-            });
-            setLoading(false);
-        }, 500);
+        const fetchStats = async () => {
+            try {
+                const response = await api.get("/admin/stats");
+                setStats({
+                    totalUsers: response.data.users,
+                    totalVehicles: response.data.vehicles,
+                    totalBookings: response.data.bookings,
+                    recentActivity: response.data.recentBookings
+                });
+            } catch (error) {
+                console.error("Error fetching stats:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchStats();
     }, []);
 
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="size-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        );
+    }
+
     return (
-        <DashboardLayout role="admin">
+        <>
             {/* Header Section */}
             <header className="flex justify-between items-end mb-10">
                 <div>
@@ -283,6 +299,6 @@ export default function AdminDashboardPage() {
                     </table>
                 </div>
             </div>
-        </DashboardLayout>
+        </>
     );
 }

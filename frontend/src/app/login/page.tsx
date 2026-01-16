@@ -32,10 +32,14 @@ export default function LoginPage() {
         resolver: zodResolver(loginSchema),
     });
 
-    // Redirect admins to dashboard after successful login
+    // Redirect users to their respective dashboards after successful login
     useEffect(() => {
-        if (user && user.role === 'admin') {
-            router.push('/dashboard/admin');
+        if (user) {
+            if (user.role === 'admin') {
+                router.push('/dashboard/admin');
+            } else {
+                router.push('/dashboard/user');
+            }
         }
     }, [user, router]);
 
