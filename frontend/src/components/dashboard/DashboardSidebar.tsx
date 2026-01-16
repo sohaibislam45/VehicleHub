@@ -13,6 +13,7 @@ export default function DashboardSidebar({ role }: DashboardSidebarProps) {
     const { user, logout } = useAuth();
 
     const userMenuItems = [
+        { icon: "home", label: "Home", href: "/" },
         { icon: "dashboard", label: "Overview", href: "/dashboard/user" },
         { icon: "add_box", label: "Add Vehicle", href: "/dashboard/user/add-vehicle" },
         { icon: "garage", label: "My Vehicles", href: "/dashboard/user/vehicles" },
@@ -20,6 +21,7 @@ export default function DashboardSidebar({ role }: DashboardSidebarProps) {
     ];
 
     const adminMenuItems = [
+        { icon: "home", label: "Home", href: "/" },
         { icon: "dashboard", label: "Overview", href: "/dashboard/admin" },
         { icon: "commute", label: "Manage Vehicles", href: "/dashboard/admin/vehicles" },
         { icon: "group", label: "Manage Users", href: "/dashboard/admin/users" },
