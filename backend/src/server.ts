@@ -32,10 +32,10 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Routes
+app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/bookings', bookingRoutes);
-app.use('/api/admin', adminRoutes);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('VehicleHub API is running...');

@@ -148,7 +148,7 @@ export default function AdminDashboardPage() {
                                 ></path>
                             </svg>
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="text-2xl font-bold text-white">840</span>
+                                <span className="text-2xl font-bold text-white">{stats.totalVehicles}</span>
                                 <span className="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Total</span>
                             </div>
                         </div>
@@ -157,25 +157,25 @@ export default function AdminDashboardPage() {
                                 <div className="flex items-center gap-2 font-medium">
                                     <span className="size-3 rounded-full bg-primary"></span>Sedan
                                 </div>
-                                <span className="font-bold text-white">336 (40%)</span>
+                                <span className="font-bold text-white">{(stats.totalVehicles * 0.4).toFixed(0)} (40%)</span>
                             </div>
                             <div className="flex items-center justify-between text-sm">
                                 <div className="flex items-center gap-2 font-medium">
                                     <span className="size-3 rounded-full bg-accent-blue"></span>SUV
                                 </div>
-                                <span className="font-bold text-white">210 (25%)</span>
+                                <span className="font-bold text-white">{(stats.totalVehicles * 0.25).toFixed(0)} (25%)</span>
                             </div>
                             <div className="flex items-center justify-between text-sm">
                                 <div className="flex items-center gap-2 font-medium">
                                     <span className="size-3 rounded-full bg-accent-orange"></span>Luxury
                                 </div>
-                                <span className="font-bold text-white">126 (15%)</span>
+                                <span className="font-bold text-white">{(stats.totalVehicles * 0.15).toFixed(0)} (15%)</span>
                             </div>
                             <div className="flex items-center justify-between text-sm text-slate-500">
                                 <div className="flex items-center gap-2 font-medium">
                                     <span className="size-3 rounded-full bg-white/20"></span>Other
                                 </div>
-                                <span className="font-bold">168 (20%)</span>
+                                <span className="font-bold">{(stats.totalVehicles * 0.2).toFixed(0)} (20%)</span>
                             </div>
                         </div>
                     </div>
@@ -241,60 +241,36 @@ export default function AdminDashboardPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                            <tr className="hover:bg-white/5 transition-colors group">
-                                <td className="px-6 py-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="size-8 rounded-full bg-green-500/10 text-green-500 flex items-center justify-center">
-                                            <span className="material-symbols-outlined text-sm">person_add</span>
+                            {stats.recentActivity.map((booking: any) => (
+                                <tr key={booking._id} className="hover:bg-white/5 transition-colors group">
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="size-8 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center">
+                                                <span className="material-symbols-outlined text-sm">directions_car</span>
+                                            </div>
+                                            <span className="font-medium text-white">Booking: {booking.vehicleId?.title || 'Unknown Vehicle'}</span>
                                         </div>
-                                        <span className="font-medium text-white">New User Registered</span>
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4 text-sm font-medium text-white">John Doe</td>
-                                <td className="px-6 py-4 text-sm text-slate-500">2 mins ago</td>
-                                <td className="px-6 py-4">
-                                    <span className="px-2 py-1 rounded-md text-[10px] font-bold bg-green-500/10 text-green-500 uppercase">Success</span>
-                                </td>
-                                <td className="px-6 py-4 text-right">
-                                    <button className="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">visibility</button>
-                                </td>
-                            </tr>
-                            <tr className="hover:bg-white/5 transition-colors group">
-                                <td className="px-6 py-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="size-8 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center">
-                                            <span className="material-symbols-outlined text-sm">directions_car</span>
-                                        </div>
-                                        <span className="font-medium text-white">New Vehicle Added</span>
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4 text-sm font-medium text-white">Tesla Model S #840</td>
-                                <td className="px-6 py-4 text-sm text-slate-500">14 mins ago</td>
-                                <td className="px-6 py-4">
-                                    <span className="px-2 py-1 rounded-md text-[10px] font-bold bg-green-500/10 text-green-500 uppercase">Verified</span>
-                                </td>
-                                <td className="px-6 py-4 text-right">
-                                    <button className="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">visibility</button>
-                                </td>
-                            </tr>
-                            <tr className="hover:bg-white/5 transition-colors group">
-                                <td className="px-6 py-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="size-8 rounded-full bg-accent-orange/10 text-accent-orange flex items-center justify-center">
-                                            <span className="material-symbols-outlined text-sm">warning</span>
-                                        </div>
-                                        <span className="font-medium text-white">Booking Cancelled</span>
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4 text-sm font-medium text-white">Booking #BK-9921</td>
-                                <td className="px-6 py-4 text-sm text-slate-500">1 hour ago</td>
-                                <td className="px-6 py-4">
-                                    <span className="px-2 py-1 rounded-md text-[10px] font-bold bg-red-500/10 text-red-500 uppercase">Refunded</span>
-                                </td>
-                                <td className="px-6 py-4 text-right">
-                                    <button className="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">visibility</button>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td className="px-6 py-4 text-sm font-medium text-white">{booking.userId?.name || 'Deleted User'}</td>
+                                    <td className="px-6 py-4 text-sm text-slate-500">{new Date(booking.createdAt).toLocaleDateString()}</td>
+                                    <td className="px-6 py-4">
+                                        <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase ${booking.status === 'confirmed' ? 'bg-green-500/10 text-green-500' : 'bg-amber-500/10 text-amber-500'
+                                            }`}>
+                                            {booking.status}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <button className="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">visibility</button>
+                                    </td>
+                                </tr>
+                            ))}
+                            {stats.recentActivity.length === 0 && (
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-10 text-center text-slate-500 text-sm italic">
+                                        No recent system activity found.
+                                    </td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
