@@ -1,7 +1,98 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register GSAP plugins
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function HomePage() {
+    const [openFaq, setOpenFaq] = useState<number | null>(null);
+    const heroRef = useRef(null);
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            // Hero section parallax/entrance
+            gsap.from(".hero-content > *", {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+
+            // Stats section
+            gsap.from(".stats-card", {
+                scrollTrigger: {
+                    trigger: ".stats-section",
+                    start: "top 80%",
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "power2.out"
+            });
+
+            // Why Choose Us
+            gsap.from(".why-choose-content > *", {
+                scrollTrigger: {
+                    trigger: ".why-choose-section",
+                    start: "top 70%",
+                },
+                x: -50,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+
+            // Latest Arrivals
+            gsap.from(".latest-arrivals-grid > *", {
+                scrollTrigger: {
+                    trigger: ".latest-arrivals-section",
+                    start: "top 70%",
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "power2.out"
+            });
+        });
+
+        return () => ctx.revert();
+    }, []);
+
+    const toggleFaq = (index: number) => {
+        setOpenFaq(openFaq === index ? null : index);
+    };
+
+    const faqData = [
+        {
+            question: "What is included in the premium insurance?",
+            answer: "Our comprehensive package covers collision damage, theft protection, and third-party liability with zero deductible for all our Elite tier vehicles."
+        },
+        {
+            question: "Do you offer home delivery?",
+            answer: "Yes, we offer white-glove delivery service to your specified location within our hub city limits."
+        },
+        {
+            question: "What are the age requirements for luxury rentals?",
+            answer: "For our Performance and Elite tiers, drivers must be at least 25 years old and have a valid driver's license for at least 3 years."
+        },
+        {
+            question: "Can I extend my booking mid-rental?",
+            answer: "Absolutely. Extensions can be requested through your dashboard or by contacting our 24/7 concierge service, subject to vehicle availability."
+        }
+    ];
+
     return (
         <div className="flex flex-col pt-6">
             {/* Cinematic Hero Section - Boxed Layout */}
@@ -17,8 +108,8 @@ export default function HomePage() {
                             }}
                         ></div>
                     </div>
-                    <div className="relative z-20 w-full h-full flex flex-col items-center md:items-start justify-center text-center md:text-left px-6 md:px-16">
-                        <div className="max-w-4xl">
+                    <div ref={heroRef} className="relative z-20 w-full h-full flex flex-col items-center md:items-start justify-center text-center md:text-left px-6 md:px-16">
+                        <div className="max-w-4xl hero-content">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-widest uppercase mb-8">
                                 <span className="relative flex h-2 w-2">
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -34,9 +125,9 @@ export default function HomePage() {
                                 explorer. Redefining the journey from A to B.
                             </p>
                             <div className="flex flex-col sm:flex-row items-center md:justify-start justify-center gap-4 w-full">
-                                <button className="w-full sm:w-auto px-10 py-4 bg-primary text-background-dark rounded-xl font-bold text-lg hover:shadow-[0_0_30px_rgba(23,191,207,0.3)] transition-all">
+                                <Link href="/explore" className="w-full sm:w-auto px-10 py-4 bg-primary text-background-dark rounded-xl font-bold text-lg hover:shadow-[0_0_30px_rgba(23,191,207,0.3)] transition-all flex items-center justify-center">
                                     Browse the Fleet
-                                </button>
+                                </Link>
                                 <button className="w-full sm:w-auto px-10 py-4 glass-card rounded-xl font-bold text-lg hover:bg-white/10 transition-all text-slate-100">
                                     View Pricing
                                 </button>
@@ -53,19 +144,19 @@ export default function HomePage() {
             </div>
 
             {/* Glassmorphism Stats Section */}
-            <section className="py-20 max-w-7xl mx-auto layout-padding w-full">
+            <section className="py-20 max-w-7xl mx-auto layout-padding w-full stats-section">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="glass-card p-10 rounded-2xl group hover:border-primary/30 transition-all">
+                    <div className="glass-card p-10 rounded-2xl group hover:border-primary/30 transition-all stats-card">
                         <span className="material-symbols-outlined text-primary mb-4 text-4xl font-light">directions_car</span>
                         <p className="text-4xl font-bold mb-1 text-slate-100">10k+</p>
                         <p className="text-slate-400 font-medium tracking-wide uppercase text-xs">Premium Vehicles</p>
                     </div>
-                    <div className="glass-card p-10 rounded-2xl group hover:border-primary/30 transition-all">
+                    <div className="glass-card p-10 rounded-2xl group hover:border-primary/30 transition-all stats-card">
                         <span className="material-symbols-outlined text-primary mb-4 text-4xl font-light">public</span>
                         <p className="text-4xl font-bold mb-1 text-slate-100">50+</p>
                         <p className="text-slate-400 font-medium tracking-wide uppercase text-xs">Global Hub Cities</p>
                     </div>
-                    <div className="glass-card p-10 rounded-2xl group hover:border-primary/30 transition-all">
+                    <div className="glass-card p-10 rounded-2xl group hover:border-primary/30 transition-all stats-card">
                         <span className="material-symbols-outlined text-primary mb-4 text-4xl font-light">star</span>
                         <p className="text-4xl font-bold mb-1 text-slate-100">4.9/5</p>
                         <p className="text-slate-400 font-medium tracking-wide uppercase text-xs">Elite User Rating</p>
@@ -74,10 +165,10 @@ export default function HomePage() {
             </section>
 
             {/* Why Choose Us Section */}
-            <section className="py-24 bg-gradient-to-b from-transparent to-surface-dark/10 w-full overflow-hidden">
+            <section className="py-24 bg-gradient-to-b from-transparent to-surface-dark/10 w-full overflow-hidden why-choose-section">
                 <div className="max-w-7xl mx-auto layout-padding">
                     <div className="flex flex-col md:flex-row items-center gap-16">
-                        <div className="flex-1 space-y-8">
+                        <div className="flex-1 space-y-8 why-choose-content">
                             <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
                                 Why the World&apos;s Elite <br />
                                 <span className="text-primary italic">Choose VehicleHub.</span>
@@ -133,7 +224,7 @@ export default function HomePage() {
             </section>
 
             {/* Latest Vehicles Carousel */}
-            <section className="py-20 overflow-hidden w-full">
+            <section className="py-20 overflow-hidden w-full latest-arrivals-section">
                 <div className="max-w-7xl mx-auto layout-padding mb-12 flex justify-between items-end">
                     <div>
                         <h2 className="text-3xl font-bold tracking-tight mb-2 text-slate-100">Latest Arrivals</h2>
@@ -148,10 +239,11 @@ export default function HomePage() {
                         </button>
                     </div>
                 </div>
-                <div className="max-w-7xl mx-auto layout-padding overflow-hidden">
-                    <div className="flex gap-6 overflow-x-auto hide-scrollbar snap-x pb-4">
+                <div className="max-w-7xl mx-auto layout-padding">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 latest-arrivals-grid">
+                        {/* Row 1 */}
                         {/* Card 1 */}
-                        <div className="min-w-[380px] snap-center group">
+                        <Link href="/vehicles/tesla-model-s" className="block group">
                             <div className="relative h-[280px] rounded-2xl overflow-hidden mb-5">
                                 <div
                                     className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
@@ -159,9 +251,9 @@ export default function HomePage() {
                                 ></div>
                                 <div className="absolute top-4 left-4 bg-primary text-background-dark text-[10px] font-black uppercase px-2 py-1 rounded">EV Elite</div>
                             </div>
-                            <div className="flex justify-between items-start">
+                            <div className="flex justify-between items-start px-2">
                                 <div>
-                                    <h3 className="text-xl font-bold text-slate-100">Tesla Model S Plaid</h3>
+                                    <h3 className="text-xl font-bold text-slate-100 group-hover:text-primary transition-colors">Tesla Model S Plaid</h3>
                                     <p className="text-slate-400 text-sm">Ludicrous Mode • 396mi Range</p>
                                 </div>
                                 <div className="text-right">
@@ -169,9 +261,9 @@ export default function HomePage() {
                                     <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Per Day</p>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                         {/* Card 2 */}
-                        <div className="min-w-[380px] snap-center group">
+                        <Link href="/vehicles/porsche-taycan" className="block group">
                             <div className="relative h-[280px] rounded-2xl overflow-hidden mb-5">
                                 <div
                                     className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
@@ -179,9 +271,9 @@ export default function HomePage() {
                                 ></div>
                                 <div className="absolute top-4 left-4 bg-primary text-background-dark text-[10px] font-black uppercase px-2 py-1 rounded">Performance</div>
                             </div>
-                            <div className="flex justify-between items-start">
+                            <div className="flex justify-between items-start px-2">
                                 <div>
-                                    <h3 className="text-xl font-bold text-slate-100">Porsche Taycan</h3>
+                                    <h3 className="text-xl font-bold text-slate-100 group-hover:text-primary transition-colors">Porsche Taycan</h3>
                                     <p className="text-slate-400 text-sm">Turbo S • 750hp AWD</p>
                                 </div>
                                 <div className="text-right">
@@ -189,18 +281,21 @@ export default function HomePage() {
                                     <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Per Day</p>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
+
+                        {/* Row 2 */}
                         {/* Card 3 */}
-                        <div className="min-w-[380px] snap-center group">
+                        <Link href="/vehicles/audi-etron" className="block group">
                             <div className="relative h-[280px] rounded-2xl overflow-hidden mb-5">
                                 <div
                                     className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
                                     style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDgTlKqlCSU8w8RFH97O4I29_cJ69vINC6Ggt40DeSf1q5vaWzRgojD1MY7dbW8ILkfwh90DU8MLLADvkpg6WAHTn_rOllvbmEuFIZ8ejoY6_6mJ_zuGPdCaMVNvj0ILAR8KAQKFdq1WF3QqUq8imMhTq8wcU9H5VA1yuIhqU8O9iFKNzrs3_9mFiTLjcZ_gvr2OBpFH44CtleCl1Ofgv2TepQNDmJVr7hSvE3IvQsyPGsaruE-nlLwRhA2XPuL462qOeT0qfa2Ukc")' }}
                                 ></div>
+                                <div className="absolute top-4 left-4 bg-primary text-background-dark text-[10px] font-black uppercase px-2 py-1 rounded">Luxury EV</div>
                             </div>
-                            <div className="flex justify-between items-start">
+                            <div className="flex justify-between items-start px-2">
                                 <div>
-                                    <h3 className="text-xl font-bold text-slate-100">Audi e-tron GT</h3>
+                                    <h3 className="text-xl font-bold text-slate-100 group-hover:text-primary transition-colors">Audi e-tron GT</h3>
                                     <p className="text-slate-400 text-sm">Quattro • Matrix LED</p>
                                 </div>
                                 <div className="text-right">
@@ -208,18 +303,19 @@ export default function HomePage() {
                                     <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Per Day</p>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                         {/* Card 4 */}
-                        <div className="min-w-[380px] snap-center group">
+                        <Link href="/vehicles/range-rover" className="block group">
                             <div className="relative h-[280px] rounded-2xl overflow-hidden mb-5">
                                 <div
                                     className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
                                     style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCXXw6o5wqWBcfaAMaikX3QsoBQ3FoYn2wd73WBosYuSz0O9PRnMXNYqM5pKfhN5-_pYVgYcRi-fVpSFnJXm8h3CQ-rSaEV83tuMl2aDG_LKdl_upCiUAsbpCDH1OcLmp-OviMNxIUG8K6Nt_HV6Np8S1WWaUwXo_SQd0uywNWUiDJ78vQXTPuGH3kiJs1kqK7fzbJSeuKt-7t6uvlW-ea2uUhX8NAx2v99fozCCbTZIPomssZhAyuYkG5Cg_2EM-dHLBrUm5YIQpM")' }}
                                 ></div>
+                                <div className="absolute top-4 left-4 bg-primary text-background-dark text-[10px] font-black uppercase px-2 py-1 rounded">Ultra Luxury</div>
                             </div>
-                            <div className="flex justify-between items-start">
+                            <div className="flex justify-between items-start px-2">
                                 <div>
-                                    <h3 className="text-xl font-bold text-slate-100">Range Rover SV</h3>
+                                    <h3 className="text-xl font-bold text-slate-100 group-hover:text-primary transition-colors">Range Rover SV</h3>
                                     <p className="text-slate-400 text-sm">Luxury SUV • V8 Twin Turbo</p>
                                 </div>
                                 <div className="text-right">
@@ -227,7 +323,7 @@ export default function HomePage() {
                                     <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Per Day</p>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -235,43 +331,66 @@ export default function HomePage() {
             {/* Explore Categories */}
             <section className="py-20 max-w-7xl mx-auto layout-padding w-full">
                 <h2 className="text-3xl font-bold tracking-tight mb-12 text-slate-100">Explore Categories</h2>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-[600px]">
-                    <div className="md:col-span-2 relative rounded-2xl overflow-hidden group">
+                <div className="flex flex-col md:flex-row gap-6 h-auto md:h-[500px]">
+                    {/* @ts-ignore */}
+                    <motion.div
+                        whileHover={{ flex: 1.5 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="flex-1 relative rounded-3xl overflow-hidden group cursor-pointer border border-white/5"
+                    >
                         <div
-                            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-1000"
+                            className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
                             style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBoAQaZ7U2ct3rWzLmYUFz2qMSyjo7Bh6yZZzvgHmTQGn9SJ9vkNHzy6hjkZ3UPy-Vq-D2h8iMXddWqjd4LzBRW6haeH8V1uF4qYUnHP8k-MSQtJJOHO2-0R9rPcsYkF21Sh9ynheYNakouDIFDhanlxufP1Skv7j5gEQSQCRqBwPZw64Ghx4FclefAojhDCFURbPuaAMBKNE1i1zcy0c6Du5sL0AI387YBXzWUo3x_4_FuLWWhVPN3-nsp0hqUhzaEShpKePfLHww")' }}
                         ></div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
-                        <div className="absolute bottom-8 left-8">
-                            <h3 className="text-3xl font-bold mb-2 text-slate-100">Luxury Sedans</h3>
-                            <p className="text-slate-300 mb-4">The pinnacle of comfort and tech.</p>
-                            <button className="text-primary font-bold text-sm tracking-widest uppercase flex items-center gap-2 group/btn">
+                        <div className="absolute inset-0 bg-gradient-to-t from-background-dark/90 via-background-dark/20 to-transparent"></div>
+                        <div className="absolute bottom-10 left-10 right-10">
+                            <h3 className="text-3xl font-bold mb-3 text-slate-100">Luxury Sedans</h3>
+                            <p className="text-slate-300 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">Experience the zenith of comfort and cutting-edge technology.</p>
+                            <Link href="/explore" className="text-primary font-bold text-sm tracking-widest uppercase flex items-center gap-2 group/btn">
                                 Explore <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                            </button>
+                            </Link>
                         </div>
-                    </div>
-                    <div className="relative rounded-2xl overflow-hidden group">
+                    </motion.div>
+
+                    {/* @ts-ignore */}
+                    <motion.div
+                        whileHover={{ flex: 1.5 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="flex-1 relative rounded-3xl overflow-hidden group cursor-pointer border border-white/5"
+                    >
                         <div
-                            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-1000"
+                            className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
                             style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC5ujtYDJk8k2TVdTKt9-9BoU6YDSN-cszUF8dSufB5GgNXqxlLjqWGn8f5PFQCGYudmV5SMZ2aXtddfdsM-tqAZnWtkCgBIinecQYemeMdkmEakDhpfe_hRLEdpwCTBv-EIeifWQC9uB4YnOe8S0GWFwuAMwuAPTEDxRkycTz0lcgsYHBkQOvl-mjltlc8z1liBap1_YECrABTDh59otBAf7CtPRNHRDZX6cTLUvCs3MGFMZxAYk1ShkNWIh7LupwEmcmlIJNcmKw")' }}
                         ></div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
-                        <div className="absolute bottom-8 left-8">
-                            <h3 className="text-2xl font-bold mb-1 text-slate-100">Pure Electric</h3>
-                            <button className="text-primary font-bold text-xs tracking-widest uppercase">View All</button>
+                        <div className="absolute inset-0 bg-gradient-to-t from-background-dark/90 via-background-dark/20 to-transparent"></div>
+                        <div className="absolute bottom-10 left-10 right-10">
+                            <h3 className="text-3xl font-bold mb-3 text-slate-100">Pure Electric</h3>
+                            <p className="text-slate-300 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">Zero emissions, infinite possibilities. The future is here.</p>
+                            <Link href="/explore" className="text-primary font-bold text-sm tracking-widest uppercase flex items-center gap-2 group/btn">
+                                Explore <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </Link>
                         </div>
-                    </div>
-                    <div className="relative rounded-2xl overflow-hidden group">
+                    </motion.div>
+
+                    {/* @ts-ignore */}
+                    <motion.div
+                        whileHover={{ flex: 1.5 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="flex-1 relative rounded-3xl overflow-hidden group cursor-pointer border border-white/5"
+                    >
                         <div
-                            className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-1000"
+                            className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
                             style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBI3Lwm1J4WWsQzvIaWXe8k4sq7AFQXOHUkZ7fGhzO8kVraNspTct_0HAiEgResPLFFyvPZr5bRTadoFjx_NT799prEbo16o_YVD9mstESVhz7tEN3jEyF1neW4OTdMrUnsuePL1ReWAxqxj7bvBDT10RnwxyL_7lJLkTMAylO4QRDlWRxddts_Hq280xacRVly5zxNLESd47XF9X-sqVzb9ixo3j5nTKCl7bgiiLMmW4nfYOTUzepKu5u0G6NWieHJVgFHQhxdoPo")' }}
                         ></div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
-                        <div className="absolute bottom-8 left-8">
-                            <h3 className="text-2xl font-bold mb-1 text-slate-100">Adventure SUV</h3>
-                            <Link href="/explore" className="text-primary font-bold text-xs tracking-widest uppercase hover:underline">View All</Link>
+                        <div className="absolute inset-0 bg-gradient-to-t from-background-dark/90 via-background-dark/20 to-transparent"></div>
+                        <div className="absolute bottom-10 left-10 right-10">
+                            <h3 className="text-3xl font-bold mb-3 text-slate-100">Adventure SUV</h3>
+                            <p className="text-slate-300 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">Conquer any terrain with our elite range of premium SUVs.</p>
+                            <Link href="/explore" className="text-primary font-bold text-sm tracking-widest uppercase flex items-center gap-2 group/btn">
+                                Explore <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </Link>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
@@ -296,7 +415,13 @@ export default function HomePage() {
                                 </p>
                             </div>
                             <div className="flex items-center gap-4">
-                                <div className="size-12 rounded-full bg-slate-800"></div>
+                                <Image
+                                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&h=200&auto=format&fit=crop"
+                                    alt="Jonathan Vance"
+                                    width={48}
+                                    height={48}
+                                    className="rounded-full object-cover"
+                                />
                                 <div>
                                     <h5 className="text-white font-bold">Jonathan Vance</h5>
                                     <p className="text-slate-500 text-xs">Tech CEO, San Francisco</p>
@@ -318,7 +443,13 @@ export default function HomePage() {
                                 </p>
                             </div>
                             <div className="flex items-center gap-4">
-                                <div className="size-12 rounded-full bg-slate-800"></div>
+                                <Image
+                                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop"
+                                    alt="Elena Rodriguez"
+                                    width={48}
+                                    height={48}
+                                    className="rounded-full object-cover"
+                                />
                                 <div>
                                     <h5 className="text-white font-bold">Elena Rodriguez</h5>
                                     <p className="text-slate-400 text-xs">Venture Partner, Madrid</p>
@@ -340,7 +471,13 @@ export default function HomePage() {
                                 </p>
                             </div>
                             <div className="flex items-center gap-4">
-                                <div className="size-12 rounded-full bg-slate-800"></div>
+                                <Image
+                                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&h=200&auto=format&fit=crop"
+                                    alt="Marcus Chen"
+                                    width={48}
+                                    height={48}
+                                    className="rounded-full object-cover"
+                                />
                                 <div>
                                     <h5 className="text-white font-bold">Marcus Chen</h5>
                                     <p className="text-slate-500 text-xs">Architect, Singapore</p>
@@ -375,42 +512,6 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Latest News / Blog Section */}
-            <section className="py-24 max-w-7xl mx-auto layout-padding">
-                <div className="flex justify-between items-end mb-16">
-                    <div>
-                        <h2 className="text-3xl font-bold text-white mb-2">Fleet Intelligence</h2>
-                        <p className="text-slate-400">Insights from the convergence of luxury and technology.</p>
-                    </div>
-                    <button className="text-primary font-bold text-sm tracking-widest uppercase hover:underline">View All Articles</button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div className="group cursor-pointer">
-                        <div className="relative h-[240px] rounded-3xl overflow-hidden mb-6">
-                            <Image src="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&q=80&w=800" alt="Blog" width={400} height={240} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                            <div className="absolute top-4 left-4 bg-background-dark/80 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase">Technology</div>
-                        </div>
-                        <h4 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">The Autonomous Revolution: What to Expect in 2024</h4>
-                        <p className="text-slate-500 text-sm line-clamp-2">Exploring how level 4 autonomy is reshaping the luxury rental landscape across European hubs.</p>
-                    </div>
-                    <div className="group cursor-pointer">
-                        <div className="relative h-[240px] rounded-3xl overflow-hidden mb-6">
-                            <Image src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&q=80&w=800" alt="Blog" width={400} height={240} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                            <div className="absolute top-4 left-4 bg-background-dark/80 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase">Lifestyle</div>
-                        </div>
-                        <h4 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">Coastal Grandeur: Top 5 Scenic Drives in Portugal</h4>
-                        <p className="text-slate-500 text-sm line-clamp-2">A curated guide to the most breathtaking roads for a weekend with the Porsche Taycan.</p>
-                    </div>
-                    <div className="group cursor-pointer">
-                        <div className="relative h-[240px] rounded-3xl overflow-hidden mb-6">
-                            <Image src="https://images.unsplash.com/photo-1492144534655-ad79c964c0df?auto=format&fit=crop&q=80&w=800" alt="Blog" width={400} height={240} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                            <div className="absolute top-4 left-4 bg-background-dark/80 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase">Sustainability</div>
-                        </div>
-                        <h4 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">Sustainable Speed: The Evolution of High-Performance EVs</h4>
-                        <p className="text-slate-500 text-sm line-clamp-2">How manufacturers are balancing breathtaking performance with ecological responsibility.</p>
-                    </div>
-                </div>
-            </section>
 
             {/* How it Works */}
             <section id="how-it-works" className="py-24 bg-surface-dark/30 w-full">
@@ -470,33 +571,39 @@ export default function HomePage() {
             <section id="faq" className="py-24 max-w-3xl mx-auto layout-padding w-full text-slate-100">
                 <h2 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
                 <div className="space-y-4">
-                    <div className="border-b border-white/5 pb-6">
-                        <button className="w-full flex justify-between items-center text-left py-4 hover:text-primary transition-colors">
-                            <span className="text-lg font-medium">What is included in the premium insurance?</span>
-                            <span className="material-symbols-outlined">add</span>
-                        </button>
-                        <div className="text-slate-400 leading-relaxed text-sm pr-12">
-                            Our comprehensive package covers collision damage, theft protection, and third-party liability with zero deductible for all our Elite tier vehicles.
+                    {faqData.map((faq, index) => (
+                        <div key={index} className="border-b border-white/5 pb-2">
+                            <button
+                                onClick={() => toggleFaq(index)}
+                                className="w-full flex justify-between items-center text-left py-6 hover:text-primary transition-colors group"
+                            >
+                                <span className={`text-lg font-medium transition-colors ${openFaq === index ? 'text-primary' : ''}`}>{faq.question}</span>
+                                {/* @ts-ignore */}
+                                <motion.span
+                                    animate={{ rotate: openFaq === index ? 45 : 0 }}
+                                    className="material-symbols-outlined text-slate-500 group-hover:text-primary"
+                                >
+                                    add
+                                </motion.span>
+                            </button>
+                            <AnimatePresence>
+                                {openFaq === index && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                                        // @ts-ignore
+                                        className="overflow-hidden"
+                                    >
+                                        <div className="pb-6 text-slate-400 leading-relaxed text-sm pr-12">
+                                            {faq.answer}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
-                    </div>
-                    <div className="border-b border-white/5 pb-2">
-                        <button className="w-full flex justify-between items-center text-left py-4 hover:text-primary transition-colors">
-                            <span className="text-lg font-medium">Do you offer home delivery?</span>
-                            <span className="material-symbols-outlined">add</span>
-                        </button>
-                    </div>
-                    <div className="border-b border-white/5 pb-2">
-                        <button className="w-full flex justify-between items-center text-left py-4 hover:text-primary transition-colors">
-                            <span className="text-lg font-medium">What are the age requirements for luxury rentals?</span>
-                            <span className="material-symbols-outlined">add</span>
-                        </button>
-                    </div>
-                    <div className="border-b border-white/5 pb-2">
-                        <button className="w-full flex justify-between items-center text-left py-4 hover:text-primary transition-colors">
-                            <span className="text-lg font-medium">Can I extend my booking mid-rental?</span>
-                            <span className="material-symbols-outlined">add</span>
-                        </button>
-                    </div>
+                    ))}
                 </div>
             </section>
         </div >
