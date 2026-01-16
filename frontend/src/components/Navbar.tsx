@@ -4,11 +4,32 @@ import Image from "next/image";
 
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
     const { user, logout } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [showBackToTop, setShowBackToTop] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 300) {
+                setShowBackToTop(true);
+            } else {
+                setShowBackToTop(false);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    };
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-background-dark/80 backdrop-blur-md">
@@ -55,6 +76,15 @@ export default function Navbar() {
                 </nav>
 
                 <div className="flex items-center gap-4">
+                    {/* Back to Top Button */}
+                    <button
+                        onClick={scrollToTop}
+                        className={`hidden md:flex items-center justify-center size-10 rounded-full bg-white/5 border border-white/10 text-primary hover:bg-primary/10 transition-all duration-500 scale-0 opacity-0 ${showBackToTop ? 'scale-100 opacity-100' : ''}`}
+                        title="Back to Top"
+                    >
+                        <span className="material-symbols-outlined text-xl">arrow_upward</span>
+                    </button>
+
                     {!user ? (
                         <>
                             <Link href="/login" className="text-sm font-semibold px-5 py-2 text-slate-100 hover:text-primary transition-colors">
