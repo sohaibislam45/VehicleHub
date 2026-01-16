@@ -99,8 +99,8 @@ export default function DashboardSidebar({ role }: DashboardSidebarProps) {
                     <div
                         className="size-10 rounded-full bg-cover bg-center border border-primary/30"
                         style={{
-                            backgroundImage: user?.avatar
-                                ? `url('${user.avatar}')`
+                            backgroundImage: user?.photoURL
+                                ? `url('${user.photoURL}')`
                                 : "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB-L4bjksbdplUz3qyTbDxasqIOSXRPWzg_mf-BIHDaU4vro4xIru8CZj7a5R0D86iUzFRraFFncySrebsHI_Aq-3qzKJib9aq8rbBd7o14DvIumoZNplsd2uGxnVYgrCb31hyLWNOfuAv2L_GwjVyoWa2XOSu7JNb_oEj4LTf4EHEm8Yq-16GpYbY1t17npdmxE18eNCgcB8onbXUL7PMvBCLkpiUKVmxoWLqiSwMl4DgckwufoDmWLW8elhDjAUN4eL56wUWOSBk')",
                         }}
                     ></div>

@@ -3,7 +3,7 @@ export interface Vehicle {
     ownerId: {
         _id: string;
         name: string;
-        avatar?: string;
+        photoURL?: string;
     };
     title: string;
     description: string;

@@ -130,12 +130,18 @@ export default function ManageVehiclesPage() {
                                     </td>
                                     <td className="px-6 py-5 text-right">
                                         <div className="flex justify-end gap-2">
-                                            <button className="p-2 hover:bg-white/5 rounded-lg text-slate-400 hover:text-primary transition-all">
+                                            <a
+                                                href={`/explore/${vehicle._id}`}
+                                                target="_blank"
+                                                className="p-2 hover:bg-white/5 rounded-lg text-slate-400 hover:text-primary transition-all inline-flex items-center justify-center"
+                                                title="View Public Details"
+                                            >
                                                 <span className="material-symbols-outlined text-xl">visibility</span>
-                                            </button>
+                                            </a>
                                             <button
                                                 onClick={() => handleDelete(vehicle._id)}
-                                                className="p-2 hover:bg-red-500/10 rounded-lg text-slate-400 hover:text-red-500 transition-all"
+                                                className="p-2 hover:bg-red-500/10 rounded-lg text-slate-400 hover:text-red-500 transition-all flex items-center justify-center"
+                                                title="Remove Listing"
                                             >
                                                 <span className="material-symbols-outlined text-xl">delete</span>
                                             </button>

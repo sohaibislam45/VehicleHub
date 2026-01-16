@@ -4,7 +4,7 @@ export interface IUser extends Document {
     email: string;
     name: string;
     role: 'user' | 'admin';
-    avatar?: string;
+    photoURL?: string;
     createdAt: Date;
 }
 declare const _default: mongoose.Model<IUser, {}, {}, {}, mongoose.Document<unknown, {}, IUser, {}, mongoose.DefaultSchemaOptions> & IUser & Required<{

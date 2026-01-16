@@ -9,7 +9,9 @@ interface User {
     name: string;
     email: string;
     role: string;
+    status: 'enabled' | 'disabled';
     photoURL?: string;
+    avatar?: string;
     createdAt: string;
 }
 
@@ -37,19 +39,29 @@ export default function ManageUsersPage() {
         if (!window.confirm(`Are you sure you want to change this user's role to ${newRole}?`)) return;
         try {
             const response = await api.patch(`/admin/users/${userId}/role`, { role: newRole });
-            setUsers(users.map(u => u._id === userId ? response.data : u));
+            setUsers(users.map(u => u._id === userId ? { ...u, role: response.data.role } : u));
         } catch (error) {
             console.error("Error updating role:", error);
             alert("Failed to update user role");
         }
     };
 
-    const handleDelete = async (userId: string) => {
-        if (userId === currentUser?._id) {
-            alert("You cannot delete yourself!");
-            return;
+    const toggleStatus = async (userId: string, currentStatus: string) => {
+        const newStatus = currentStatus === 'enabled' ? 'disabled' : 'enabled';
+        if (!window.confirm(`Are you sure you want to ${newStatus === 'enabled' ? 'enable' : 'disable'} this user?`)) return;
+
+        try {
+            const response = await api.patch(`/admin/users/${userId}/status`, { status: newStatus });
+            setUsers(users.map(u => u._id === userId ? { ...u, status: response.data.status } : u));
+        } catch (error) {
+            console.error("Error updating status:", error);
+            alert("Failed to update user status");
         }
-        if (!window.confirm("Are you sure you want to delete this user? This will also remove their associated data.")) return;
+    };
+
+    const handleDelete = async (userId: string) => {
+        if (userId === currentUser?._id) return;
+        if (!window.confirm("Are you sure you want to PERMANENTLY delete this user? This cannot be undone.")) return;
         try {
             await api.delete(`/admin/users/${userId}`);
             setUsers(users.filter(u => u._id !== userId));
@@ -74,76 +86,127 @@ export default function ManageUsersPage() {
 
     return (
         <div className="animate-in fade-in duration-500">
-            <header className="flex justify-between items-end mb-10">
-                <div>
-                    <h2 className="text-4xl font-black tracking-tight text-white mb-1">Manage Users</h2>
-                    <p className="text-slate-400 text-sm">Monitor user activity and manage system permissions.</p>
+            {/* Header */}
+            <header className="flex flex-wrap items-center justify-between gap-6 mb-10">
+                <div className="flex flex-col gap-1">
+                    <h2 className="text-4xl font-black text-white tracking-tight">Manage Users</h2>
+                    <p className="text-slate-400 font-medium">Control access levels and monitor active sessions</p>
                 </div>
-                <div className="relative">
-                    <input
-                        type="text"
-                        placeholder="Search name, email..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-primary/50 w-64 pl-10"
-                    />
-                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+                <div className="flex items-center gap-4">
+                    <button className="flex items-center gap-2 px-5 h-12 rounded-xl bg-surface-dark border border-border-dark text-sm font-bold text-white hover:bg-white/5 transition-all">
+                        <span className="material-symbols-outlined text-lg">file_download</span>
+                        Export List
+                    </button>
+                    <button className="flex items-center gap-2 px-6 h-12 rounded-xl bg-primary text-background-dark text-sm font-black hover:brightness-110 transition-all shadow-lg shadow-primary/20">
+                        <span className="material-symbols-outlined text-lg">person_add</span>
+                        Invite User
+                    </button>
                 </div>
             </header>
 
-            <div className="bg-surface-dark rounded-2xl border border-white/5 overflow-hidden shadow-2xl">
+            {/* Search */}
+            <section className="mb-6">
+                <div className="bg-surface-dark p-2 rounded-2xl border border-border-dark flex items-center gap-2 shadow-sm">
+                    <div className="flex-1 flex items-center gap-3 px-4">
+                        <span className="material-symbols-outlined text-slate-400">search</span>
+                        <input
+                            className="w-full bg-transparent border-none focus:ring-0 text-white placeholder:text-slate-500 font-medium"
+                            placeholder="Search users by name, email or ID..."
+                            type="text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                </div>
+            </section>
+
+            {/* Table */}
+            <div className="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden shadow-xl">
                 <div className="overflow-x-auto">
-                    <table className="w-full text-left">
-                        <thead className="bg-white/5 border-b border-white/5 text-[11px] font-bold uppercase tracking-widest text-slate-500">
-                            <tr>
-                                <th className="px-6 py-4">User</th>
-                                <th className="px-6 py-4">Role</th>
-                                <th className="px-6 py-4">Joined</th>
-                                <th className="px-6 py-4 text-right">Actions</th>
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-white/[0.02] border-b border-border-dark">
+                                <th className="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400">User</th>
+                                <th className="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400">Contact</th>
+                                <th className="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400">Role</th>
+                                <th className="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400">Status</th>
+                                <th className="px-6 py-5 text-xs font-black uppercase tracking-widest text-slate-400 text-right">Access Management</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-white/5">
+                        <tbody className="divide-y divide-border-dark">
                             {filteredUsers.map((u) => (
-                                <tr key={u._id} className="hover:bg-white/[0.02] transition-colors group">
+                                <tr key={u._id} className={`hover:bg-white/[0.01] transition-colors group ${u.status === 'disabled' ? 'opacity-50' : ''}`}>
                                     <td className="px-6 py-5">
                                         <div className="flex items-center gap-4">
-                                            <div className="size-10 rounded-full overflow-hidden bg-primary/20 border border-white/10 flex items-center justify-center text-primary font-bold">
-                                                {u.photoURL ? (
-                                                    <img src={u.photoURL} alt={u.name} className="object-cover size-full" />
+                                            <div className="size-12 rounded-full overflow-hidden border-2 border-primary/20 bg-white/5 flex items-center justify-center text-primary font-bold">
+                                                {u.photoURL || u.avatar ? (
+                                                    <img src={u.photoURL || u.avatar} alt={u.name} className="object-cover size-full" />
                                                 ) : (
                                                     u.name.charAt(0).toUpperCase()
                                                 )}
                                             </div>
                                             <div>
-                                                <h4 className="font-bold text-slate-100 mb-0.5">
-                                                    {u.name} {u._id === currentUser?._id && <span className="text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-slate-400 ml-1 underline underline-offset-2">YOU</span>}
-                                                </h4>
-                                                <p className="text-xs text-slate-500 font-mono">{u.email}</p>
+                                                <p className="font-bold text-white group-hover:text-primary transition-colors">
+                                                    {u.name} {u._id === currentUser?._id && <span className="text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-slate-400 ml-1">YOU</span>}
+                                                </p>
+                                                <p className="text-xs text-slate-500 font-medium">Joined {new Date(u.createdAt).toLocaleDateString()}</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-5">
-                                        <select
-                                            value={u.role}
-                                            onChange={(e) => handleRoleChange(u._id, e.target.value)}
-                                            disabled={u._id === currentUser?._id}
-                                            className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs font-bold text-white focus:outline-none focus:border-primary/50 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider"
-                                        >
-                                            <option value="user" className="bg-background-dark">User</option>
-                                            <option value="admin" className="bg-background-dark">Admin</option>
-                                        </select>
+                                    <td className="px-6 py-5 text-sm font-medium text-slate-400">
+                                        {u.email}
                                     </td>
                                     <td className="px-6 py-5">
-                                        <span className="text-sm text-slate-400">{new Date(u.createdAt).toLocaleDateString()}</span>
+                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-black border uppercase ${u.role === 'admin'
+                                            ? 'bg-primary/10 text-primary border-primary/20'
+                                            : 'bg-white/10 text-slate-300 border-white/10'
+                                            }`}>
+                                            {u.role}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-5">
+                                        <div className="flex items-center gap-2">
+                                            <span className={`size-2 rounded-full ${u.status === 'enabled' ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></span>
+                                            <span className={`text-sm font-bold ${u.status === 'enabled' ? 'text-emerald-500' : 'text-red-500'}`}>
+                                                {u.status === 'enabled' ? 'Enabled' : 'Disabled'}
+                                            </span>
+                                        </div>
                                     </td>
                                     <td className="px-6 py-5 text-right">
-                                        <button
-                                            onClick={() => handleDelete(u._id)}
-                                            disabled={u._id === currentUser?._id}
-                                            className="p-2 hover:bg-red-500/10 rounded-lg text-slate-400 hover:text-red-500 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                                        >
-                                            <span className="material-symbols-outlined text-xl">delete</span>
-                                        </button>
+                                        <div className="flex items-center justify-end gap-3">
+                                            <select
+                                                value={u.role}
+                                                onChange={(e) => handleRoleChange(u._id, e.target.value)}
+                                                disabled={u._id === currentUser?._id || u.status === 'disabled'}
+                                                className="bg-background-dark border-none rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary py-1.5 pl-3 pr-8 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-white"
+                                            >
+                                                <option value="user">Standard User</option>
+                                                <option value="admin">Admin</option>
+                                            </select>
+
+                                            <button
+                                                onClick={() => toggleStatus(u._id, u.status)}
+                                                disabled={u._id === currentUser?._id}
+                                                className={`p-2 rounded-lg transition-all flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed ${u.status === 'enabled'
+                                                    ? 'bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white'
+                                                    : 'bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white'
+                                                    }`}
+                                                title={u.status === 'enabled' ? "Disable User" : "Enable User"}
+                                            >
+                                                <span className="material-symbols-outlined text-lg">
+                                                    {u.status === 'enabled' ? 'block' : 'check_circle'}
+                                                </span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => handleDelete(u._id)}
+                                                disabled={u._id === currentUser?._id}
+                                                className="p-2 rounded-lg bg-white/5 text-slate-500 hover:bg-red-500 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                                                title="Permanently Delete"
+                                            >
+                                                <span className="material-symbols-outlined text-lg">delete</span>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

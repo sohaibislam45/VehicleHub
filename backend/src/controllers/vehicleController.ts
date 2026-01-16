@@ -23,7 +23,7 @@ export const getVehicles = async (req: Request, res: Response) => {
             if (maxPrice) query.price.$lte = Number(maxPrice);
         }
 
-        const vehicles = await Vehicle.find(query).populate('ownerId', 'name avatar');
+        const vehicles = await Vehicle.find(query).populate('ownerId', 'name photoURL');
         res.json(vehicles);
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
@@ -34,7 +34,7 @@ export const getVehicles = async (req: Request, res: Response) => {
 // @route GET /api/vehicles/:id
 export const getVehicleById = async (req: Request, res: Response) => {
     try {
-        const vehicle = await Vehicle.findById(req.params.id).populate('ownerId', 'name avatar');
+        const vehicle = await Vehicle.findById(req.params.id).populate('ownerId', 'name photoURL');
         if (!vehicle) return res.status(404).json({ message: 'Vehicle not found' });
         res.json(vehicle);
     } catch (error) {

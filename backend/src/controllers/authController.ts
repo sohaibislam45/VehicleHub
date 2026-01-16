@@ -20,9 +20,14 @@ export const syncUser = async (req: Request, res: Response) => {
                 firebaseId: uid,
                 email: email || '',
                 name: name || 'User',
-                avatar: picture || '',
+                photoURL: picture || '',
                 role: 'user', // Default role
             });
+        } else {
+            // Update existing user with latest info from Firebase
+            user.name = name || user.name;
+            user.photoURL = picture || user.photoURL;
+            await user.save();
         }
 
         res.status(200).json(user);

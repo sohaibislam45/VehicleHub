@@ -10,6 +10,7 @@ interface Booking {
         email: string;
     };
     vehicleId: {
+        _id: string;
         title: string;
     };
     startDate: string;
@@ -82,8 +83,8 @@ export default function ManageBookingsPage() {
                             key={status}
                             onClick={() => setFilterStatus(status)}
                             className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border ${filterStatus === status
-                                    ? 'bg-primary text-background-dark border-primary shadow-[0_0_15px_rgba(23,191,207,0.3)]'
-                                    : 'bg-white/5 text-slate-400 border-white/10 hover:border-white/20'
+                                ? 'bg-primary text-background-dark border-primary shadow-[0_0_15px_rgba(23,191,207,0.3)]'
+                                : 'bg-white/5 text-slate-400 border-white/10 hover:border-white/20'
                                 }`}
                         >
                             {status}
@@ -116,7 +117,18 @@ export default function ManageBookingsPage() {
                                             <span className="text-xs text-slate-500">{b.userId?.email || "N/A"}</span>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-5 text-sm text-slate-200">{b.vehicleId?.title || "Unknown Vehicle"}</td>
+                                    <td className="px-6 py-5">
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-medium text-white">{b.vehicleId?.title || "Deleted Vehicle"}</span>
+                                            <a
+                                                href={`/explore/${b.vehicleId?._id}`}
+                                                target="_blank"
+                                                className="text-[10px] text-primary hover:underline w-fit"
+                                            >
+                                                View Listing
+                                            </a>
+                                        </div>
+                                    </td>
                                     <td className="px-6 py-5">
                                         <div className="flex flex-col gap-0.5">
                                             <span className="text-xs text-slate-300">{new Date(b.startDate).toLocaleDateString()}</span>

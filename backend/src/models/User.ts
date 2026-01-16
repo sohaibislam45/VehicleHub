@@ -5,6 +5,7 @@ export interface IUser extends Document {
     email: string;
     name: string;
     role: 'user' | 'admin';
+    status: 'enabled' | 'disabled';
     photoURL?: string;
     phoneNumber?: string;
     location?: string;
@@ -17,6 +18,7 @@ const UserSchema: Schema = new Schema({
     email: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    status: { type: String, enum: ['enabled', 'disabled'], default: 'enabled' },
     photoURL: { type: String },
     phoneNumber: { type: String },
     location: { type: String },
