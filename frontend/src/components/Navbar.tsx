@@ -35,22 +35,22 @@ export default function Navbar() {
                         Explore
                     </Link>
                     <Link
-                        href="/explore"
-                        className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
-                    >
-                        Fleet
-                    </Link>
-                    <Link
-                        href="/explore"
-                        className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
-                    >
-                        Rentals
-                    </Link>
-                    <Link
                         href="/about"
                         className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
                     >
                         About
+                    </Link>
+                    <Link
+                        href="/contact"
+                        className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
+                    >
+                        Contact Us
+                    </Link>
+                    <Link
+                        href="/privacy"
+                        className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
+                    >
+                        Privacy & Terms
                     </Link>
                 </nav>
 

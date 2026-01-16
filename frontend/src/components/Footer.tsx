@@ -60,23 +60,18 @@ export default function Footer() {
                         </h4>
                         <ul className="space-y-4 text-slate-400 text-sm">
                             <li>
-                                <Link className="hover:text-white transition-colors" href="#">
+                                <Link className="hover:text-white transition-colors" href="/explore">
                                     Fleet Explorer
                                 </Link>
                             </li>
                             <li>
-                                <Link className="hover:text-white transition-colors" href="#">
+                                <Link className="hover:text-white transition-colors" href="/#how-it-works">
                                     How it Works
                                 </Link>
                             </li>
                             <li>
-                                <Link className="hover:text-white transition-colors" href="#">
-                                    Mobile App
-                                </Link>
-                            </li>
-                            <li>
-                                <Link className="hover:text-white transition-colors" href="#">
-                                    Corporate Accounts
+                                <Link className="hover:text-white transition-colors" href="/privacy">
+                                    Privacy & Terms
                                 </Link>
                             </li>
                         </ul>
@@ -87,23 +82,18 @@ export default function Footer() {
                         </h4>
                         <ul className="space-y-4 text-slate-400 text-sm">
                             <li>
-                                <Link className="hover:text-white transition-colors" href="#">
-                                    About Mission
+                                <Link className="hover:text-white transition-colors" href="/about">
+                                    About Us
                                 </Link>
                             </li>
                             <li>
-                                <Link className="hover:text-white transition-colors" href="#">
-                                    Careers
-                                </Link>
-                            </li>
-                            <li>
-                                <Link className="hover:text-white transition-colors" href="#">
-                                    Sustainability
-                                </Link>
-                            </li>
-                            <li>
-                                <Link className="hover:text-white transition-colors" href="#">
+                                <Link className="hover:text-white transition-colors" href="/contact">
                                     Contact Support
+                                </Link>
+                            </li>
+                            <li>
+                                <Link className="hover:text-white transition-colors" href="/#faq">
+                                    FAQ
                                 </Link>
                             </li>
                         </ul>
