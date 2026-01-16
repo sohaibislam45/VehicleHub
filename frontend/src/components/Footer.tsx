@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
     return (
@@ -7,18 +8,13 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
                     <div className="md:col-span-2">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="text-primary">
-                                <svg
-                                    className="w-6 h-6"
-                                    fill="none"
-                                    viewBox="0 0 48 48"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z"
-                                        fill="currentColor"
-                                    ></path>
-                                </svg>
+                            <div className="relative w-8 h-8">
+                                <Image
+                                    src="/logo.png"
+                                    alt="VehicleHub Logo"
+                                    fill
+                                    className="object-contain"
+                                />
                             </div>
                             <span className="text-lg font-bold tracking-tighter uppercase text-slate-100">
                                 VehicleHub

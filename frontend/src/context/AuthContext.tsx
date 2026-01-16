@@ -26,11 +26,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             if (firebaseUser) {
                 try {
                     const token = await firebaseUser.getIdToken();
-                    // Sync with MongoDB
-                    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/sync`, { token });
-                    setUser({ ...firebaseUser, ...response.data });
+                    // Sync with MongoDB (Optional for now)
+                    if (process.env.NEXT_PUBLIC_API_URL) {
+                        try {
+                            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/sync`, { token });
+                            setUser({ ...firebaseUser, ...response.data });
+                        } catch (syncError) {
+                            console.warn("Auth sync failed, using firebase user only:", syncError);
+                            setUser(firebaseUser);
+                        }
+                    } else {
+                        setUser(firebaseUser);
+                    }
                 } catch (error) {
-                    console.error("Auth sync error:", error);
+                    console.error("Auth error:", error);
                     setUser(null);
                 }
             } else {
