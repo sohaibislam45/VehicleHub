@@ -1,0 +1,321 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { uploadMultipleToImgBB } from "@/services/imgbbService";
+import api from "@/lib/api";
+
+export default function AddVehiclePage() {
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    const [uploadingImages, setUploadingImages] = useState(false);
+    const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+    const [formData, setFormData] = useState({
+        title: "",
+        description: "",
+        category: "Sedan",
+        price: "",
+        location: "",
+        year: "",
+        brand: "",
+        model: "",
+        availableFrom: "",
+        availableTo: "",
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        setUploadingImages(true);
+        try {
+            const fileArray = Array.from(files);
+            const urls = await uploadMultipleToImgBB(fileArray);
+            setUploadedImages([...uploadedImages, ...urls]);
+        } catch (error) {
+            alert("Failed to upload images. Please try again.");
+        } finally {
+            setUploadingImages(false);
+        }
+    };
+
+    const removeImage = (index: number) => {
+        setUploadedImages(uploadedImages.filter((_, i) => i !== index));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (uploadedImages.length === 0) {
+            alert("Please upload at least one image");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            await api.post("/vehicles", {
+                ...formData,
+                images: uploadedImages,
+                price: parseFloat(formData.price),
+                year: parseInt(formData.year),
+                status: "active",
+            });
+
+            router.push("/dashboard/user/vehicles");
+        } catch (error: any) {
+            console.error("Error creating vehicle:", error);
+            alert(error.response?.data?.message || "Failed to create vehicle");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="max-w-4xl mx-auto">
+            {/* Header */}
+            <div className="mb-8">
+                <h2 className="text-4xl font-black text-white tracking-tight mb-3">Add New Vehicle</h2>
+                <p className="text-slate-400 text-lg">Set up your listing and start earning by sharing your ride with the community.</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Image Upload Section */}
+                <section className="bg-surface-dark p-8 rounded-xl border border-border-dark">
+                    <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                        <span className="material-symbols-outlined text-primary">image</span>
+                        Vehicle Gallery
+                    </h3>
+
+                    <div className="border-2 border-dashed border-border-dark rounded-xl p-12 flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-all group cursor-pointer relative">
+                        <input
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            disabled={uploadingImages}
+                        />
+                        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span className="material-symbols-outlined text-primary text-3xl">
+                                {uploadingImages ? "progress_activity" : "cloud_upload"}
+                            </span>
+                        </div>
+                        <div className="text-center pointer-events-none">
+                            <p className="font-bold text-lg text-white">
+                                {uploadingImages ? "Uploading..." : "Drag & drop your photos here"}
+                            </p>
+                            <p className="text-slate-400 text-sm">Supports JPG, PNG (Max 10MB per file)</p>
+                        </div>
+                        <button
+                            type="button"
+                            className="mt-2 px-6 py-2 rounded-lg bg-primary text-white font-bold text-sm hover:opacity-90 transition-opacity pointer-events-none"
+                        >
+                            Browse Files
+                        </button>
+                    </div>
+
+                    {/* Uploaded Images Preview */}
+                    {uploadedImages.length > 0 && (
+                        <div className="mt-6 grid grid-cols-4 gap-4">
+                            {uploadedImages.map((url, index) => (
+                                <div key={index} className="relative group">
+                                    <img src={url} alt={`Upload ${index + 1}`} className="w-full h-24 object-cover rounded-lg border border-border-dark" />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeImage(index)}
+                                        className="absolute top-1 right-1 size-6 bg-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                        <span className="material-symbols-outlined text-white text-sm">close</span>
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </section>
+
+                {/* Basic Info Section */}
+                <section className="bg-surface-dark p-8 rounded-xl border border-border-dark">
+                    <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                        <span className="material-symbols-outlined text-primary">info</span>
+                        General Information
+                    </h3>
+                    <div className="grid grid-cols-2 gap-6">
+                        <div className="col-span-2 space-y-2">
+                            <label className="text-sm font-bold text-slate-300">Vehicle Name</label>
+                            <input
+                                type="text"
+                                name="title"
+                                value={formData.title}
+                                onChange={handleChange}
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-white"
+                                placeholder="e.g. Tesla Model 3 Performance"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-slate-300">Brand</label>
+                            <input
+                                type="text"
+                                name="brand"
+                                value={formData.brand}
+                                onChange={handleChange}
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                                placeholder="e.g. Tesla"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-slate-300">Model</label>
+                            <input
+                                type="text"
+                                name="model"
+                                value={formData.model}
+                                onChange={handleChange}
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                                placeholder="e.g. Model 3"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-slate-300">Year</label>
+                            <input
+                                type="number"
+                                name="year"
+                                value={formData.year}
+                                onChange={handleChange}
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                                placeholder="2024"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-slate-300">Category</label>
+                            <select
+                                name="category"
+                                value={formData.category}
+                                onChange={handleChange}
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                            >
+                                <option value="Sedan">Sedan</option>
+                                <option value="SUV">SUV</option>
+                                <option value="Luxury">Luxury</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Electric">Electric</option>
+                                <option value="Truck">Truck</option>
+                            </select>
+                        </div>
+                        <div className="col-span-2 space-y-2">
+                            <label className="text-sm font-bold text-slate-300">Description</label>
+                            <textarea
+                                name="description"
+                                value={formData.description}
+                                onChange={handleChange}
+                                rows={4}
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white resize-none"
+                                placeholder="Tell potential renters what makes your vehicle special..."
+                                required
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Pricing & Location */}
+                <div className="grid grid-cols-2 gap-6">
+                    <section className="bg-surface-dark p-8 rounded-xl border border-border-dark">
+                        <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                            <span className="material-symbols-outlined text-primary">payments</span>
+                            Pricing
+                        </h3>
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-slate-300">Price per Day ($)</label>
+                            <div className="relative">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                                <input
+                                    type="number"
+                                    name="price"
+                                    value={formData.price}
+                                    onChange={handleChange}
+                                    className="w-full bg-background-dark border border-border-dark rounded-lg pl-8 pr-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                                    placeholder="0.00"
+                                    required
+                                />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="bg-surface-dark p-8 rounded-xl border border-border-dark">
+                        <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                            <span className="material-symbols-outlined text-primary">location_on</span>
+                            Location
+                        </h3>
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-slate-300">Pick-up Address</label>
+                            <input
+                                type="text"
+                                name="location"
+                                value={formData.location}
+                                onChange={handleChange}
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                                placeholder="Street, City, Zip Code"
+                                required
+                            />
+                        </div>
+                    </section>
+                </div>
+
+                {/* Availability */}
+                <section className="bg-surface-dark p-8 rounded-xl border border-border-dark">
+                    <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                        <span className="material-symbols-outlined text-primary">event_available</span>
+                        Availability
+                    </h3>
+                    <div className="grid grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-slate-300">Available From</label>
+                            <input
+                                type="date"
+                                name="availableFrom"
+                                value={formData.availableFrom}
+                                onChange={handleChange}
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-slate-300">Available To</label>
+                            <input
+                                type="date"
+                                name="availableTo"
+                                value={formData.availableTo}
+                                onChange={handleChange}
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Footer Actions */}
+                <div className="flex items-center justify-between pt-6 border-t border-border-dark">
+                    <button
+                        type="button"
+                        onClick={() => router.back()}
+                        className="px-8 py-4 rounded-xl font-bold text-slate-400 hover:bg-surface-dark transition-all"
+                    >
+                        Discard Draft
+                    </button>
+                    <button
+                        type="submit"
+                        disabled={loading || uploadingImages}
+                        className="px-12 py-4 bg-primary text-white rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                        {loading && <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>}
+                        <span>{loading ? "Submitting..." : "Submit Listing"}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
+}

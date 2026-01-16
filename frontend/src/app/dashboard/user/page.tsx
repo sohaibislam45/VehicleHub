@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import StatsCard from "@/components/dashboard/StatsCard";
 
 interface BookingData {
@@ -63,7 +62,7 @@ export default function UserDashboardPage() {
     }, []);
 
     return (
-        <DashboardLayout role="user">
+        <>
             {/* Header Section */}
             <header className="flex justify-between items-end mb-10">
                 <div>
@@ -198,8 +197,8 @@ export default function UserDashboardPage() {
                                     <td className="px-6 py-5 text-center">
                                         <span
                                             className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${booking.status === "Confirmed"
-                                                    ? "bg-primary/20 text-primary border border-primary/30"
-                                                    : "bg-amber-500/20 text-amber-500 border border-amber-500/30"
+                                                ? "bg-primary/20 text-primary border border-primary/30"
+                                                : "bg-amber-500/20 text-amber-500 border border-amber-500/30"
                                                 }`}
                                         >
                                             {booking.status}
@@ -228,6 +227,6 @@ export default function UserDashboardPage() {
                     </a>
                 </div>
             </footer>
-        </DashboardLayout>
+        </>
     );
 }

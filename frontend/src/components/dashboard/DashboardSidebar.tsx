@@ -28,7 +28,6 @@ export default function DashboardSidebar({ role }: DashboardSidebarProps) {
 
     const accountItems = [
         { icon: "person", label: "Profile", href: `/dashboard/${role}/profile` },
-        { icon: "settings", label: "Settings", href: `/dashboard/${role}/settings` },
     ];
 
     const menuItems = role === "admin" ? adminMenuItems : userMenuItems;

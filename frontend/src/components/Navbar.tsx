@@ -115,15 +115,6 @@ export default function Navbar() {
                                         Dashboard
                                     </Link>
 
-                                    <Link
-                                        href="/settings"
-                                        className="px-4 py-3 text-sm text-slate-300 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-3"
-                                        onClick={() => setIsDropdownOpen(false)}
-                                    >
-                                        <span className="material-symbols-outlined text-lg">settings</span>
-                                        Settings
-                                    </Link>
-
                                     <div className="h-[1px] bg-white/5 my-2"></div>
 
                                     <button
