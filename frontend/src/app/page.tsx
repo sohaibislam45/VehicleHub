@@ -1,3 +1,6 @@
+import Link from "next/link";
+import Image from "next/image";
+
 export default function HomePage() {
     return (
         <div className="flex flex-col pt-6">
@@ -207,7 +210,7 @@ export default function HomePage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
                         <div className="absolute bottom-8 left-8">
                             <h3 className="text-2xl font-bold mb-1 text-slate-100">Adventure SUV</h3>
-                            <button className="text-primary font-bold text-xs tracking-widest uppercase">View All</button>
+                            <Link href="/explore" className="text-primary font-bold text-xs tracking-widest uppercase hover:underline">View All</Link>
                         </div>
                     </div>
                 </div>

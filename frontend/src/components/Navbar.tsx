@@ -29,28 +29,28 @@ export default function Navbar() {
 
                 <nav className="hidden md:flex items-center gap-10">
                     <Link
-                        href="/fleet"
+                        href="/explore"
+                        className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
+                    >
+                        Explore
+                    </Link>
+                    <Link
+                        href="/explore"
                         className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
                     >
                         Fleet
                     </Link>
                     <Link
-                        href="/categories"
+                        href="/explore"
                         className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
                     >
-                        Categories
+                        Rentals
                     </Link>
                     <Link
-                        href="/concierge"
+                        href="/about"
                         className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
                     >
-                        Concierge
-                    </Link>
-                    <Link
-                        href="/pricing"
-                        className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
-                    >
-                        Pricing
+                        About
                     </Link>
                 </nav>
 
