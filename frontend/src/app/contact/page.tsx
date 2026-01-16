@@ -39,31 +39,31 @@ export default function ContactPage() {
                 {/* Split Screen Layout */}
                 <div className="grid lg:grid-cols-2 gap-12 items-stretch">
                     {/* Left Panel: Information & Map */}
-                    <div className="flex flex-col gap-8">
+                    <div className="flex flex-col gap-4">
                         {/* Info Card */}
                         <div className="glass-card rounded-[40px] p-10 flex flex-col gap-10 border border-white/5 relative overflow-hidden group">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                <div className="space-y-3">
+                            <div className="grid grid-cols-1 md:grid-cols-2">
+                                <div className="space-y-3 overflow-hidden">
                                     <div className="flex items-center gap-2 text-primary">
                                         <span className="material-symbols-outlined text-xl">call</span>
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em]">Support Hotline</span>
                                     </div>
-                                    <p className="text-2xl font-bold text-white tracking-tight">+1 (888) 555-0192</p>
+                                    <p className="text-xl md:text-2xl font-bold text-white tracking-tight break-all">+01712456789</p>
                                 </div>
-                                <div className="space-y-3">
+                                <div className="space-y-3 overflow-hidden">
                                     <div className="flex items-center gap-2 text-primary">
                                         <span className="material-symbols-outlined text-xl">mail</span>
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em]">Email Us</span>
                                     </div>
-                                    <p className="text-2xl font-bold text-white tracking-tight">ops@vehiclehub.io</p>
+                                    <p className="text-xl md:text-2xl font-bold text-white tracking-tight break-all">sohaibislam45@gmail.com</p>
                                 </div>
                             </div>
                             <div className="pt-8 border-t border-white/5">
                                 <div className="flex items-center gap-2 text-primary mb-3">
                                     <span className="material-symbols-outlined text-xl">location_on</span>
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Global Headquarters</span>
+                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Our Headquarter</span>
                                 </div>
-                                <p className="text-slate-400 text-lg">123 Innovation Circuit, Silicon Valley, CA 94043</p>
+                                <p className="text-slate-400 text-lg">Suvastu Ittefaq Tower, Panthapath, Dhaka, Bangladesh</p>
                             </div>
                             {/* Decorative blur */}
                             <div className="absolute -bottom-12 -right-12 size-48 bg-primary/5 blur-[80px] group-hover:bg-primary/10 transition-all duration-700"></div>
@@ -72,21 +72,16 @@ export default function ContactPage() {
                         {/* Map Placeholder */}
                         <div className="glass-card rounded-[40px] p-2 h-full min-h-[400px] overflow-hidden border border-white/5 relative group">
                             <div className="w-full h-full bg-slate-900/50 rounded-[34px] relative overflow-hidden">
-                                <Image
-                                    src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=1200"
-                                    alt="Minimalist dark map"
-                                    fill
-                                    className="object-cover grayscale opacity-30 contrast-125 transition-transform duration-[20s] group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="relative">
-                                        <div className="absolute -inset-8 bg-primary/20 rounded-full animate-pulse"></div>
-                                        <div className="relative bg-primary size-4 rounded-full border-4 border-background-dark shadow-[0_0_20px_rgba(23,191,207,0.8)]"></div>
-                                    </div>
-                                </div>
-                                <div className="absolute bottom-6 left-6 glass-card px-5 py-3 rounded-2xl text-xs font-bold text-white border border-white/10 flex items-center gap-3 backdrop-blur-xl">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14608.03694485038!2d90.3654215!3d23.74614945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b087026b81%3A0x8fa563bbdd5904c2!2sDhaka!5e0!3m2!1sen!2sbd!4v1710000000000!5m2!1sen!2sbd"
+                                    className="w-full h-full border-0 grayscale invert contrast-125 opacity-50"
+                                    allowFullScreen
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                ></iframe>
+                                <div className="absolute bottom-6 left-6 glass-card px-5 py-3 rounded-2xl text-xs font-bold text-white border border-white/10 flex items-center gap-3 backdrop-blur-xl z-20">
                                     <span className="size-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]"></span>
-                                    Live Traffic Monitoring Active
+                                    Drag to adjust
                                 </div>
                             </div>
                         </div>
@@ -129,7 +124,7 @@ export default function ContactPage() {
                                                 value={formData.name}
                                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                                 className="w-full h-14 bg-white/[0.03] border border-white/10 rounded-2xl px-6 text-white focus:outline-none focus:border-primary/50 transition-all font-light"
-                                                placeholder="John Doe"
+                                                placeholder="Sohaib Islam"
                                             />
                                         </div>
                                         <div className="space-y-3">
@@ -140,7 +135,7 @@ export default function ContactPage() {
                                                 value={formData.email}
                                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                                 className="w-full h-14 bg-white/[0.03] border border-white/10 rounded-2xl px-6 text-white focus:outline-none focus:border-primary/50 transition-all font-light"
-                                                placeholder="john@example.com"
+                                                placeholder="sohaib@gmail.com"
                                             />
                                         </div>
                                     </div>
