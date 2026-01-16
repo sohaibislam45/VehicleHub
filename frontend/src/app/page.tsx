@@ -413,7 +413,7 @@ export default function HomePage() {
             </section>
 
             {/* How it Works */}
-            <section className="py-24 bg-surface-dark/30 w-full">
+            <section id="how-it-works" className="py-24 bg-surface-dark/30 w-full">
                 <div className="max-w-4xl mx-auto layout-padding">
                     <div className="text-center mb-20 text-slate-100">
                         <h2 className="text-4xl font-bold mb-4">Modern Booking, Simplified.</h2>
@@ -467,7 +467,7 @@ export default function HomePage() {
             </section>
 
             {/* FAQ */}
-            <section className="py-24 max-w-3xl mx-auto layout-padding w-full text-slate-100">
+            <section id="faq" className="py-24 max-w-3xl mx-auto layout-padding w-full text-slate-100">
                 <h2 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
                 <div className="space-y-4">
                     <div className="border-b border-white/5 pb-6">
