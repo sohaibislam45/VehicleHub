@@ -12,15 +12,33 @@ export default function ExplorePage() {
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [search, setSearch] = useState("");
+    const [category, setCategory] = useState("");
+    const [sortBy, setSortBy] = useState("Latest Arrivals");
 
     useEffect(() => {
-        fetchVehicles();
-    }, []);
+        const timer = setTimeout(() => {
+            fetchVehicles();
+        }, 500); // Debounce search
+        return () => clearTimeout(timer);
+    }, [search, category, sortBy]);
 
     const fetchVehicles = async () => {
+        setLoading(true);
         try {
-            const data = await vehicleService.getAll();
-            setVehicles(data);
+            const filters: any = {};
+            if (search) filters.search = search;
+            if (category) filters.category = category;
+            // Sorting logic could be handled here or as part of the query
+
+            const data = await vehicleService.getAll(filters);
+
+            // Basic client-side sorting if backend doesn't handle all types yet
+            let sortedData = [...data];
+            if (sortBy === "Price: Low to High") sortedData.sort((a, b) => a.price - b.price);
+            if (sortBy === "Price: High to Low") sortedData.sort((a, b) => b.price - a.price);
+
+            setVehicles(sortedData);
         } catch (err) {
             setError("Failed to load vehicles. Please try again.");
             console.error(err);
@@ -44,13 +62,19 @@ export default function ExplorePage() {
                                 className="w-full h-full bg-surface-dark border border-white/5 rounded-xl pl-12 pr-4 text-white placeholder:text-slate-500 focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none"
                                 placeholder="Search vehicle model, brand or city..."
                                 type="text"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                             />
                         </div>
                     </div>
                     <div className="w-full lg:w-64">
                         <label className="block text-sm font-medium text-slate-500 mb-2 px-1 uppercase tracking-widest">Sort By</label>
                         <div className="relative">
-                            <select className="w-full h-14 bg-surface-dark border border-white/5 rounded-xl px-4 appearance-none focus:ring-1 focus:ring-primary focus:border-primary text-white cursor-pointer outline-none">
+                            <select
+                                className="w-full h-14 bg-surface-dark border border-white/5 rounded-xl px-4 appearance-none focus:ring-1 focus:ring-primary focus:border-primary text-white cursor-pointer outline-none"
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                            >
                                 <option>Latest Arrivals</option>
                                 <option>Price: Low to High</option>
                                 <option>Price: High to Low</option>
@@ -64,18 +88,41 @@ export default function ExplorePage() {
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-10">
-                    <FilterSidebar />
+                    <FilterSidebar
+                        selectedCategory={category}
+                        onCategoryChange={setCategory}
+                    />
 
                     {/* Main Content Grid */}
                     <div className="flex-1">
                         {/* Active Filters Tags */}
-                        <div className="flex items-center gap-3 mb-6 overflow-x-auto pb-2 hide-scrollbar">
-                            <span className="text-sm font-medium text-slate-500 whitespace-nowrap">Active Filters:</span>
-                            <span className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-2 border border-primary/30">
-                                Electric <span className="material-symbols-outlined text-[14px] cursor-pointer hover:bg-primary/20 rounded-full">close</span>
-                            </span>
-                            <button className="text-xs font-bold text-slate-500 hover:text-white transition-all underline underline-offset-4">Clear Results</button>
-                        </div>
+                        {(category || search) && (
+                            <div className="flex items-center gap-3 mb-6 overflow-x-auto pb-2 hide-scrollbar">
+                                <span className="text-sm font-medium text-slate-500 whitespace-nowrap">Active Filters:</span>
+                                {category && (
+                                    <span className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-2 border border-primary/30">
+                                        {category} <span
+                                            className="material-symbols-outlined text-[14px] cursor-pointer hover:bg-primary/20 rounded-full"
+                                            onClick={() => setCategory("")}
+                                        >close</span>
+                                    </span>
+                                )}
+                                {search && (
+                                    <span className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-2 border border-primary/30">
+                                        "{search}" <span
+                                            className="material-symbols-outlined text-[14px] cursor-pointer hover:bg-primary/20 rounded-full"
+                                            onClick={() => setSearch("")}
+                                        >close</span>
+                                    </span>
+                                )}
+                                <button
+                                    onClick={() => { setCategory(""); setSearch(""); }}
+                                    className="text-xs font-bold text-slate-500 hover:text-white transition-all underline underline-offset-4"
+                                >
+                                    Clear Results
+                                </button>
+                            </div>
+                        )}
 
                         {/* Vehicle Grid */}
                         {loading ? (

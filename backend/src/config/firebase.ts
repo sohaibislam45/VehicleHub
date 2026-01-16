@@ -23,9 +23,14 @@ try {
 }
 
 if (serviceAccount) {
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-    });
+    try {
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount),
+        });
+        console.log('Firebase initialized successfully');
+    } catch (error) {
+        console.error('Firebase initialization failed:', error);
+    }
 } else {
     console.warn('Firebase Admin SDK not initialized: FIREBASE_SERVICE_ACCOUNT and vehiclehub.json are missing.');
 }

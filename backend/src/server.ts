@@ -1,3 +1,10 @@
+process.on('uncaughtException', (err) => {
+    console.error('GLOBAL UNCAUGHT EXCEPTION:', err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('GLOBAL UNHANDLED REJECTION:', reason);
+});
+
 import express from 'express';
 import type { Request, Response } from 'express';
 import cors from 'cors';

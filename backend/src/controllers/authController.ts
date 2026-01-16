@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import User from '../models/User.js';
-import admin from 'firebase-admin';
+import admin from '../config/firebase.js';
 
 export const syncUser = async (req: Request, res: Response) => {
     const { token } = req.body;
