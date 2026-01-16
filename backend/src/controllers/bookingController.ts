@@ -37,3 +37,18 @@ export const getMyBookings = async (req: AuthRequest, res: Response) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
+
+// @desc Update booking status
+// @route PATCH /api/bookings/:id/status
+export const updateBookingStatus = async (req: AuthRequest, res: Response) => {
+    try {
+        const booking = await Booking.findById(req.params.id);
+        if (!booking) return res.status(404).json({ message: 'Booking not found' });
+
+        booking.status = req.body.status || booking.status;
+        await booking.save();
+        res.json(booking);
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
