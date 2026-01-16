@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import * as z from "zod";
@@ -20,6 +20,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
     const router = useRouter();
+    const { user } = useAuth();
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -31,12 +32,22 @@ export default function LoginPage() {
         resolver: zodResolver(loginSchema),
     });
 
+    // Redirect admins to dashboard after successful login
+    useEffect(() => {
+        if (user && user.role === 'admin') {
+            router.push('/dashboard/admin');
+        }
+    }, [user, router]);
+
     const onSubmit = async (data: LoginFormValues) => {
         setLoading(true);
         setError(null);
         try {
-            await signInWithEmailAndPassword(auth, data.email, data.password);
-            router.push("/dashboard/user"); // Default redirect, can be dynamic
+            const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
+            // Wait a moment for AuthContext to sync user data
+            await new Promise(resolve => setTimeout(resolve, 500));
+            // Only redirect admins to dashboard, regular users stay on current page
+            // Admin check will happen in AuthContext after sync
         } catch (err: any) {
             console.error("Login error:", err);
             // Customize error messages based on Firebase error codes if needed
@@ -55,7 +66,9 @@ export default function LoginPage() {
         setError(null);
         try {
             await signInWithPopup(auth, googleProvider);
-            router.push("/dashboard/user");
+            // Wait a moment for AuthContext to sync user data
+            await new Promise(resolve => setTimeout(resolve, 500));
+            // Only redirect admins to dashboard, regular users stay on current page
         } catch (err: any) {
             console.error("Google login error:", err);
             setError("Failed to sign in with Google.");

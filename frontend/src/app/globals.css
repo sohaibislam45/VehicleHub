@@ -16,6 +16,33 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
   }
 
+  .bento-card {
+    background-color: #1a1d21;
+    border: 1px solid #2d3339;
+    transition: all 0.3s ease;
+  }
+
+  .bento-card:hover {
+    border-color: #17bfcf;
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 15px rgba(23, 191, 207, 0.3);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #111317;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #2d3339;
+    border-radius: 10px;
+  }
+
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -32,4 +59,7 @@
 :root {
   --background-light: 249 250 251;
   --background-dark: 18 20 22;
+  --accent-blue: 61 138 251;
+  --accent-orange: 240 101 32;
+  --border-dark: 45 51 57;
 }

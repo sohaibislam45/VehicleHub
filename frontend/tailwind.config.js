@@ -13,6 +13,9 @@ module.exports = {
         'background-light': '#f9fafb',
         'background-dark': '#121416',
         'surface-dark': '#1c1f24',
+        'accent-blue': '#3D8AFB',
+        'accent-orange': '#F06520',
+        'border-dark': '#2d3339',
       },
       fontFamily: {
         sans: ['var(--font-space-grotesk)', 'ui-sans-serif', 'system-ui'],
