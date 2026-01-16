@@ -8,12 +8,14 @@ import axios from 'axios';
 interface AuthContextType {
     user: any | null;
     loading: boolean;
+    setUser: (user: any) => void;
     logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
     loading: true,
+    setUser: () => { },
     logout: async () => { },
 });
 
@@ -26,27 +28,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             if (firebaseUser) {
                 try {
                     const token = await firebaseUser.getIdToken();
-                    // Sync with MongoDB (Optional for now)
                     if (process.env.NEXT_PUBLIC_API_URL) {
                         try {
                             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/sync`, { token });
-                            // Add backend data to Firebase user
-                            const userData = Object.assign({}, firebaseUser, {
-                                role: response.data.role || 'user',
-                                _id: response.data._id,
-                                name: response.data.name || firebaseUser.displayName
-                            });
+                            const userData = {
+                                ...firebaseUser,
+                                ...response.data, // This includes _id, role, name, photoURL, phoneNumber, location, bio
+                                displayName: response.data.name || firebaseUser.displayName,
+                                photoURL: response.data.photoURL || firebaseUser.photoURL,
+                            };
                             setUser(userData);
                         } catch (syncError) {
-                            console.warn("Auth sync failed, using firebase user with default role:", syncError);
-                            // Just add role property to Firebase user
-                            const userData = Object.assign({}, firebaseUser, { role: 'user' });
-                            setUser(userData);
+                            console.warn("Auth sync failed, using firebase user:", syncError);
+                            setUser({ ...firebaseUser, role: 'user' });
                         }
                     } else {
-                        // Just add role property to Firebase user
-                        const userData = Object.assign({}, firebaseUser, { role: 'user' });
-                        setUser(userData);
+                        setUser({ ...firebaseUser, role: 'user' });
                     }
                 } catch (error) {
                     console.error("Auth error:", error);
@@ -66,7 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, logout }}>
+        <AuthContext.Provider value={{ user, loading, setUser, logout }}>
             {children}
         </AuthContext.Provider>
     );

@@ -4,6 +4,9 @@ export interface IVehicle extends Document {
     ownerId: mongoose.Types.ObjectId;
     title: string;
     description: string;
+    brand: string;
+    model: string;
+    year: number;
     price: number;
     category: string;
     status: 'available' | 'booked' | 'maintenance';
@@ -21,6 +24,8 @@ export interface IVehicle extends Document {
     }[];
     rating: number;
     reviewsCount: number;
+    availableFrom?: Date;
+    availableTo?: Date;
     createdAt: Date;
 }
 
@@ -28,6 +33,9 @@ const VehicleSchema: Schema = new Schema({
     ownerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     title: { type: String, required: true },
     description: { type: String, required: true },
+    brand: { type: String, required: true },
+    model: { type: String, required: true },
+    year: { type: Number, required: true },
     price: { type: Number, required: true },
     category: { type: String, required: true },
     status: { type: String, enum: ['available', 'booked', 'maintenance'], default: 'available' },
@@ -45,6 +53,8 @@ const VehicleSchema: Schema = new Schema({
     }],
     rating: { type: Number, default: 5 },
     reviewsCount: { type: Number, default: 0 },
+    availableFrom: { type: Date },
+    availableTo: { type: Date },
     createdAt: { type: Date, default: Date.now },
 });
 

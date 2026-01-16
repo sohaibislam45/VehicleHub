@@ -31,3 +31,31 @@ export const syncUser = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Error syncing user' });
     }
 };
+
+export const updateProfile = async (req: any, res: Response) => {
+    try {
+        const userId = req.user._id;
+        const updates = req.body;
+
+        // Rename displayName from frontend to name for backend
+        if (updates.displayName) {
+            updates.name = updates.displayName;
+            delete updates.displayName;
+        }
+
+        // Prevent updating sensitive fields
+        delete updates.firebaseId;
+        delete updates.email;
+        delete updates.role;
+
+        const user = await User.findByIdAndUpdate(userId, updates, { new: true });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        console.error('Update Profile Error:', error);
+        res.status(500).json({ message: 'Error updating profile' });
+    }
+};

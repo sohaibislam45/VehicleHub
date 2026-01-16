@@ -46,19 +46,26 @@ export const getVehicleById = async (req: Request, res: Response) => {
 // @route POST /api/vehicles
 export const createVehicle = async (req: AuthRequest, res: Response) => {
     try {
-        const { title, description, price, category, images, specs, location } = req.body;
+        const { title, description, price, category, images, specs, location, brand, model, year, availableFrom, availableTo, features } = req.body;
         const vehicle = await Vehicle.create({
             ownerId: req.user._id,
             title,
             description,
+            brand,
+            model,
+            year,
             price,
             category,
             images,
-            specs,
-            location
+            specs: specs || [],
+            features: features || [],
+            location,
+            availableFrom,
+            availableTo
         });
         res.status(201).json(vehicle);
     } catch (error) {
+        console.error('Create vehicle error:', error);
         res.status(400).json({ message: 'Invalid data' });
     }
 };
