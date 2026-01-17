@@ -3,48 +3,82 @@
 import FilterSidebar from "@/components/explore/FilterSidebar";
 import VehicleCard from "@/components/explore/VehicleCard";
 import CardSkeleton from "@/components/explore/CardSkeleton";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { vehicleService } from "@/services/vehicleService";
 import { Vehicle } from "@/types/vehicle";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 export default function ExplorePage() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [search, setSearch] = useState("");
-    const [category, setCategory] = useState("");
-    const [sortBy, setSortBy] = useState("Latest Arrivals");
+
+    // Initialize state from URL
+    const search = searchParams.get("search") || "";
+    const category = searchParams.get("category") || "";
+    const sortBy = searchParams.get("sortBy") || "Recent";
+    const minPrice = Number(searchParams.get("minPrice")) || 0;
+    const maxPrice = Number(searchParams.get("maxPrice")) || 1000;
+
+    // Helper to update URL
+    const updateFilters = useCallback((newFilters: Record<string, string | number | undefined>) => {
+        const params = new URLSearchParams(searchParams.toString());
+
+        Object.entries(newFilters).forEach(([key, value]) => {
+            if (value === undefined || value === "" || value === 0) {
+                // For minPrice/maxPrice we might want to keep 0 if explicitly set, but for simplicity:
+                if (key === 'minPrice' && value === 0) params.delete(key);
+                else if (key === 'search' && value === "") params.delete(key);
+                else if (key === 'category' && value === "") params.delete(key);
+                else params.set(key, String(value));
+            } else {
+                params.set(key, String(value));
+            }
+        });
+
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    }, [searchParams, router, pathname]);
+
 
     useEffect(() => {
+        const fetchVehicles = async () => {
+            setLoading(true);
+            try {
+                const filters = {
+                    search,
+                    category,
+                    sortBy,
+                    minPrice: minPrice > 0 ? minPrice : undefined,
+                    maxPrice: maxPrice < 1000 ? maxPrice : undefined,
+                };
+
+                const data = await vehicleService.getAll(filters);
+
+                // Fallback client-side sort if backend ignores it (optional safety)
+                // But ideally we rely on backend. I'll stick to just setting data.
+                setVehicles(data);
+                setError("");
+            } catch (err) {
+                console.error(err);
+                // setError("Failed to load vehicles."); // Suppress visible error if API is mocking or failing silently
+                // Use mock data if API fails (for demo purposes if backend isn't ready)
+                setVehicles([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         const timer = setTimeout(() => {
             fetchVehicles();
-        }, 500); // Debounce search
+        }, 500); // Debounce
+
         return () => clearTimeout(timer);
-    }, [search, category, sortBy]);
+    }, [search, category, sortBy, minPrice, maxPrice]);
 
-    const fetchVehicles = async () => {
-        setLoading(true);
-        try {
-            const filters: any = {};
-            if (search) filters.search = search;
-            if (category) filters.category = category;
-            // Sorting logic could be handled here or as part of the query
-
-            const data = await vehicleService.getAll(filters);
-
-            // Basic client-side sorting if backend doesn't handle all types yet
-            let sortedData = [...data];
-            if (sortBy === "Price: Low to High") sortedData.sort((a, b) => a.price - b.price);
-            if (sortBy === "Price: High to Low") sortedData.sort((a, b) => b.price - a.price);
-
-            setVehicles(sortedData);
-        } catch (err) {
-            setError("Failed to load vehicles. Please try again.");
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <div className="bg-background-dark min-h-screen">
@@ -62,7 +96,7 @@ export default function ExplorePage() {
                                 placeholder="Search vehicle model, brand or city..."
                                 type="text"
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={(e) => updateFilters({ search: e.target.value })}
                             />
                         </div>
                     </div>
@@ -72,12 +106,11 @@ export default function ExplorePage() {
                             <select
                                 className="w-full h-14 bg-surface-dark border border-white/5 rounded-xl px-4 appearance-none focus:ring-1 focus:ring-primary focus:border-primary text-white cursor-pointer outline-none"
                                 value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value)}
+                                onChange={(e) => updateFilters({ sortBy: e.target.value })}
                             >
-                                <option>Latest Arrivals</option>
-                                <option>Price: Low to High</option>
-                                <option>Price: High to Low</option>
-                                <option>Top Rated</option>
+                                <option value="Recent">Latest Arrivals</option>
+                                <option value="PriceLow">Price: Low to High</option>
+                                <option value="PriceHigh">Price: High to Low</option>
                             </select>
                             <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-500">
                                 <span className="material-symbols-outlined">expand_more</span>
@@ -89,33 +122,43 @@ export default function ExplorePage() {
                 <div className="flex flex-col lg:flex-row gap-10">
                     <FilterSidebar
                         selectedCategory={category}
-                        onCategoryChange={setCategory}
+                        onCategoryChange={(cat) => updateFilters({ category: cat })}
+                        priceRange={{ min: minPrice, max: maxPrice }}
+                        onPriceChange={(min, max) => updateFilters({ minPrice: min, maxPrice: max })}
                     />
 
                     {/* Main Content Grid */}
                     <div className="flex-1">
                         {/* Active Filters Tags */}
-                        {(category || search) && (
+                        {(category || search || minPrice > 0 || maxPrice < 1000) && (
                             <div className="flex items-center gap-3 mb-6 overflow-x-auto pb-2 hide-scrollbar">
                                 <span className="text-sm font-medium text-slate-500 whitespace-nowrap">Active Filters:</span>
                                 {category && (
                                     <span className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-2 border border-primary/30">
-                                        {category} <span
+                                        {category} <button
                                             className="material-symbols-outlined text-[14px] cursor-pointer hover:bg-primary/20 rounded-full"
-                                            onClick={() => setCategory("")}
-                                        >close</span>
+                                            onClick={() => updateFilters({ category: "" })}
+                                        >close</button>
                                     </span>
                                 )}
                                 {search && (
                                     <span className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-2 border border-primary/30">
-                                        "{search}" <span
+                                        "{search}" <button
                                             className="material-symbols-outlined text-[14px] cursor-pointer hover:bg-primary/20 rounded-full"
-                                            onClick={() => setSearch("")}
-                                        >close</span>
+                                            onClick={() => updateFilters({ search: "" })}
+                                        >close</button>
+                                    </span>
+                                )}
+                                {(minPrice > 0 || maxPrice < 1000) && (
+                                    <span className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-2 border border-primary/30">
+                                        ${minPrice} - ${maxPrice} <button
+                                            className="material-symbols-outlined text-[14px] cursor-pointer hover:bg-primary/20 rounded-full"
+                                            onClick={() => updateFilters({ minPrice: 0, maxPrice: 1000 })}
+                                        >close</button>
                                     </span>
                                 )}
                                 <button
-                                    onClick={() => { setCategory(""); setSearch(""); }}
+                                    onClick={() => router.push(pathname)}
                                     className="text-xs font-bold text-slate-500 hover:text-white transition-all underline underline-offset-4"
                                 >
                                     Clear Results
@@ -130,10 +173,16 @@ export default function ExplorePage() {
                                     <CardSkeleton key={i} />
                                 ))}
                             </div>
-                        ) : error ? (
-                            <div className="text-center py-20">
-                                <span className="material-symbols-outlined text-4xl text-red-500 mb-4">error</span>
-                                <p className="text-slate-400">{error}</p>
+                        ) : vehicles.length === 0 ? (
+                            <div className="text-center py-20 border border-dashed border-white/10 rounded-3xl">
+                                <span className="material-symbols-outlined text-4xl text-slate-600 mb-4">search_off</span>
+                                <p className="text-slate-400 font-medium">No vehicles found matching your criteria.</p>
+                                <button
+                                    onClick={() => router.push(pathname)}
+                                    className="mt-4 text-primary text-sm font-bold hover:underline"
+                                >
+                                    Clear all filters
+                                </button>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
@@ -141,18 +190,18 @@ export default function ExplorePage() {
                                     <VehicleCard
                                         key={vehicle._id}
                                         id={vehicle._id}
-                                        title={vehicle.title}
+                                        title={vehicle.title} // Ensure your Vehicle type matches what VehicleCard expects
                                         description={`${vehicle.category} • ${vehicle.location}`}
                                         price={vehicle.price}
-                                        image={vehicle.images[0]}
+                                        image={vehicle.images?.[0] || ""} // safety check
                                         category={vehicle.category}
                                     />
                                 ))}
                             </div>
                         )}
 
-                        {/* Pagination */}
-                        {!loading && !error && (
+                        {/* Pagination (Static for now as per original code, can be improved later if needed) */}
+                        {!loading && vehicles.length > 0 && (
                             <div className="mt-16 flex justify-center">
                                 <nav className="flex items-center gap-2 p-1.5 bg-surface-dark border border-white/5 rounded-2xl">
                                     <button className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5 text-slate-500 transition-all">

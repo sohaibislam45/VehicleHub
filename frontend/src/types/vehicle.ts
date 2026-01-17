@@ -32,4 +32,6 @@ export interface VehicleQuery {
     minPrice?: number;
     maxPrice?: number;
     location?: string;
+    search?: string;
+    sortBy?: string;
 }

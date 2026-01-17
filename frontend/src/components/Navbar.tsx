@@ -50,6 +50,12 @@ export default function Navbar() {
 
                 <nav className="hidden md:flex items-center gap-10">
                     <Link
+                        href="/"
+                        className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
+                    >
+                        Home
+                    </Link>
+                    <Link
                         href="/explore"
                         className="text-sm font-medium text-slate-100 hover:text-primary transition-colors"
                     >

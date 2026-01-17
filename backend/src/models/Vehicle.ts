@@ -24,6 +24,7 @@ export interface IVehicle extends Document {
     }[];
     rating: number;
     reviewsCount: number;
+    bookingCount: number;
     availableFrom?: Date;
     availableTo?: Date;
     createdAt: Date;
@@ -53,6 +54,7 @@ const VehicleSchema: Schema = new Schema({
     }],
     rating: { type: Number, default: 5 },
     reviewsCount: { type: Number, default: 0 },
+    bookingCount: { type: Number, default: 0 },
     availableFrom: { type: Date },
     availableTo: { type: Date },
     createdAt: { type: Date, default: Date.now },

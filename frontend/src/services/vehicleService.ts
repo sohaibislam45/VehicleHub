@@ -8,6 +8,8 @@ export const vehicleService = {
         if (query?.minPrice) params.append("minPrice", query.minPrice.toString());
         if (query?.maxPrice) params.append("maxPrice", query.maxPrice.toString());
         if (query?.location) params.append("location", query.location);
+        if (query?.search) params.append("search", query.search);
+        if (query?.sortBy) params.append("sortBy", query.sortBy);
 
         const response = await api.get<Vehicle[]>(`/vehicles?${params.toString()}`);
         return response.data;
