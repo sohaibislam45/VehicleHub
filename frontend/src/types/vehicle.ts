@@ -7,6 +7,9 @@ export interface Vehicle {
     };
     title: string;
     description: string;
+    brand: string;
+    model: string;
+    year: number;
     price: number;
     category: string;
     images: string[];
@@ -34,4 +37,5 @@ export interface VehicleQuery {
     location?: string;
     search?: string;
     sortBy?: string;
+    limit?: number;
 }

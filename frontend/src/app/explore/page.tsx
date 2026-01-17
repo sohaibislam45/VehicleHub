@@ -109,6 +109,7 @@ export default function ExplorePage() {
                                 onChange={(e) => updateFilters({ sortBy: e.target.value })}
                             >
                                 <option value="Recent">Latest Arrivals</option>
+                                <option value="TopBooking">Top Booking</option>
                                 <option value="PriceLow">Price: Low to High</option>
                                 <option value="PriceHigh">Price: High to Low</option>
                             </select>

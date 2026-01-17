@@ -1,18 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Hero from "@/components/Hero";
 import Statistics from "@/components/Statistics";
+import { vehicleService } from "@/services/vehicleService";
+import { Vehicle } from "@/types/vehicle";
 
 export default function HomePage() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
+    const [latestVehicles, setLatestVehicles] = useState<Vehicle[]>([]);
+    const [topBookingVehicles, setTopBookingVehicles] = useState<Vehicle[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const toggleFaq = (index: number) => {
         setOpenFaq(openFaq === index ? null : index);
     };
+
+    useEffect(() => {
+        const fetchHomeData = async () => {
+            try {
+                const [latest, top] = await Promise.all([
+                    vehicleService.getAll({ sortBy: 'Recent', limit: 6 }),
+                    vehicleService.getAll({ sortBy: 'TopBooking', limit: 3 })
+                ]);
+                setLatestVehicles(latest);
+                setTopBookingVehicles(top);
+            } catch (error) {
+                console.error("Failed to fetch homepage data", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHomeData();
+    }, []);
 
     const faqData = [
         {
@@ -30,57 +54,6 @@ export default function HomePage() {
         {
             question: "Can I extend my booking mid-rental?",
             answer: "Absolutely. Extensions can be requested through your dashboard or by contacting our 24/7 concierge service, subject to vehicle availability."
-        }
-    ];
-
-    const latestArrivals = [
-        {
-            id: "tesla-model-s",
-            name: "Tesla Model S Plaid",
-            desc: "Ludicrous Mode • 396mi Range",
-            price: 120,
-            tag: "EV Elite",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDXBtpiH8Ks0lWhNZu9Ad9tivizgphkf72kC6dKB1H4vBeqiaxZZEdxPAKfAFd8X1zQO_glmIG4j8WxtH0Ro2mpQBlospRTeT1e4BDHzI8FeUF9HPWVrQQ4u3bYFMyHssswZpc_3r1naAd53Kfh7VJ926iq-VmgcPh6_POqDjhN4H8fFAqKxac142VF5FVEr1PAe_AE6HyOqORoRWe5dMFhcnUBadv4-MUhOU0PqnjL4CwbK_AcTTlyt9tKGWoVoRc3tJhyiTYLcKk"
-        },
-        {
-            id: "porsche-taycan",
-            name: "Porsche Taycan",
-            desc: "Turbo S • 750hp AWD",
-            price: 250,
-            tag: "Performance",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA8ozPLwgMhyAQkY9TzfJjVpOIHQoHOjQJO0hyJ0e_adXbH7NOZYunfmJTc8fP9J34LWmcf0TfI0zmElkTgrYpXD7cCRyIzbh0eJV-bb8cN2tsNFEiZeAIJb9cecZXX5PPZV5Z8yop4U_uiRCNZvfOjjB-lT3QYfrohnnLQ--PtTEnqyC5cWy_8Wn9DaNdw37WMuq0SCP-PsKflYSSrII9MQLZlXSvwuIExvOkqvH4rU5uGnZ8JTQn93zLz5IG9fMU5s7z9Wn_KAyY"
-        },
-        {
-            id: "audi-etron",
-            name: "Audi e-tron GT",
-            desc: "Quattro • Matrix LED",
-            price: 180,
-            tag: "Luxury EV",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDgTlKqlCSU8w8RFH97O4I29_cJ69vINC6Ggt40DeSf1q5vaWzRgojD1MY7dbW8ILkfwh90DU8MLLADvkpg6WAHTn_rOllvbmEuFIZ8ejoY6_6mJ_zuGPdCaMVNvj0ILAR8KAQKFdq1WF3QqUq8imMhTq8wcU9H5VA1yuIhqU8O9iFKNzrs3_9mFiTLjcZ_gvr2OBpFH44CtleCl1Ofgv2TepQNDmJVr7hSvE3IvQsyPGsaruE-nlLwRhA2XPuL462qOeT0qfa2Ukc"
-        },
-        {
-            id: "range-rover",
-            name: "Range Rover SV",
-            desc: "Luxury SUV • V8 Twin Turbo",
-            price: 320,
-            tag: "Ultra Luxury",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCXXw6o5wqWBcfaAMaikX3QsoBQ3FoYn2wd73WBosYuSz0O9PRnMXNYqM5pKfhN5-_pYVgYcRi-fVpSFnJXm8h3CQ-rSaEV83tuMl2aDG_LKdl_upCiUAsbpCDH1OcLmp-OviMNxIUG8K6Nt_HV6Np8S1WWaUwXo_SQd0uywNWUiDJ78vQXTPuGH3kiJs1kqK7fzbJSeuKt-7t6uvlW-ea2uUhX8NAx2v99fozCCbTZIPomssZhAyuYkG5Cg_2EM-dHLBrUm5YIQpM"
-        },
-        {
-            id: "mercedes-amg",
-            name: "Mercedes-AMG GT",
-            desc: "Handcrafted V8 • 0-60 3.7s",
-            price: 290,
-            tag: "Sport",
-            image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=800&auto=format&fit=crop"
-        },
-        {
-            id: "bmw-i7",
-            name: "BMW i7 xDrive60",
-            desc: "Electric Luxury • 31" + " Theater Screen",
-            price: 210,
-            tag: "Executive",
-            image: "https://images.unsplash.com/photo-1678297753644-8d9609c131dc?q=80&w=800&auto=format&fit=crop"
         }
     ];
 
@@ -232,52 +205,113 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Latest Vehicles Layout Update (Grid w/ 6 items) */}
-            <section className="py-20 overflow-hidden w-full latest-arrivals-section">
+            {/* Top Booking Vehicles - New Section */}
+            {!loading && topBookingVehicles.length > 0 && (
+                <section className="py-20 bg-surface-dark/20 w-full overflow-hidden">
+                    <div className="max-w-7xl mx-auto layout-padding mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                        <div>
+                            <span className="text-primary font-bold uppercase tracking-[0.3em] text-[10px] mb-2 block">Most Requested</span>
+                            <h2 className="text-3xl md:text-4xl font-bold text-white">Top Booking Vehicles</h2>
+                            <p className="text-slate-400 mt-2">The most popular choices among our elite members.</p>
+                        </div>
+                        <Link href="/explore?sortBy=TopBooking" className="group flex items-center gap-2 text-white font-bold hover:text-primary transition-colors">
+                            Explore All Top Booked
+                            <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                        </Link>
+                    </div>
+
+                    <div className="max-w-7xl mx-auto layout-padding">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                            {topBookingVehicles.map((car, idx) => (
+                                <motion.div
+                                    key={car._id}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: idx * 0.1 }}
+                                >
+                                    <Link href={`/vehicles/${car._id}`} className="group block relative rounded-[2rem] overflow-hidden bg-surface-dark border border-white/5 hover:border-primary/30 transition-all">
+                                        <div className="relative h-[300px] overflow-hidden">
+                                            <div
+                                                className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
+                                                style={{ backgroundImage: `url("${car.images?.[0]}")` }}
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-transparent to-transparent" />
+                                            <div className="absolute top-6 left-6 flex gap-2">
+                                                <div className="bg-primary/90 text-background-dark text-[10px] font-black uppercase px-2 py-1 rounded backdrop-blur-md">Popular</div>
+                                                <div className="bg-white/10 text-white text-[10px] font-black uppercase px-2 py-1 rounded backdrop-blur-md border border-white/10">{car.category}</div>
+                                            </div>
+                                            <div className="absolute bottom-6 left-6 right-6">
+                                                <div className="flex justify-between items-end">
+                                                    <div>
+                                                        <h3 className="text-xl font-bold text-white mb-1">{car.title}</h3>
+                                                        <div className="flex items-center gap-2 text-slate-400 text-xs">
+                                                            <span className="material-symbols-outlined text-[14px]">location_on</span>
+                                                            {car.location}
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-primary font-bold text-2xl">${car.price}</p>
+                                                        <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">/ Day</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Latest Vehicles Layout Update */}
+            <section className="py-24 overflow-hidden w-full">
                 <div className="max-w-7xl mx-auto layout-padding mb-12 flex justify-between items-end">
                     <div>
                         <h2 className="text-3xl font-bold tracking-tight mb-2 text-slate-100">Latest Arrivals</h2>
-                        <p className="text-slate-400">Newly added performance and luxury vehicles.</p>
+                        <p className="text-slate-400">Newly added performance and luxury vehicles to our global fleet.</p>
                     </div>
 
                     <div className="flex items-center gap-4">
                         <Link href="/explore" className="text-primary font-bold uppercase text-xs tracking-widest hover:underline hidden md:block">
                             View All
                         </Link>
-                        <div className="flex gap-2 text-slate-100">
-                            <button className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary hover:text-background-dark transition-all">
-                                <span className="material-symbols-outlined">chevron_left</span>
-                            </button>
-                            <button className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-primary hover:text-background-dark transition-all">
-                                <span className="material-symbols-outlined">chevron_right</span>
-                            </button>
-                        </div>
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto layout-padding">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 latest-arrivals-grid">
-                        {latestArrivals.map((car) => (
-                            <Link href={`/vehicles/${car.id}`} key={car.id} className="block group">
-                                <div className="relative h-[250px] rounded-2xl overflow-hidden mb-5">
-                                    <div
-                                        className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
-                                        style={{ backgroundImage: `url("${car.image}")` }}
-                                    ></div>
-                                    <div className="absolute top-4 left-4 bg-primary text-background-dark text-[10px] font-black uppercase px-2 py-1 rounded">{car.tag}</div>
-                                </div>
-                                <div className="flex justify-between items-start px-2">
-                                    <div>
-                                        <h3 className="text-lg font-bold text-slate-100 group-hover:text-primary transition-colors">{car.name}</h3>
-                                        <p className="text-slate-400 text-xs">{car.desc}</p>
+                    {loading ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {[1, 2, 3].map((i) => (
+                                <div key={i} className="h-[350px] rounded-3xl bg-white/5 animate-pulse" />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {latestVehicles.map((car) => (
+                                <Link href={`/vehicles/${car._id}`} key={car._id} className="block group">
+                                    <div className="relative h-[280px] rounded-3xl overflow-hidden mb-6">
+                                        <div
+                                            className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
+                                            style={{ backgroundImage: `url("${car.images?.[0]}")` }}
+                                        ></div>
+                                        <div className="absolute top-4 left-4 bg-primary text-background-dark text-[10px] font-black uppercase px-3 py-1.5 rounded-full shadow-lg">{car.category}</div>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-background-dark/40 to-transparent pointer-events-none" />
                                     </div>
-                                    <div className="text-right">
-                                        <p className="text-primary font-bold text-lg">${car.price}</p>
-                                        <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Per Day</p>
+                                    <div className="flex justify-between items-start px-2">
+                                        <div>
+                                            <h3 className="text-xl font-bold text-slate-100 group-hover:text-primary transition-colors">{car.title}</h3>
+                                            <p className="text-slate-400 text-sm mt-1">{car.brand} {car.model} • {car.year}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-primary font-bold text-xl">${car.price}</p>
+                                            <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest mt-1">Per Day</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -465,9 +499,9 @@ export default function HomePage() {
                                 className="w-full flex justify-between items-center text-left py-6 hover:text-primary transition-colors group"
                             >
                                 <span className={`text-lg font-medium transition-colors ${openFaq === index ? 'text-primary' : ''}`}>{faq.question}</span>
-                                {/* @ts-ignore */}
-                                <motion.span
-                                    animate={{ rotate: openFaq === index ? 45 : 0 }}
+                            {/* @ts-ignore */}
+                            <motion.span
+                                animate={{ rotate: openFaq === index ? 45 : 0 }}
                                     className="material-symbols-outlined text-slate-500 group-hover:text-primary"
                                 >
                                     add

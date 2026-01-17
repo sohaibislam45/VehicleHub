@@ -10,6 +10,7 @@ export const vehicleService = {
         if (query?.location) params.append("location", query.location);
         if (query?.search) params.append("search", query.search);
         if (query?.sortBy) params.append("sortBy", query.sortBy);
+        if (query?.limit) params.append("limit", query.limit.toString());
 
         const response = await api.get<Vehicle[]>(`/vehicles?${params.toString()}`);
         return response.data;

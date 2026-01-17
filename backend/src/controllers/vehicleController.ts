@@ -6,7 +6,7 @@ import type { AuthRequest } from '../middleware/authMiddleware.js';
 // @route GET /api/vehicles
 export const getVehicles = async (req: Request, res: Response) => {
     try {
-        const { category, minPrice, maxPrice, location, search } = req.query;
+        const { category, minPrice, maxPrice, location, search, sortBy, limit } = req.query;
         let query: any = {};
 
         if (category) query.category = category;
@@ -23,7 +23,20 @@ export const getVehicles = async (req: Request, res: Response) => {
             if (maxPrice) query.price.$lte = Number(maxPrice);
         }
 
-        const vehicles = await Vehicle.find(query).populate('ownerId', 'name photoURL');
+        // Sorting logic
+        let sortOptions: any = { createdAt: -1 }; // Default: Latest
+        if (sortBy === 'PriceLow') sortOptions = { price: 1 };
+        if (sortBy === 'PriceHigh') sortOptions = { price: -1 };
+        if (sortBy === 'TopBooking') sortOptions = { bookingCount: -1 };
+        if (sortBy === 'Recent') sortOptions = { createdAt: -1 };
+
+        let mongooseQuery = Vehicle.find(query).populate('ownerId', 'name photoURL').sort(sortOptions);
+        
+        if (limit) {
+            mongooseQuery = mongooseQuery.limit(Number(limit));
+        }
+
+        const vehicles = await mongooseQuery;
         res.json(vehicles);
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });

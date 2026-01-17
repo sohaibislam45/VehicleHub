@@ -21,6 +21,10 @@ export const createBooking = async (req: AuthRequest, res: Response) => {
             status: 'pending'
         });
 
+        // Increment vehicle booking count
+        vehicle.bookingCount = (vehicle.bookingCount || 0) + 1;
+        await vehicle.save();
+
         res.status(201).json(booking);
     } catch (error) {
         res.status(400).json({ message: 'Invalid booking data' });
