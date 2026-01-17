@@ -231,9 +231,9 @@ export default function AddVehiclePage() {
                             Pricing
                         </h3>
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-300">Price per Day ($)</label>
+                            <label className="text-sm font-bold text-slate-300">Price per Day (৳)</label>
                             <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">৳</span>
                                 <input
                                     type="number"
                                     name="price"

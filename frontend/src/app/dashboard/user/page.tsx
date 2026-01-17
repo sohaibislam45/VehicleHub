@@ -3,14 +3,17 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import StatsCard from "@/components/dashboard/StatsCard";
+import { vehicleService } from "@/services/vehicleService";
 
 interface BookingData {
     _id: string;
     vehicleId: {
+        _id: string;
         title: string;
         images: string[];
     };
     startDate: string;
+    endDate: string;
     status: string;
     totalPrice: number;
 }
@@ -26,40 +29,29 @@ export default function UserDashboardPage() {
     const [recentBookings, setRecentBookings] = useState<BookingData[]>([]);
 
     useEffect(() => {
-        // TODO: Fetch real data from API
-        // For now, using mock data
-        setTimeout(() => {
-            setStats({
-                vehiclesAdded: 12,
-                bookingsMade: 48,
-                totalSpent: 12450,
-            });
-            setRecentBookings([
-                {
-                    _id: "VH-99210",
-                    vehicleId: { title: "Tesla Model S Plaid", images: [] },
-                    startDate: "Oct 24, 2023",
-                    status: "Confirmed",
-                    totalPrice: 450,
-                },
-                {
-                    _id: "VH-99208",
-                    vehicleId: { title: "Mercedes Sprinter", images: [] },
-                    startDate: "Oct 22, 2023",
-                    status: "Pending",
-                    totalPrice: 1200,
-                },
-                {
-                    _id: "VH-99195",
-                    vehicleId: { title: "Porsche 911 GT3", images: [] },
-                    startDate: "Oct 20, 2023",
-                    status: "Confirmed",
-                    totalPrice: 890,
-                },
-            ]);
-            setLoading(false);
-        }, 500);
-    }, []);
+        const fetchDashboardData = async () => {
+            try {
+                const bookings = await vehicleService.getUserBookings();
+                setRecentBookings(bookings);
+
+                const totalSpent = bookings.reduce((sum: number, b: any) => sum + b.totalPrice, 0);
+
+                setStats({
+                    vehiclesAdded: 0, // Need a separate API if this is "count of vehicles I listed"
+                    bookingsMade: bookings.length,
+                    totalSpent: totalSpent,
+                });
+            } catch (err) {
+                console.error("Failed to fetch dashboard data:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (user) {
+            fetchDashboardData();
+        }
+    }, [user]);
 
     return (
         <>
@@ -98,7 +90,7 @@ export default function UserDashboardPage() {
                 />
                 <StatsCard
                     title="Total Spent"
-                    value={`$${stats.totalSpent.toLocaleString()}`}
+                    value={`৳${stats.totalSpent.toLocaleString()}`}
                     change="+10%"
                     icon="payments"
                     progressPercent={80}
@@ -204,7 +196,7 @@ export default function UserDashboardPage() {
                                             {booking.status}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-5 text-right text-sm font-bold text-white">${booking.totalPrice.toFixed(2)}</td>
+                                    <td className="px-6 py-5 text-right text-sm font-bold text-white">৳{booking.totalPrice.toLocaleString()}</td>
                                 </tr>
                             ))}
                         </tbody>

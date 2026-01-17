@@ -12,7 +12,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 // @desc Create a checkout session
 // @route POST /api/bookings/create-checkout-session
-export const createCheckoutSession = async (req: AuthRequest, res: Response) => {
+export const createCheckoutSession = async (req: AuthRequest, res: Response): Promise<any> => {
     try {
         const { vehicleId, startDate, endDate, totalPrice, pickupLocation } = req.body;
 
@@ -46,8 +46,8 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response) => 
                 },
             ],
             mode: 'payment',
-            success_url: `${process.env.FRONTEND_URL}/vehicles/${vehicleId}?success=true&bookingId=${booking._id}`,
-            cancel_url: `${process.env.FRONTEND_URL}/vehicles/${vehicleId}?canceled=true`,
+            success_url: `${process.env.FRONTEND_URL}/payment/success?vehicleId=${vehicleId}&bookingId=${booking._id}`,
+            cancel_url: `${process.env.FRONTEND_URL}/payment/canceled?vehicleId=${vehicleId}`,
             customer_email: req.user.email,
             client_reference_id: booking._id.toString(),
             metadata: {
@@ -64,12 +64,16 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response) => 
 };
 
 // @desc Webhook for Stripe events
-export const stripeWebhook = async (req: Request, res: Response) => {
+export const stripeWebhook = async (req: Request, res: Response): Promise<any> => {
     const sig = req.headers['stripe-signature'];
     let event;
 
     try {
-        event = stripe.webhooks.constructEvent(req.body, sig as string, process.env.STRIPE_WEBHOOK_SECRET!);
+        const rawBody = (req as any).rawBody;
+        if (!rawBody) {
+            throw new Error("Raw body not found. Check server.ts middleware.");
+        }
+        event = stripe.webhooks.constructEvent(rawBody, sig as string, process.env.STRIPE_WEBHOOK_SECRET!);
     } catch (err: any) {
         console.error("Webhook Error:", err.message);
         return res.status(400).send(`Webhook Error: ${err.message}`);
@@ -99,7 +103,7 @@ export const stripeWebhook = async (req: Request, res: Response) => {
 };
 
 // @desc Create a booking (deprecated/fallback if needed)
-export const createBooking = async (req: AuthRequest, res: Response) => {
+export const createBooking = async (req: AuthRequest, res: Response): Promise<any> => {
     try {
         const { vehicleId, startDate, endDate, totalPrice } = req.body;
 
@@ -126,9 +130,9 @@ export const createBooking = async (req: AuthRequest, res: Response) => {
 
 // @desc Get user bookings
 // @route GET /api/bookings/my
-export const getMyBookings = async (req: AuthRequest, res: Response) => {
+export const getMyBookings = async (req: AuthRequest, res: Response): Promise<any> => {
     try {
-        const bookings = await Booking.find({ userId: req.user._id }).populate('vehicleId');
+        const bookings = await Booking.find({ userId: req.user?._id }).populate('vehicleId');
         res.json(bookings);
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
@@ -137,7 +141,7 @@ export const getMyBookings = async (req: AuthRequest, res: Response) => {
 
 // @desc Update booking status
 // @route PATCH /api/bookings/:id/status
-export const updateBookingStatus = async (req: AuthRequest, res: Response) => {
+export const updateBookingStatus = async (req: AuthRequest, res: Response): Promise<any> => {
     try {
         const booking = await Booking.findById(req.params.id);
         if (!booking) return res.status(404).json({ message: 'Booking not found' });

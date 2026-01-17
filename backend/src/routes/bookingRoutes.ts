@@ -11,7 +11,7 @@ router.route('/my')
     .get(protect, getMyBookings);
 
 router.post('/create-checkout-session', protect, createCheckoutSession);
-router.post('/webhook', express.raw({ type: 'application/json' }), stripeWebhook);
+router.post('/webhook', stripeWebhook);
 
 router.route('/:id/status')
     .patch(protect, updateBookingStatus);

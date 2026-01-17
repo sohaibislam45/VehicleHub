@@ -156,7 +156,7 @@ export default function MyVehiclesPage() {
                                             </span>
                                         </td>
                                         <td className="px-6 py-5 text-right font-medium">
-                                            <span className="text-white">${vehicle.price}</span>
+                                            <span className="text-white">৳{vehicle.price}</span>
                                             <span className="text-slate-500 text-sm">/day</span>
                                         </td>
                                         <td className="px-6 py-5 text-center">{getStatusBadge(vehicle.status)}</td>
