@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
+import Pagination from "@/components/dashboard/Pagination";
 
 interface Booking {
     _id: string;
@@ -25,6 +26,8 @@ export default function ManageBookingsPage() {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
     const [filterStatus, setFilterStatus] = useState("all");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         const fetchBookings = async () => {
@@ -53,6 +56,16 @@ export default function ManageBookingsPage() {
     const filteredBookings = bookings.filter(b =>
         filterStatus === "all" || b.status.toLowerCase() === filterStatus.toLowerCase()
     );
+
+    // Pagination logic
+    const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedBookings = filteredBookings.slice(startIndex, startIndex + itemsPerPage);
+
+    // Reset to page 1 when filter changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filterStatus]);
 
     const getStatusStyle = (status: string) => {
         switch (status.toLowerCase()) {
@@ -110,7 +123,7 @@ export default function ManageBookingsPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                            {filteredBookings.map((b) => (
+                            {paginatedBookings.map((b) => (
                                 <tr key={b._id} className="hover:bg-white/[0.02] transition-colors group">
                                     <td className="px-6 py-5 font-mono text-xs text-slate-500">#{b._id.slice(-8).toUpperCase()}</td>
                                     <td className="px-6 py-5">
@@ -178,6 +191,12 @@ export default function ManageBookingsPage() {
                     </div>
                 )}
             </div>
+
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+            />
         </div>
     );
 }

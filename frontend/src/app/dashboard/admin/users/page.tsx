@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import Pagination from "@/components/dashboard/Pagination";
 
 interface User {
     _id: string;
@@ -20,6 +21,8 @@ export default function ManageUsersPage() {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -75,6 +78,16 @@ export default function ManageUsersPage() {
         u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         u.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // Pagination logic
+    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
+
+    // Reset to page 1 when search term changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     if (loading) {
         return (
@@ -134,7 +147,7 @@ export default function ManageUsersPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border-dark">
-                            {filteredUsers.map((u) => (
+                            {paginatedUsers.map((u) => (
                                 <tr key={u._id} className={`hover:bg-white/[0.01] transition-colors group ${u.status === 'disabled' ? 'opacity-50' : ''}`}>
                                     <td className="px-6 py-5">
                                         <div className="flex items-center gap-4">
@@ -214,6 +227,12 @@ export default function ManageUsersPage() {
                     </table>
                 </div>
             </div>
+
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+            />
         </div>
     );
 }

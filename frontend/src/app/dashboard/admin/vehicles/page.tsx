@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
+import Pagination from "@/components/dashboard/Pagination";
 
 interface Vehicle {
     _id: string;
@@ -22,6 +23,8 @@ export default function ManageVehiclesPage() {
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         const fetchVehicles = async () => {
@@ -53,6 +56,16 @@ export default function ManageVehiclesPage() {
         v.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         v.ownerId?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // Pagination logic
+    const totalPages = Math.ceil(filteredVehicles.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedVehicles = filteredVehicles.slice(startIndex, startIndex + itemsPerPage);
+
+    // Reset to page 1 when search term changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     if (loading) {
         return (
@@ -94,7 +107,7 @@ export default function ManageVehiclesPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                            {filteredVehicles.map((vehicle) => (
+                            {paginatedVehicles.map((vehicle) => (
                                 <tr key={vehicle._id} className="hover:bg-white/[0.02] transition-colors group">
                                     <td className="px-6 py-5">
                                         <div className="flex items-center gap-4">
@@ -166,6 +179,12 @@ export default function ManageVehiclesPage() {
                     </div>
                 )}
             </div>
+
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+            />
         </div>
     );
 }
