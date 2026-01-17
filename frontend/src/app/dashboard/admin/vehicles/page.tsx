@@ -138,6 +138,13 @@ export default function ManageVehiclesPage() {
                                             >
                                                 <span className="material-symbols-outlined text-xl">visibility</span>
                                             </a>
+                                            <a
+                                                href={`/dashboard/admin/vehicles/${vehicle._id}/edit`}
+                                                className="p-2 hover:bg-blue-500/10 rounded-lg text-slate-400 hover:text-blue-500 transition-all inline-flex items-center justify-center"
+                                                title="Edit Vehicle"
+                                            >
+                                                <span className="material-symbols-outlined text-xl">edit</span>
+                                            </a>
                                             <button
                                                 onClick={() => handleDelete(vehicle._id)}
                                                 className="p-2 hover:bg-red-500/10 rounded-lg text-slate-400 hover:text-red-500 transition-all flex items-center justify-center"
