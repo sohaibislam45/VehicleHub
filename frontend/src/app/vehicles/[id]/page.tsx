@@ -94,12 +94,12 @@ export default function VehicleDetailsPage() {
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                             <div className="p-6 rounded-2xl bg-surface-dark border border-white/5 flex flex-col items-center text-center">
                                 <span className="material-symbols-outlined text-primary mb-3 text-3xl">speed</span>
-                                <p className="text-xs text-slate-500 uppercase font-bold tracking-widest mb-1">Performance</p>
+                                <p className="text-xs text-slate-500 uppercase font-bold tracking-widest mb-1">Performance (HP)</p>
                                 <p className="text-white font-bold text-lg">{vehicle.performance || "N/A"}</p>
                             </div>
                             <div className="p-6 rounded-2xl bg-surface-dark border border-white/5 flex flex-col items-center text-center">
                                 <span className="material-symbols-outlined text-primary mb-3 text-3xl">battery_charging_full</span>
-                                <p className="text-xs text-slate-500 uppercase font-bold tracking-widest mb-1">Range</p>
+                                <p className="text-xs text-slate-500 uppercase font-bold tracking-widest mb-1">Range (Miles)</p>
                                 <p className="text-white font-bold text-lg">{vehicle.range || "N/A"}</p>
                             </div>
                             <div className="p-6 rounded-2xl bg-surface-dark border border-white/5 flex flex-col items-center text-center">
@@ -113,19 +113,6 @@ export default function VehicleDetailsPage() {
                                 <p className="text-white font-bold text-lg">{vehicle.drive || "N/A"}</p>
                             </div>
                         </div>
-
-                        {/* Additional Specs Grid (if dynamic specs exist) */}
-                        {vehicle.specs && vehicle.specs.length > 0 && (
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                {vehicle.specs.map((spec, idx) => (
-                                    <div key={idx} className="p-6 rounded-2xl bg-surface-dark border border-white/5 flex flex-col items-center text-center">
-                                        <span className="material-symbols-outlined text-primary mb-3">{spec.icon}</span>
-                                        <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">{spec.label}</p>
-                                        <p className="text-white font-bold text-lg">{spec.value}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
 
                         {/* Vehicle Overview */}
                         <section>

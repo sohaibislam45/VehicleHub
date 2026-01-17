@@ -120,7 +120,7 @@ export default function ManageVehiclesPage() {
                                         </div>
                                     </td>
                                     <td className="px-6 py-5">
-                                        <span className="text-sm font-bold text-white">${vehicle.price}</span>
+                                        <span className="text-sm font-bold text-white">৳{vehicle.price}</span>
                                     </td>
                                     <td className="px-6 py-5">
                                         <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[10px] font-bold rounded-full border border-emerald-500/20 w-fit uppercase">
@@ -131,7 +131,7 @@ export default function ManageVehiclesPage() {
                                     <td className="px-6 py-5 text-right">
                                         <div className="flex justify-end gap-2">
                                             <a
-                                                href={`/explore/${vehicle._id}`}
+                                                href={`/vehicles/${vehicle._id}`}
                                                 target="_blank"
                                                 className="p-2 hover:bg-white/5 rounded-lg text-slate-400 hover:text-primary transition-all inline-flex items-center justify-center"
                                                 title="View Public Details"

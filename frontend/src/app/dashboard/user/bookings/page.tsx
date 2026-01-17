@@ -120,17 +120,25 @@ export default function MyBookingsPage() {
                                 </div>
                             </div>
                             <div className="flex items-center gap-3">
-                                <button className="p-3 rounded-lg border border-border-dark text-slate-400 hover:text-white hover:bg-surface-dark transition-all">
-                                    <span className="material-symbols-outlined">description</span>
-                                </button>
                                 <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(booking._id);
+                                        alert('Booking ID copied to clipboard!');
+                                    }}
+                                    className="p-3 rounded-lg border border-border-dark text-slate-400 hover:text-white hover:bg-surface-dark transition-all"
+                                    title="Copy Booking ID"
+                                >
+                                    <span className="material-symbols-outlined">content_copy</span>
+                                </button>
+                                <a
+                                    href={`/vehicles/${booking.vehicleId._id}`}
                                     className={`px-6 py-3 rounded-lg font-bold text-sm transition-colors ${booking.status.toLowerCase() === "interested"
                                         ? "bg-primary text-white hover:opacity-90 shadow-lg shadow-primary/20"
                                         : "bg-surface-dark text-white hover:bg-slate-700"
                                         }`}
                                 >
                                     {booking.status.toLowerCase() === "interested" ? "Complete Booking" : "View Details"}
-                                </button>
+                                </a>
                             </div>
                         </div>
                     ))

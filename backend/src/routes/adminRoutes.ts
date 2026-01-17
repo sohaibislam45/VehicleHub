@@ -90,7 +90,7 @@ router.get('/bookings', protect, adminOnly, async (req: AuthRequest, res: Respon
     try {
         const bookings = await Booking.find({})
             .populate('userId', 'name email photoURL')
-            .populate('vehicleId', 'title')
+            .populate('vehicleId', 'title images')
             .sort({ createdAt: -1 });
         res.json(bookings);
     } catch (error) {

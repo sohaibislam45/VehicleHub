@@ -12,6 +12,7 @@ interface Booking {
     vehicleId: {
         _id: string;
         title: string;
+        images?: string[];
     };
     startDate: string;
     endDate: string;
@@ -100,6 +101,7 @@ export default function ManageBookingsPage() {
                             <tr>
                                 <th className="px-6 py-4">Transaction ID</th>
                                 <th className="px-6 py-4">Customer Details</th>
+                                <th className="px-6 py-4">Vehicle Image</th>
                                 <th className="px-6 py-4">Vehicle</th>
                                 <th className="px-6 py-4">Timeline</th>
                                 <th className="px-6 py-4">Total</th>
@@ -118,10 +120,21 @@ export default function ManageBookingsPage() {
                                         </div>
                                     </td>
                                     <td className="px-6 py-5">
+                                        <div className="size-16 rounded-lg overflow-hidden bg-white/5 border border-white/10">
+                                            {b.vehicleId?.images?.[0] ? (
+                                                <img src={b.vehicleId.images[0]} alt={b.vehicleId?.title || 'Vehicle'} className="object-cover size-full" />
+                                            ) : (
+                                                <div className="size-full flex items-center justify-center text-slate-600">
+                                                    <span className="material-symbols-outlined">image</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-5">
                                         <div className="flex flex-col">
                                             <span className="text-sm font-medium text-white">{b.vehicleId?.title || "Deleted Vehicle"}</span>
                                             <a
-                                                href={`/explore/${b.vehicleId?._id}`}
+                                                href={`/vehicles/${b.vehicleId?._id}`}
                                                 target="_blank"
                                                 className="text-[10px] text-primary hover:underline w-fit"
                                             >
@@ -135,7 +148,7 @@ export default function ManageBookingsPage() {
                                             <span className="text-[10px] text-slate-500">to {new Date(b.endDate).toLocaleDateString()}</span>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-5 font-bold text-white">${b.totalPrice.toFixed(2)}</td>
+                                    <td className="px-6 py-5 font-bold text-white">৳{b.totalPrice.toFixed(2)}</td>
                                     <td className="px-6 py-5">
                                         <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-bold uppercase w-fit ${getStatusStyle(b.status)}`}>
                                             <span className={`size-1.5 rounded-full ${b.status === 'pending' ? 'animate-pulse' : ''} bg-current`}></span>
