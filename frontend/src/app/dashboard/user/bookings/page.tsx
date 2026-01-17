@@ -26,40 +26,9 @@ export default function MyBookingsPage() {
 
     const fetchBookings = async () => {
         try {
-            // TODO: Replace with actual bookings endpoint
-            // const response = await api.get("/bookings");
-            // setBookings(response.data);
-
-            // Mock data for now
-            setTimeout(() => {
-                setBookings([
-                    {
-                        _id: "VH-99210",
-                        vehicleId: {
-                            _id: "1",
-                            title: "Tesla Model S Plaid",
-                            images: ["https://via.placeholder.com/400x300"],
-                        },
-                        startDate: "2023-10-12",
-                        endDate: "2023-10-15",
-                        totalPrice: 450,
-                        status: "Booked",
-                    },
-                    {
-                        _id: "VH-10294",
-                        vehicleId: {
-                            _id: "2",
-                            title: "Rivian R1S Adventure",
-                            images: ["https://via.placeholder.com/400x300"],
-                        },
-                        startDate: "2023-11-02",
-                        endDate: "2023-11-05",
-                        totalPrice: 890,
-                        status: "Interested",
-                    },
-                ]);
-                setLoading(false);
-            }, 500);
+            const response = await api.get("/bookings/my");
+            setBookings(response.data);
+            setLoading(false);
         } catch (error) {
             console.error("Error fetching bookings:", error);
             setLoading(false);
@@ -156,8 +125,8 @@ export default function MyBookingsPage() {
                                 </button>
                                 <button
                                     className={`px-6 py-3 rounded-lg font-bold text-sm transition-colors ${booking.status.toLowerCase() === "interested"
-                                            ? "bg-primary text-white hover:opacity-90 shadow-lg shadow-primary/20"
-                                            : "bg-surface-dark text-white hover:bg-slate-700"
+                                        ? "bg-primary text-white hover:opacity-90 shadow-lg shadow-primary/20"
+                                        : "bg-surface-dark text-white hover:bg-slate-700"
                                         }`}
                                 >
                                     {booking.status.toLowerCase() === "interested" ? "Complete Booking" : "View Details"}
@@ -167,30 +136,6 @@ export default function MyBookingsPage() {
                     ))
                 )}
             </div>
-
-            {/* Quick Stats */}
-            {bookings.length > 0 && (
-                <div className="mt-20 flex justify-between items-center border-t border-border-dark pt-8">
-                    <div className="flex gap-10">
-                        <div>
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Total Distance</p>
-                            <p className="text-xl font-bold text-white">
-                                1,240 <span className="text-sm font-medium text-primary">km</span>
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Carbon Saved</p>
-                            <p className="text-xl font-bold text-white">
-                                420 <span className="text-sm font-medium text-emerald-500">kg</span>
-                            </p>
-                        </div>
-                    </div>
-                    <button className="text-sm font-bold text-primary flex items-center gap-2 hover:underline underline-offset-4">
-                        Download Full History (PDF)
-                        <span className="material-symbols-outlined text-base">download</span>
-                    </button>
-                </div>
-            )}
         </div>
     );
 }

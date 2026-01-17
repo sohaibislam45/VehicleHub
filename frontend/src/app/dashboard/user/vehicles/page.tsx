@@ -4,22 +4,17 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
-
-interface Vehicle {
-    _id: string;
-    title: string;
-    category: string;
-    price: number;
-    status: string;
-    images: string[];
-    createdAt: string;
-}
+import { Vehicle } from "@/types/vehicle";
 
 export default function MyVehiclesPage() {
     const { user } = useAuth();
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [loading, setLoading] = useState(true);
     const [deleteModal, setDeleteModal] = useState<{ show: boolean; vehicle: Vehicle | null }>({
+        show: false,
+        vehicle: null,
+    });
+    const [statsModal, setStatsModal] = useState<{ show: boolean; vehicle: Vehicle | null }>({
         show: false,
         vehicle: null,
     });
@@ -167,15 +162,18 @@ export default function MyVehiclesPage() {
                                         <td className="px-6 py-5 text-center">{getStatusBadge(vehicle.status)}</td>
                                         <td className="px-6 py-5 text-right">
                                             <div className="flex items-center justify-end gap-2">
-                                                <Link
-                                                    href={`/vehicles/${vehicle._id}`}
+                                                <button
+                                                    onClick={() => setStatsModal({ show: true, vehicle })}
                                                     className="size-9 rounded-lg flex items-center justify-center border border-border-dark text-slate-400 hover:text-white hover:border-slate-500 transition-all"
                                                 >
                                                     <span className="material-symbols-outlined text-[20px]">visibility</span>
-                                                </Link>
-                                                <button className="size-9 rounded-lg flex items-center justify-center border border-border-dark text-slate-400 hover:text-primary hover:border-primary transition-all">
-                                                    <span className="material-symbols-outlined text-[20px]">edit</span>
                                                 </button>
+                                                <Link
+                                                    href={`/dashboard/user/edit-vehicle/${vehicle._id}`}
+                                                    className="size-9 rounded-lg flex items-center justify-center border border-border-dark text-slate-400 hover:text-primary hover:border-primary transition-all"
+                                                >
+                                                    <span className="material-symbols-outlined text-[20px]">edit</span>
+                                                </Link>
                                                 <button
                                                     onClick={() => setDeleteModal({ show: true, vehicle })}
                                                     className="size-9 rounded-lg flex items-center justify-center border border-border-dark text-slate-400 hover:text-red-500 hover:border-red-500/50 transition-all"
@@ -217,6 +215,95 @@ export default function MyVehiclesPage() {
                                 >
                                     Cancel, Keep It
                                 </button>
+                                {/* Stats Modal */}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Stats Modal */}
+            {statsModal.show && statsModal.vehicle && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                    onClick={() => setStatsModal({ show: false, vehicle: null })}>
+
+                    <div className="bg-surface-dark border border-border-dark w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 relative"
+                        onClick={(e) => e.stopPropagation()}>
+
+                        {/* Header */}
+                        <div className="relative h-32 bg-slate-800">
+                            {statsModal.vehicle.images?.[0] && (
+                                <div className="absolute inset-0">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-surface-dark to-transparent z-10" />
+                                    <img
+                                        src={statsModal.vehicle.images[0]}
+                                        alt={statsModal.vehicle.title}
+                                        className="w-full h-full object-cover opacity-60"
+                                    />
+                                </div>
+                            )}
+                            <button
+                                onClick={() => setStatsModal({ show: false, vehicle: null })}
+                                className="absolute top-4 right-4 size-8 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-colors z-20"
+                            >
+                                <span className="material-symbols-outlined text-lg">close</span>
+                            </button>
+                        </div>
+
+                        <div className="p-8 -mt-12 relative z-20">
+                            <div className="flex items-start justify-between mb-6">
+                                <div>
+                                    <h3 className="text-2xl font-black text-white mb-1">{statsModal.vehicle.title}</h3>
+                                    <p className="text-slate-400 text-sm flex items-center gap-1">
+                                        <span className="material-symbols-outlined text-base">calendar_month</span>
+                                        Added on {new Date(statsModal.vehicle.createdAt).toLocaleDateString()}
+                                    </p>
+                                </div>
+                                <div className="flex flex-col items-end gap-2">
+                                    {getStatusBadge(statsModal.vehicle.status)}
+                                    <span className="text-xl font-bold text-primary">৳{statsModal.vehicle.price}<span className="text-sm font-normal text-slate-400">/day</span></span>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-background-dark p-4 rounded-xl border border-border-dark flex items-center gap-4">
+                                    <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                        <span className="material-symbols-outlined text-2xl">key</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Rented</p>
+                                        <p className="text-2xl font-black text-white">{statsModal.vehicle.bookingCount || 0}</p>
+                                    </div>
+                                </div>
+
+                                <div className="bg-background-dark p-4 rounded-xl border border-border-dark flex items-center gap-4">
+                                    <div className="size-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                        <span className="material-symbols-outlined text-2xl">payments</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Earnings</p>
+                                        <p className="text-2xl font-black text-white">৳{(statsModal.vehicle.bookingCount || 0) * statsModal.vehicle.price}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 pt-6 border-t border-border-dark flex gap-3">
+                                <Link
+                                    href={`/dashboard/user/edit-vehicle/${statsModal.vehicle._id}`}
+                                    className="flex-1 py-3 bg-primary/10 text-primary font-bold rounded-xl hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2"
+                                >
+                                    <span className="material-symbols-outlined">edit_note</span>
+                                    Edit Listing
+                                </Link>
+                                <Link
+                                    href={`/vehicles/${statsModal.vehicle._id}`}
+                                    target="_blank"
+                                    className="flex-1 py-3 bg-transparent border border-border-dark text-slate-300 font-bold rounded-xl hover:text-white hover:border-slate-500 transition-all flex items-center justify-center gap-2"
+                                >
+                                    <span className="material-symbols-outlined">open_in_new</span>
+                                    Public View
+                                </Link>
                             </div>
                         </div>
                     </div>

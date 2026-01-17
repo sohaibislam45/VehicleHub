@@ -12,6 +12,7 @@ export interface Vehicle {
     year: number;
     price: number;
     category: string;
+    status: string;
     performance?: string;
     range?: string;
     seats?: number;
@@ -30,6 +31,7 @@ export interface Vehicle {
     }[];
     rating?: number;
     reviewsCount?: number;
+    bookingCount?: number;
     createdAt: string;
     updatedAt: string;
 }
