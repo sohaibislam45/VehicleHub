@@ -5,6 +5,19 @@ import { useRouter } from "next/navigation";
 import { uploadMultipleToImgBB } from "@/services/imgbbService";
 import api from "@/lib/api";
 
+const DHAKA_LOCATIONS = [
+    "Gulshan Circle 1",
+    "Bashundhara City Mall",
+    "Jamuna Future Park",
+    "University of Dhaka",
+    "Ramna Park",
+    "Old Dhaka / Sadarghat Riverfront",
+    "National Parliament House",
+    "Ahsan Manzil Area (Old Dhaka)",
+    "Hatirjheel",
+    "Banani / Kamal Ataturk Avenue"
+];
+
 export default function AddVehiclePage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -15,13 +28,15 @@ export default function AddVehiclePage() {
         description: "",
         category: "Sedan",
         price: "",
-        location: "",
+        location: DHAKA_LOCATIONS[0],
         year: "",
         brand: "",
         model: "",
         availableFrom: "",
         availableTo: "",
     });
+
+    const today = new Date().toISOString().split('T')[0];
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,8 +65,8 @@ export default function AddVehiclePage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (uploadedImages.length === 0) {
-            alert("Please upload at least one image");
+        if (uploadedImages.length < 3) {
+            alert("Please upload at least 3 images");
             return;
         }
 
@@ -109,6 +124,7 @@ export default function AddVehiclePage() {
                                 {uploadingImages ? "Uploading..." : "Drag & drop your photos here"}
                             </p>
                             <p className="text-slate-400 text-sm">Supports JPG, PNG (Max 10MB per file)</p>
+                            <p className="text-primary font-bold text-xs mt-2">Minimum 3 photos required</p>
                         </div>
                         <button
                             type="button"
@@ -253,16 +269,17 @@ export default function AddVehiclePage() {
                             Location
                         </h3>
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-300">Pick-up Address</label>
-                            <input
-                                type="text"
+                            <label className="text-sm font-bold text-slate-300">Pick-up Location</label>
+                            <select
                                 name="location"
                                 value={formData.location}
                                 onChange={handleChange}
-                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
-                                placeholder="Street, City, Zip Code"
-                                required
-                            />
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white appearance-none"
+                            >
+                                {DHAKA_LOCATIONS.map(loc => (
+                                    <option key={loc} value={loc} className="bg-surface-dark">{loc}</option>
+                                ))}
+                            </select>
                         </div>
                     </section>
                 </div>
@@ -279,9 +296,10 @@ export default function AddVehiclePage() {
                             <input
                                 type="date"
                                 name="availableFrom"
+                                min={today}
                                 value={formData.availableFrom}
                                 onChange={handleChange}
-                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white [color-scheme:dark]"
                             />
                         </div>
                         <div className="space-y-2">
@@ -289,9 +307,10 @@ export default function AddVehiclePage() {
                             <input
                                 type="date"
                                 name="availableTo"
+                                min={formData.availableFrom || today}
                                 value={formData.availableTo}
                                 onChange={handleChange}
-                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                                className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white [color-scheme:dark]"
                             />
                         </div>
                     </div>

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Hero from "@/components/Hero";
 import Statistics from "@/components/Statistics";
+import ListYourVehicle from "@/components/ListYourVehicle";
 import { vehicleService } from "@/services/vehicleService";
 import { Vehicle } from "@/types/vehicle";
 
@@ -248,6 +249,8 @@ export default function HomePage() {
                     </div>
                 </div>
             </section>
+
+            <ListYourVehicle />
 
             {/* Why Choose Us */}
             <section className="py-24 bg-gradient-to-b from-transparent to-surface-dark/10 w-full overflow-hidden">
@@ -507,6 +510,6 @@ export default function HomePage() {
                     </div>
                 </div>
             </section>
-        </div>
+        </div >
     );
 }

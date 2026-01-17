@@ -5,8 +5,8 @@ import { auth, googleProvider } from "@/lib/firebase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { Eye, EyeOff } from "lucide-react";
@@ -20,6 +20,18 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center bg-background-dark">
+                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        }>
+            <LoginContent />
+        </Suspense>
+    );
+}
+
+function LoginContent() {
     const router = useRouter();
     const { user } = useAuth();
     const [error, setError] = useState<string | null>(null);
@@ -35,9 +47,16 @@ export default function LoginPage() {
         resolver: zodResolver(loginSchema),
     });
 
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get("redirect");
+
     // Redirect users based on role after successful login
     useEffect(() => {
         if (user) {
+            if (redirectTo) {
+                router.push(redirectTo);
+                return;
+            }
             if (user.role === 'admin') {
                 router.push('/dashboard/admin');
             } else {
@@ -53,7 +72,7 @@ export default function LoginPage() {
                 }, 100);
             }
         }
-    }, [user, router]);
+    }, [user, router, redirectTo]);
 
     const onSubmit = async (data: LoginFormValues) => {
         setLoading(true);
