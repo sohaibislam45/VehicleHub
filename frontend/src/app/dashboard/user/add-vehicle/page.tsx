@@ -243,7 +243,7 @@ export default function AddVehiclePage() {
                         </div>
                         <div className="grid grid-cols-2 gap-6 col-span-2">
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-300">Performance (0-60)</label>
+                                <label className="text-sm font-bold text-slate-300">Performance (Hp)</label>
                                 <input
                                     type="text"
                                     name="performance"

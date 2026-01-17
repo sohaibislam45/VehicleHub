@@ -87,18 +87,8 @@ export default function VehicleDetailsPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                     {/* Left Column: Details */}
                     <div className="col-span-1 lg:col-span-8 space-y-12">
-                        {/* Key Stats Grid */}
-                        {vehicle.specs && vehicle.specs.length > 0 && (
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                {vehicle.specs.map((spec, idx) => (
-                                    <div key={idx} className="p-6 rounded-2xl bg-surface-dark border border-white/5 flex flex-col items-center text-center">
-                                        <span className="material-symbols-outlined text-primary mb-3">{spec.icon}</span>
-                                        <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">{spec.label}</p>
-                                        <p className="text-white font-bold text-lg">{spec.value}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+
+
 
                         {/* Primary Specs Grid */}
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

@@ -4,12 +4,17 @@ import Image from "next/image";
 
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useClickOutside } from "@/hooks/useClickOutside";
 
 export default function Navbar() {
     const { user, logout } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
+
+    // Dropdown ref for click outside
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    useClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
     useEffect(() => {
         const handleScroll = () => {
@@ -104,7 +109,7 @@ export default function Navbar() {
                             </Link>
                         </>
                     ) : (
-                        <div className="relative">
+                        <div className="relative" ref={dropdownRef}>
                             <button
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                                 className="flex items-center gap-3 hover:opacity-80 transition-opacity focus:outline-none"
@@ -136,7 +141,7 @@ export default function Navbar() {
                             </button>
 
                             {isDropdownOpen && (
-                                <div className="absolute right-0 top-full mt-4 w-56 glass-card rounded-2xl border border-white/5 shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col py-2 animate-in fade-in slide-in-from-top-2 z-50">
+                                <div className="absolute right-0 top-full mt-2 w-64 bg-[#0F172A] rounded-xl border border-slate-700/50 shadow-2xl overflow-hidden flex flex-col py-2 animate-in fade-in slide-in-from-top-2 z-50 ring-1 ring-black/5">
                                     <div className="px-4 py-3 border-b border-white/5 mb-2">
                                         <p className="text-sm font-bold text-slate-100 truncate">{user.displayName || "User"}</p>
                                         <p className="text-xs text-slate-400 truncate font-mono">{user.email}</p>
@@ -144,7 +149,7 @@ export default function Navbar() {
 
                                     <Link
                                         href={user.role === 'admin' ? '/dashboard/admin' : '/dashboard/user'}
-                                        className="px-4 py-3 text-sm text-slate-300 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-3"
+                                        className="px-4 py-3 text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-3"
                                         onClick={() => setIsDropdownOpen(false)}
                                     >
                                         <span className="material-symbols-outlined text-lg">dashboard</span>

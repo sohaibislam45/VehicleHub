@@ -6,8 +6,10 @@ import type { AuthRequest } from '../middleware/authMiddleware.js';
 // @route GET /api/vehicles
 export const getVehicles = async (req: Request, res: Response) => {
     try {
-        const { category, minPrice, maxPrice, location, search, sortBy, limit } = req.query;
+        const { category, minPrice, maxPrice, location, search, sortBy, limit, userId } = req.query;
         let query: any = {};
+
+        if (userId) query.ownerId = userId;
 
         if (category) query.category = category;
         if (location) query.location = new RegExp(location as string, 'i');

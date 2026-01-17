@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import api from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 interface Vehicle {
     _id: string;
@@ -15,6 +16,7 @@ interface Vehicle {
 }
 
 export default function MyVehiclesPage() {
+    const { user } = useAuth();
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [loading, setLoading] = useState(true);
     const [deleteModal, setDeleteModal] = useState<{ show: boolean; vehicle: Vehicle | null }>({
@@ -23,13 +25,16 @@ export default function MyVehiclesPage() {
     });
 
     useEffect(() => {
-        fetchVehicles();
-    }, []);
+        if (user) {
+            fetchVehicles();
+        }
+    }, [user]);
 
     const fetchVehicles = async () => {
         try {
-            const response = await api.get("/vehicles");
-            // Filter to only show user's own vehicles
+            const response = await api.get("/vehicles", {
+                params: { userId: user._id }
+            });
             setVehicles(response.data);
         } catch (error) {
             console.error("Error fetching vehicles:", error);
