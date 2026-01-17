@@ -59,7 +59,7 @@ export const getVehicleById = async (req: Request, res: Response) => {
 // @route POST /api/vehicles
 export const createVehicle = async (req: AuthRequest, res: Response) => {
     try {
-        const { title, description, price, category, images, specs, location, brand, model, year, availableFrom, availableTo, features } = req.body;
+        const { title, description, price, category, images, specs, location, brand, model, year, availableFrom, availableTo, features, performance, range, seats, drive } = req.body;
         const vehicle = await Vehicle.create({
             ownerId: req.user._id,
             title,
@@ -74,7 +74,11 @@ export const createVehicle = async (req: AuthRequest, res: Response) => {
             features: features || [],
             location,
             availableFrom,
-            availableTo
+            availableTo,
+            performance,
+            range,
+            seats,
+            drive
         });
         res.status(201).json(vehicle);
     } catch (error) {

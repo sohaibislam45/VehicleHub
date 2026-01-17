@@ -32,6 +32,10 @@ export default function AddVehiclePage() {
         year: "",
         brand: "",
         model: "",
+        performance: "",
+        range: "",
+        seats: "",
+        drive: "",
         availableFrom: "",
         availableTo: "",
     });
@@ -77,6 +81,7 @@ export default function AddVehiclePage() {
                 images: uploadedImages,
                 price: parseFloat(formData.price),
                 year: parseInt(formData.year),
+                seats: formData.seats ? parseInt(formData.seats) : undefined,
                 status: "active",
             });
 
@@ -235,6 +240,52 @@ export default function AddVehiclePage() {
                                 placeholder="Tell potential renters what makes your vehicle special..."
                                 required
                             />
+                        </div>
+                        <div className="grid grid-cols-2 gap-6 col-span-2">
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-slate-300">Performance (0-60)</label>
+                                <input
+                                    type="text"
+                                    name="performance"
+                                    value={formData.performance}
+                                    onChange={handleChange}
+                                    className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                                    placeholder="e.g. 3.1s"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-slate-300">Range (Miles)</label>
+                                <input
+                                    type="text"
+                                    name="range"
+                                    value={formData.range}
+                                    onChange={handleChange}
+                                    className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                                    placeholder="e.g. 300 mi"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-slate-300">Seats</label>
+                                <input
+                                    type="number"
+                                    name="seats"
+                                    value={formData.seats}
+                                    onChange={handleChange}
+                                    className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                                    placeholder="e.g. 5"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-slate-300">Drive Type</label>
+                                <input
+                                    type="text"
+                                    name="drive"
+                                    value={formData.drive}
+                                    onChange={handleChange}
+                                    className="w-full bg-background-dark border border-border-dark rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none text-white"
+                                    placeholder="e.g. AWD"
+                                />
+                            </div>
                         </div>
                     </div>
                 </section>

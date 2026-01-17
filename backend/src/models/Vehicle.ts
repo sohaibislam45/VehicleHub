@@ -10,6 +10,10 @@ export interface IVehicle extends Document {
     price: number;
     category: string;
     status: 'available' | 'booked' | 'maintenance';
+    performance?: string;
+    range?: string;
+    seats?: number;
+    drive?: string;
     images: string[];
     specs: {
         icon: string;
@@ -40,6 +44,10 @@ const VehicleSchema: Schema = new Schema({
     price: { type: Number, required: true },
     category: { type: String, required: true },
     status: { type: String, enum: ['available', 'booked', 'maintenance'], default: 'available' },
+    performance: { type: String },
+    range: { type: String },
+    seats: { type: Number },
+    drive: { type: String },
     images: { type: [String], required: true },
     specs: [{
         icon: { type: String },

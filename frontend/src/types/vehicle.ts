@@ -12,6 +12,10 @@ export interface Vehicle {
     year: number;
     price: number;
     category: string;
+    performance?: string;
+    range?: string;
+    seats?: number;
+    drive?: string;
     images: string[];
     specs: {
         icon: string;
