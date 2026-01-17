@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
+import { Eye, EyeOff } from "lucide-react";
 import * as z from "zod";
 
 const loginSchema = z.object({
@@ -23,6 +24,7 @@ export default function LoginPage() {
     const { user } = useAuth();
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const {
         register,
@@ -33,13 +35,22 @@ export default function LoginPage() {
         resolver: zodResolver(loginSchema),
     });
 
-    // Redirect users to their respective dashboards after successful login
+    // Redirect users based on role after successful login
     useEffect(() => {
         if (user) {
             if (user.role === 'admin') {
                 router.push('/dashboard/admin');
             } else {
-                router.push('/dashboard/user');
+                // For regular users, we want them to stay on the same page where they were.
+                // Since they are on /login, we go back in history.
+                // If there's no history (direct visit), we fallback to home.
+                router.back();
+                // Fallback: if still on login page after a short delay, go to home
+                setTimeout(() => {
+                    if (window.location.pathname === '/login') {
+                        router.push('/');
+                    }
+                }, 100);
             }
         }
     }, [user, router]);
@@ -158,12 +169,21 @@ export default function LoginPage() {
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-slate-300 ml-1">Password</label>
-                            <input
-                                {...register("password")}
-                                type="password"
-                                className="w-full h-12 px-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 text-slate-100 placeholder:text-slate-600 transition-all"
-                                placeholder="••••••••"
-                            />
+                            <div className="relative">
+                                <input
+                                    {...register("password")}
+                                    type={showPassword ? "text" : "password"}
+                                    className="w-full h-12 px-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 text-slate-100 placeholder:text-slate-600 transition-all pr-12"
+                                    placeholder="••••••••"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
                             {errors.password && (
                                 <p className="text-red-400 text-xs ml-1">{errors.password.message}</p>
                             )}

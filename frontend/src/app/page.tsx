@@ -13,6 +13,7 @@ export default function HomePage() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [latestVehicles, setLatestVehicles] = useState<Vehicle[]>([]);
     const [topBookingVehicles, setTopBookingVehicles] = useState<Vehicle[]>([]);
+    const [featuredReviews, setFeaturedReviews] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     const toggleFaq = (index: number) => {
@@ -22,12 +23,14 @@ export default function HomePage() {
     useEffect(() => {
         const fetchHomeData = async () => {
             try {
-                const [latest, top] = await Promise.all([
+                const [latest, top, reviews] = await Promise.all([
                     vehicleService.getAll({ sortBy: 'Recent', limit: 6 }),
-                    vehicleService.getAll({ sortBy: 'TopBooking', limit: 6 })
+                    vehicleService.getAll({ sortBy: 'TopBooking', limit: 6 }),
+                    vehicleService.getFeaturedReviews()
                 ]);
                 setLatestVehicles(latest);
                 setTopBookingVehicles(top);
+                setFeaturedReviews(reviews);
             } catch (error) {
                 console.error("Failed to fetch homepage data", error);
             } finally {
@@ -314,7 +317,7 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Testimonials */}
+            {/* Testimonials - Global Elite Voice */}
             <section className="py-24 bg-surface-dark/50 w-full overflow-hidden">
                 <div className="max-w-7xl mx-auto layout-padding text-center">
                     {/* @ts-ignore */}
@@ -324,64 +327,50 @@ export default function HomePage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
                     >
-                        <h2 className="text-3xl font-bold text-white mb-2">Our Customers Voice</h2>
-                        <p className="text-slate-400 mb-16">Trusted by innovators and leaders across 50 countries.</p>
+                        <h2 className="text-3xl font-bold text-white mb-2">Global Elite Voice</h2>
+                        <p className="text-slate-400 mb-16">Trusted reviews from our global community of elite travelers.</p>
                     </motion.div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {[
-                            {
-                                quote: "The transition from my private jet to the Tesla Model S Plaid arranged by VehicleHub was flawless. Truly the gold standard of mobility.",
-                                author: "Jonathan Vance",
-                                role: "Tech CEO, San Francisco",
-                                img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&h=200&auto=format&fit=crop"
-                            },
-                            {
-                                quote: "Finally, a platform that understands what high-net-worth individuals actually need. The delivery to my Alpine villa was prompt. Exceptional service.",
-                                author: "Elena Rodriguez",
-                                role: "Venture Partner, Madrid",
-                                img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop",
-                                featured: true
-                            },
-                            {
-                                quote: "VehicleHub makes city navigation effortless. I always have the latest EV waiting for me at the hub. Smart, sustainable, and sleek.",
-                                author: "Marcus Chen",
-                                role: "Architect, Singapore",
-                                img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&h=200&auto=format&fit=crop"
-                            }
-                        ].map((t, idx) => (
-                            /* @ts-ignore */
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, y: 40 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: idx * 0.2, duration: 0.6 }}
-                                className={`glass-card p-10 rounded-[2.5rem] text-left border border-white/5 flex flex-col justify-between h-full transition-all duration-500 hover:border-primary/30 ${t.featured ? 'bg-primary/5 border-primary/20' : ''}`}
-                            >
-                                <div>
-                                    <div className="flex gap-1 mb-6 text-primary">
-                                        {[1, 2, 3, 4, 5].map(s => <span key={s} className="material-symbols-outlined text-[18px]">star</span>)}
-                                    </div>
-                                    <p className={`text-lg italic leading-relaxed mb-8 ${t.featured ? 'text-slate-100' : 'text-slate-300'}`}>
-                                        &quot;{t.quote}&quot;
-                                    </p>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    <Image
-                                        src={t.img}
-                                        alt={t.author}
-                                        width={48}
-                                        height={48}
-                                        className="rounded-full object-cover border-2 border-white/10"
-                                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+                        {featuredReviews.length > 0 ? (
+                            featuredReviews.map((review, idx) => (
+                                /* @ts-ignore */
+                                <motion.div
+                                    key={review._id}
+                                    initial={{ opacity: 0, y: 40 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: idx * 0.2, duration: 0.6 }}
+                                    className={`glass-card p-10 rounded-[2.5rem] border border-white/5 flex flex-col justify-between h-full transition-all duration-500 hover:border-primary/30 ${idx === 1 ? 'bg-primary/5 border-primary/20' : ''}`}
+                                >
                                     <div>
-                                        <h5 className="text-white font-bold">{t.author}</h5>
-                                        <p className="text-slate-500 text-xs">{t.role}</p>
+                                        <div className="flex gap-1 mb-6 text-primary">
+                                            {[...Array(5)].map((_, i) => (
+                                                <span key={i} className={`material-symbols-outlined text-[18px] ${i < review.rating ? 'fill-[1]' : ''}`}>star</span>
+                                            ))}
+                                        </div>
+                                        <p className="text-lg italic leading-relaxed mb-8 text-slate-100">
+                                            &quot;{review.comment}&quot;
+                                        </p>
                                     </div>
-                                </div>
-                            </motion.div>
-                        ))}
+                                    <div className="flex items-center gap-4">
+                                        <img
+                                            src={review.userId.photoURL || `https://i.pravatar.cc/150?u=${review.userId._id}`}
+                                            alt={review.userId.name}
+                                            className="size-12 rounded-full object-cover border-2 border-white/10"
+                                        />
+                                        <div>
+                                            <h5 className="text-white font-bold">{review.userId.name}</h5>
+                                            <p className="text-slate-500 text-xs">{review.vehicleId?.title || 'Elite Client'}</p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))
+                        ) : (
+                            <div className="col-span-full py-12 text-center text-slate-500 font-medium border border-dashed border-white/10 rounded-3xl">
+                                No guest reviews available yet.
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>

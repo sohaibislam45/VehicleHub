@@ -1,10 +1,99 @@
-import type { Response } from 'express';
 import Booking from '../models/Booking.js';
 import Vehicle from '../models/Vehicle.js';
 import type { AuthRequest } from '../middleware/authMiddleware.js';
+import Stripe from 'stripe';
+import dotenv from 'dotenv';
 
-// @desc Create a booking
-// @route POST /api/bookings
+dotenv.config();
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+// @desc Create a checkout session
+// @route POST /api/bookings/create-checkout-session
+export const createCheckoutSession = async (req: AuthRequest, res: Response) => {
+    try {
+        const { vehicleId, startDate, endDate, totalPrice, pickupLocation } = req.body;
+
+        const vehicle = await Vehicle.findById(vehicleId);
+        if (!vehicle) return res.status(404).json({ message: 'Vehicle not found' });
+
+        // Create a pending booking first
+        const booking = await Booking.create({
+            userId: req.user._id,
+            vehicleId,
+            startDate,
+            endDate,
+            totalPrice,
+            status: 'pending'
+        });
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'bdt',
+                        product_data: {
+                            name: `Booking: ${vehicle.title}`,
+                            description: `Rental from ${new Date(startDate).toLocaleDateString()} to ${new Date(endDate).toLocaleDateString()} at ${pickupLocation}`,
+                            images: vehicle.images,
+                        },
+                        unit_amount: totalPrice * 100, // Stripe expects amount in cents/paisa
+                    },
+                    quantity: 1,
+                },
+            ],
+            mode: 'payment',
+            success_url: `${process.env.FRONTEND_URL}/vehicles/${vehicleId}?success=true&bookingId=${booking._id}`,
+            cancel_url: `${process.env.FRONTEND_URL}/vehicles/${vehicleId}?canceled=true`,
+            customer_email: req.user.email,
+            client_reference_id: booking._id.toString(),
+            metadata: {
+                bookingId: booking._id.toString(),
+                vehicleId: vehicleId.toString(),
+            },
+        });
+
+        res.json({ id: session.id, url: session.url });
+    } catch (error: any) {
+        console.error("Stripe Session Error:", error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc Webhook for Stripe events
+export const stripeWebhook = async (req: Request, res: Response) => {
+    const sig = req.headers['stripe-signature'];
+    let event;
+
+    try {
+        event = stripe.webhooks.constructEvent(req.body, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
+    } catch (err: any) {
+        return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    if (event.type === 'checkout.session.completed') {
+        const session: any = event.data.object;
+        const bookingId = session.client_reference_id;
+
+        const booking = await Booking.findById(bookingId);
+        if (booking) {
+            booking.status = 'confirmed';
+            await booking.save();
+
+            // Update vehicle booking count
+            const vehicle = await Vehicle.findById(booking.vehicleId);
+            if (vehicle) {
+                vehicle.bookingCount = (vehicle.bookingCount || 0) + 1;
+                await vehicle.save();
+            }
+        }
+    }
+
+    res.json({ received: true });
+};
+
+// @desc Create a booking (deprecated/fallback if needed)
 export const createBooking = async (req: AuthRequest, res: Response) => {
     try {
         const { vehicleId, startDate, endDate, totalPrice } = req.body;
@@ -18,10 +107,9 @@ export const createBooking = async (req: AuthRequest, res: Response) => {
             startDate,
             endDate,
             totalPrice,
-            status: 'pending'
+            status: 'confirmed' // Assuming manual booking bypasses stripe
         });
 
-        // Increment vehicle booking count
         vehicle.bookingCount = (vehicle.bookingCount || 0) + 1;
         await vehicle.save();
 

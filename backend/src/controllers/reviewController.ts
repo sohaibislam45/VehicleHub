@@ -11,10 +11,14 @@ interface AuthRequest extends Request {
 export const createReview = async (req: AuthRequest, res: Response) => {
     try {
         const { vehicleId, rating, comment } = req.body;
-        const userId = req.user?._id; // Assuming auth middleware sets req.user
+        const userId = req.user?._id;
 
         if (!userId) {
             return res.status(401).json({ message: 'User not authenticated' });
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
+            return res.status(400).json({ message: 'Invalid vehicle ID' });
         }
 
         const review = new Review({
@@ -27,18 +31,18 @@ export const createReview = async (req: AuthRequest, res: Response) => {
         await review.save();
 
         // Update Vehicle rating and review count
-        const vehicle = await Vehicle.findById(vehicleId);
-        if (vehicle) {
-            const reviews = await Review.find({ vehicleId: vehicleId as any });
-            const totalRating = reviews.reduce((acc: number, rev: any) => acc + rev.rating, 0);
-            vehicle.rating = totalRating / reviews.length;
-            vehicle.reviewsCount = reviews.length;
-            await vehicle.save();
-        }
+        const reviews = await Review.find({ vehicleId });
+        const totalRating = reviews.reduce((acc: number, rev: any) => acc + rev.rating, 0);
+        
+        await Vehicle.findByIdAndUpdate(vehicleId, {
+            rating: reviews.length > 0 ? totalRating / reviews.length : 5,
+            reviewsCount: reviews.length
+        });
 
-        const populatedReview = await review.populate('userId', 'displayName photoURL');
+        const populatedReview = await review.populate('userId', 'name photoURL');
         res.status(201).json(populatedReview);
     } catch (error: any) {
+        console.error("Create Review Error:", error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -46,8 +50,11 @@ export const createReview = async (req: AuthRequest, res: Response) => {
 export const getVehicleReviews = async (req: Request, res: Response) => {
     try {
         const { vehicleId } = req.params;
-        const reviews = await Review.find({ vehicleId: vehicleId as any })
-            .populate('userId', 'displayName photoURL')
+        if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
+            return res.status(400).json({ message: 'Invalid vehicle ID' });
+        }
+        const reviews = await Review.find({ vehicleId })
+            .populate('userId', 'name photoURL')
             .sort({ createdAt: -1 });
         res.json(reviews);
     } catch (error: any) {
@@ -58,7 +65,7 @@ export const getVehicleReviews = async (req: Request, res: Response) => {
 export const getFeaturedReviews = async (req: Request, res: Response) => {
     try {
         const reviews = await Review.find({ rating: { $gte: 4 } })
-            .populate('userId', 'displayName photoURL')
+            .populate('userId', 'name photoURL')
             .populate('vehicleId', 'title category')
             .sort({ createdAt: -1 })
             .limit(6);

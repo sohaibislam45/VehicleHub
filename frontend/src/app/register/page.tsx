@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
+import { Eye, EyeOff } from "lucide-react";
 import * as z from "zod";
 
 const registerSchema = z.object({
@@ -26,6 +27,8 @@ export default function RegisterPage() {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const {
         register,
@@ -141,12 +144,21 @@ export default function RegisterPage() {
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-slate-300 ml-1">Password</label>
-                            <input
-                                {...register("password")}
-                                type="password"
-                                className="w-full h-12 px-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 text-slate-100 placeholder:text-slate-600 transition-all"
-                                placeholder="Create a password"
-                            />
+                            <div className="relative">
+                                <input
+                                    {...register("password")}
+                                    type={showPassword ? "text" : "password"}
+                                    className="w-full h-12 px-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 text-slate-100 placeholder:text-slate-600 transition-all pr-12"
+                                    placeholder="Create a password"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
                             {errors.password && (
                                 <p className="text-red-400 text-xs ml-1">{errors.password.message}</p>
                             )}
@@ -154,12 +166,21 @@ export default function RegisterPage() {
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-slate-300 ml-1">Confirm Password</label>
-                            <input
-                                {...register("confirmPassword")}
-                                type="password"
-                                className="w-full h-12 px-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 text-slate-100 placeholder:text-slate-600 transition-all"
-                                placeholder="Confirm your password"
-                            />
+                            <div className="relative">
+                                <input
+                                    {...register("confirmPassword")}
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    className="w-full h-12 px-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 text-slate-100 placeholder:text-slate-600 transition-all pr-12"
+                                    placeholder="Confirm your password"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
+                                >
+                                    {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
                             {errors.confirmPassword && (
                                 <p className="text-red-400 text-xs ml-1">{errors.confirmPassword.message}</p>
                             )}
