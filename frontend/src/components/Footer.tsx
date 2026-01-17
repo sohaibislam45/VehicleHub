@@ -107,13 +107,13 @@ export default function Footer() {
                         </ul>
                     </div>
                 </div>
-                <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div className="mt-8 pt-2 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
                     <p className="text-slate-500 text-xs font-medium uppercase tracking-[0.2em]">
                         © 2026 VehicleHub Technologies Inc. All rights reserved.
                     </p>
                     <button
                         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                        className="group flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-primary/50 transition-all text-slate-400 hover:text-white"
+                        className="group flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:border-primary/50 transition-all text-slate-400 hover:text-white"
                     >
                         <span className="text-xs font-bold uppercase tracking-widest">Back to Top</span>
                         <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-background-dark transition-all">

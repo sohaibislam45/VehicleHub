@@ -24,7 +24,7 @@ export default function HomePage() {
             try {
                 const [latest, top] = await Promise.all([
                     vehicleService.getAll({ sortBy: 'Recent', limit: 6 }),
-                    vehicleService.getAll({ sortBy: 'TopBooking', limit: 3 })
+                    vehicleService.getAll({ sortBy: 'TopBooking', limit: 6 })
                 ]);
                 setLatestVehicles(latest);
                 setTopBookingVehicles(top);
@@ -64,146 +64,6 @@ export default function HomePage() {
 
             {/* Statistics Section (Moved out) */}
             <Statistics />
-
-            {/* Exploring Categories (Moved up for better flow) */}
-            <section className="py-20 max-w-7xl mx-auto layout-padding w-full">
-                <div className="flex justify-between items-end mb-12">
-                    <div>
-                        <h2 className="text-3xl font-bold tracking-tight mb-2 text-slate-100">Explore Categories</h2>
-                        <p className="text-slate-400">Curated collections for every occasion.</p>
-                    </div>
-                    <Link href="/explore" className="text-primary font-bold uppercase text-xs tracking-widest hover:underline">
-                        View All
-                    </Link>
-                </div>
-
-                <div className="flex flex-col md:flex-row gap-6 h-auto md:h-[500px]">
-                    {/* Category 1 */}
-                    {/* @ts-ignore */}
-                    <motion.div
-                        whileHover={{ flex: 1.5 }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="flex-1 relative rounded-3xl overflow-hidden group cursor-pointer border border-white/5"
-                    >
-                        <Link href="/explore?category=Luxury" className="absolute inset-0 z-20"></Link>
-                        <div
-                            className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
-                            style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBoAQaZ7U2ct3rWzLmYUFz2qMSyjo7Bh6yZZzvgHmTQGn9SJ9vkNHzy6hjkZ3UPy-Vq-D2h8iMXddWqjd4LzBRW6haeH8V1uF4qYUnHP8k-MSQtJJOHO2-0R9rPcsYkF21Sh9ynheYNakouDIFDhanlxufP1Skv7j5gEQSQCRqBwPZw64Ghx4FclefAojhDCFURbPuaAMBKNE1i1zcy0c6Du5sL0AI387YBXzWUo3x_4_FuLWWhVPN3-nsp0hqUhzaEShpKePfLHww")' }}
-                        ></div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-background-dark/90 via-background-dark/20 to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-10 left-10 right-10 pointer-events-none">
-                            <h3 className="text-3xl font-bold mb-3 text-slate-100">Luxury Sedans</h3>
-                            <p className="text-slate-300 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">Experience the zenith of comfort and cutting-edge technology.</p>
-                            <span className="text-primary font-bold text-sm tracking-widest uppercase flex items-center gap-2">
-                                Explore <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                            </span>
-                        </div>
-                    </motion.div>
-
-                    {/* Category 2 */}
-                    {/* @ts-ignore */}
-                    <motion.div
-                        whileHover={{ flex: 1.5 }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="flex-1 relative rounded-3xl overflow-hidden group cursor-pointer border border-white/5"
-                    >
-                        <Link href="/explore?category=Electric" className="absolute inset-0 z-20"></Link>
-                        <div
-                            className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
-                            style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC5ujtYDJk8k2TVdTKt9-9BoU6YDSN-cszUF8dSufB5GgNXqxlLjqWGn8f5PFQCGYudmV5SMZ2aXtddfdsM-tqAZnWtkCgBIinecQYemeMdkmEakDhpfe_hRLEdpwCTBv-EIeifWQC9uB4YnOe8S0GWFwuAMwuAPTEDxRkycTz0lcgsYHBkQOvl-mjltlc8z1liBap1_YECrABTDh59otBAf7CtPRNHRDZX6cTLUvCs3MGFMZxAYk1ShkNWIh7LupwEmcmlIJNcmKw")' }}
-                        ></div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-background-dark/90 via-background-dark/20 to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-10 left-10 right-10 pointer-events-none">
-                            <h3 className="text-3xl font-bold mb-3 text-slate-100">Pure Electric</h3>
-                            <p className="text-slate-300 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">Zero emissions, infinite possibilities. The future is here.</p>
-                            <span className="text-primary font-bold text-sm tracking-widest uppercase flex items-center gap-2">
-                                Explore <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                            </span>
-                        </div>
-                    </motion.div>
-
-                    {/* Category 3 */}
-                    {/* @ts-ignore */}
-                    <motion.div
-                        whileHover={{ flex: 1.5 }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="flex-1 relative rounded-3xl overflow-hidden group cursor-pointer border border-white/5"
-                    >
-                        <Link href="/explore?category=SUV" className="absolute inset-0 z-20"></Link>
-                        <div
-                            className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
-                            style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBI3Lwm1J4WWsQzvIaWXe8k4sq7AFQXOHUkZ7fGhzO8kVraNspTct_0HAiEgResPLFFyvPZr5bRTadoFjx_NT799prEbo16o_YVD9mstESVhz7tEN3jEyF1neW4OTdMrUnsuePL1ReWAxqxj7bvBDT10RnwxyL_7lJLkTMAylO4QRDlWRxddts_Hq280xacRVly5zxNLESd47XF9X-sqVzb9ixo3j5nTKCl7bgiiLMmW4nfYOTUzepKu5u0G6NWieHJVgFHQhxdoPo")' }}
-                        ></div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-background-dark/90 via-background-dark/20 to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-10 left-10 right-10 pointer-events-none">
-                            <h3 className="text-3xl font-bold mb-3 text-slate-100">Adventure SUV</h3>
-                            <p className="text-slate-300 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">Conquer any terrain with our elite range of premium SUVs.</p>
-                            <span className="text-primary font-bold text-sm tracking-widest uppercase flex items-center gap-2">
-                                Explore <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                            </span>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Why Choose Us Section */}
-            <section className="py-24 bg-gradient-to-b from-transparent to-surface-dark/10 w-full overflow-hidden why-choose-section">
-                <div className="max-w-7xl mx-auto layout-padding">
-                    <div className="flex flex-col md:flex-row items-center gap-16">
-                        <div className="flex-1 space-y-8 why-choose-content">
-                            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-                                Why the World&apos;s Elite <br />
-                                <span className="text-primary italic">Choose VehicleHub.</span>
-                            </h2>
-                            <p className="text-slate-400 text-lg max-w-xl">
-                                We don&apos;t just rent cars. We provide a seamless, premium mobility ecosystem tailored for those who demand excellence in every journey.
-                            </p>
-                            <div className="space-y-6">
-                                <div className="flex items-start gap-4">
-                                    <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                                        <span className="material-symbols-outlined">verified_user</span>
-                                    </div>
-                                    <div>
-                                        <h4 className="text-white font-bold text-lg">Guaranteed Availability</h4>
-                                        <p className="text-slate-500 text-sm">Our real-time inventory management ensures the car you book is the exact car you drive.</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-4">
-                                    <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                                        <span className="material-symbols-outlined">distance</span>
-                                    </div>
-                                    <div>
-                                        <h4 className="text-white font-bold text-lg">Unlimited Exploration</h4>
-                                        <p className="text-slate-500 text-sm">Zero mileage restrictions on selection elite tiers. Drive as far as your ambition takes you.</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-4">
-                                    <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                                        <span className="material-symbols-outlined">support_agent</span>
-                                    </div>
-                                    <div>
-                                        <h4 className="text-white font-bold text-lg">24/7 Concierge Support</h4>
-                                        <p className="text-slate-500 text-sm">A dedicated mobility specialist is always a click away, anywhere in the world.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex-1 relative">
-                            <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border border-white/5">
-                                <Image
-                                    src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800"
-                                    alt="Interior View"
-                                    width={600}
-                                    height={400}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <div className="absolute -top-10 -right-10 size-64 bg-primary/10 blur-[100px] -z-0"></div>
-                            <div className="absolute -bottom-10 -left-10 size-64 bg-accent-blue/10 blur-[120px] -z-0"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             {/* Top Booking Vehicles - New Section */}
             {!loading && topBookingVehicles.length > 0 && (
@@ -315,6 +175,148 @@ export default function HomePage() {
                 </div>
             </section>
 
+            {/* Exploring Categories (Moved up for better flow) */}
+            <section className="py-20 w-full overflow-hidden">
+                <div className="max-w-7xl mx-auto layout-padding">
+                    <div className="flex justify-between items-end mb-12">
+                        <div>
+                            <h2 className="text-3xl font-bold tracking-tight mb-2 text-slate-100">Explore Categories</h2>
+                            <p className="text-slate-400">Curated collections for every occasion.</p>
+                        </div>
+                        <Link href="/explore" className="text-primary font-bold uppercase text-xs tracking-widest hover:underline">
+                            View All
+                        </Link>
+                    </div>
+
+                    <div className="flex flex-col md:flex-row gap-6 h-auto md:h-[500px]">
+                        {/* Category 1 */}
+                        {/* @ts-ignore */}
+                        <motion.div
+                            whileHover={{ flex: 1.5 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
+                            className="flex-1 relative rounded-3xl overflow-hidden group cursor-pointer border border-white/5"
+                        >
+                            <Link href="/explore?category=Luxury" className="absolute inset-0 z-20"></Link>
+                            <div
+                                className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
+                                style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBoAQaZ7U2ct3rWzLmYUFz2qMSyjo7Bh6yZZzvgHmTQGn9SJ9vkNHzy6hjkZ3UPy-Vq-D2h8iMXddWqjd4LzBRW6haeH8V1uF4qYUnHP8k-MSQtJJOHO2-0R9rPcsYkF21Sh9ynheYNakouDIFDhanlxufP1Skv7j5gEQSQCRqBwPZw64Ghx4FclefAojhDCFURbPuaAMBKNE1i1zcy0c6Du5sL0AI387YBXzWUo3x_4_FuLWWhVPN3-nsp0hqUhzaEShpKePfLHww")' }}
+                            ></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-background-dark/90 via-background-dark/20 to-transparent pointer-events-none"></div>
+                            <div className="absolute bottom-10 left-10 right-10 pointer-events-none">
+                                <h3 className="text-3xl font-bold mb-3 text-slate-100">Luxury Sedans</h3>
+                                <p className="text-slate-300 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">Experience the zenith of comfort and cutting-edge technology.</p>
+                                <span className="text-primary font-bold text-sm tracking-widest uppercase flex items-center gap-2">
+                                    Explore <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                </span>
+                            </div>
+                        </motion.div>
+
+                        {/* Category 2 */}
+                        {/* @ts-ignore */}
+                        <motion.div
+                            whileHover={{ flex: 1.5 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
+                            className="flex-1 relative rounded-3xl overflow-hidden group cursor-pointer border border-white/5"
+                        >
+                            <Link href="/explore?category=Electric" className="absolute inset-0 z-20"></Link>
+                            <div
+                                className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
+                                style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC5ujtYDJk8k2TVdTKt9-9BoU6YDSN-cszUF8dSufB5GgNXqxlLjqWGn8f5PFQCGYudmV5SMZ2aXtddfdsM-tqAZnWtkCgBIinecQYemeMdkmEakDhpfe_hRLEdpwCTBv-EIeifWQC9uB4YnOe8S0GWFwuAMwuAPTEDxRkycTz0lcgsYHBkQOvl-mjltlc8z1liBap1_YECrABTDh59otBAf7CtPRNHRDZX6cTLUvCs3MGFMZxAYk1ShkNWIh7LupwEmcmlIJNcmKw")' }}
+                            ></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-background-dark/90 via-background-dark/20 to-transparent pointer-events-none"></div>
+                            <div className="absolute bottom-10 left-10 right-10 pointer-events-none">
+                                <h3 className="text-3xl font-bold mb-3 text-slate-100">Pure Electric</h3>
+                                <p className="text-slate-300 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">Zero emissions, infinite possibilities. The future is here.</p>
+                                <span className="text-primary font-bold text-sm tracking-widest uppercase flex items-center gap-2">
+                                    Explore <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                </span>
+                            </div>
+                        </motion.div>
+
+                        {/* Category 3 */}
+                        {/* @ts-ignore */}
+                        <motion.div
+                            whileHover={{ flex: 1.5 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
+                            className="flex-1 relative rounded-3xl overflow-hidden group cursor-pointer border border-white/5"
+                        >
+                            <Link href="/explore?category=SUV" className="absolute inset-0 z-20"></Link>
+                            <div
+                                className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
+                                style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBI3Lwm1J4WWsQzvIaWXe8k4sq7AFQXOHUkZ7fGhzO8kVraNspTct_0HAiEgResPLFFyvPZr5bRTadoFjx_NT799prEbo16o_YVD9mstESVhz7tEN3jEyF1neW4OTdMrUnsuePL1ReWAxqxj7bvBDT10RnwxyL_7lJLkTMAylO4QRDlWRxddts_Hq280xacRVly5zxNLESd47XF9X-sqVzb9ixo3j5nTKCl7bgiiLMmW4nfYOTUzepKu5u0G6NWieHJVgFHQhxdoPo")' }}
+                            ></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-background-dark/90 via-background-dark/20 to-transparent pointer-events-none"></div>
+                            <div className="absolute bottom-10 left-10 right-10 pointer-events-none">
+                                <h3 className="text-3xl font-bold mb-3 text-slate-100">Adventure SUV</h3>
+                                <p className="text-slate-300 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">Conquer any terrain with our elite range of premium SUVs.</p>
+                                <span className="text-primary font-bold text-sm tracking-widest uppercase flex items-center gap-2">
+                                    Explore <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                </span>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Why Choose Us Section */}
+            <section className="py-24 bg-gradient-to-b from-transparent to-surface-dark/10 w-full overflow-hidden why-choose-section">
+                <div className="max-w-7xl mx-auto layout-padding">
+                    <div className="flex flex-col md:flex-row items-center gap-16">
+                        <div className="flex-1 space-y-8 why-choose-content">
+                            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+                                Why the World&apos;s Elite <br />
+                                <span className="text-primary italic">Choose VehicleHub.</span>
+                            </h2>
+                            <p className="text-slate-400 text-lg max-w-xl">
+                                We don&apos;t just rent cars. We provide a seamless, premium mobility ecosystem tailored for those who demand excellence in every journey.
+                            </p>
+                            <div className="space-y-6">
+                                <div className="flex items-start gap-4">
+                                    <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                                        <span className="material-symbols-outlined">verified_user</span>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-white font-bold text-lg">Guaranteed Availability</h4>
+                                        <p className="text-slate-500 text-sm">Our real-time inventory management ensures the car you book is the exact car you drive.</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-4">
+                                    <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                                        <span className="material-symbols-outlined">distance</span>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-white font-bold text-lg">Unlimited Exploration</h4>
+                                        <p className="text-slate-500 text-sm">Zero mileage restrictions on selection elite tiers. Drive as far as your ambition takes you.</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-4">
+                                    <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                                        <span className="material-symbols-outlined">support_agent</span>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-white font-bold text-lg">24/7 Concierge Support</h4>
+                                        <p className="text-slate-500 text-sm">A dedicated mobility specialist is always a click away, anywhere in the world.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex-1 relative">
+                            <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border border-white/5">
+                                <Image
+                                    src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800"
+                                    alt="Interior View"
+                                    width={600}
+                                    height={400}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <div className="absolute -top-10 -right-10 size-64 bg-primary/10 blur-[100px] -z-0"></div>
+                            <div className="absolute -bottom-10 -left-10 size-64 bg-accent-blue/10 blur-[120px] -z-0"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Testimonials Section */}
             <section className="py-24 bg-surface-dark/50 w-full overflow-hidden">
                 <div className="max-w-7xl mx-auto layout-padding text-center">
@@ -409,27 +411,29 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Newsletter Section - Unchanged */}
-            <section className="py-24 max-w-7xl mx-auto layout-padding">
-                <div className="relative rounded-[40px] overflow-hidden bg-primary/10 border border-primary/20 p-12 md:p-24 text-center">
-                    <div className="relative z-10 max-w-2xl mx-auto">
-                        <span className="text-primary font-bold uppercase tracking-[0.3em] text-xs mb-4 block">Future Proof Your Inbox</span>
-                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Join the Vanguard.</h2>
-                        <p className="text-slate-400 text-lg mb-12">Get exclusive early access to our limited runs, new hub openings, and zero-emission news.</p>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="flex-1 h-14 bg-background-dark/50 border border-white/10 rounded-2xl px-6 focus:outline-none focus:border-primary text-white transition-all"
-                            />
-                            <button className="h-14 px-10 bg-primary text-background-dark font-bold rounded-2xl hover:shadow-[0_0_30px_rgba(23,191,207,0.3)] transition-all">
-                                Subscribe
-                            </button>
+            {/* Newsletter Section - Standardized Wrapper */}
+            <section className="py-24 w-full bg-surface-dark/10">
+                <div className="max-w-7xl mx-auto layout-padding">
+                    <div className="relative rounded-[40px] overflow-hidden bg-primary/10 border border-primary/20 p-12 md:p-24 text-center">
+                        <div className="relative z-10 max-w-2xl mx-auto">
+                            <span className="text-primary font-bold uppercase tracking-[0.3em] text-xs mb-4 block">Future Proof Your Inbox</span>
+                            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Join the Vanguard.</h2>
+                            <p className="text-slate-400 text-lg mb-12">Get exclusive early access to our limited runs, new hub openings, and zero-emission news.</p>
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    className="flex-1 h-14 bg-background-dark/50 border border-white/10 rounded-2xl px-6 focus:outline-none focus:border-primary text-white transition-all"
+                                />
+                                <button className="h-14 px-10 bg-primary text-background-dark font-bold rounded-2xl hover:shadow-[0_0_30px_rgba(23,191,207,0.3)] transition-all">
+                                    Subscribe
+                                </button>
+                            </div>
+                            <p className="mt-6 text-xs text-slate-500">By subscribing, you agree to our Privacy Policy and Terms of Elite Membership.</p>
                         </div>
-                        <p className="mt-6 text-xs text-slate-500">By subscribing, you agree to our Privacy Policy and Terms of Elite Membership.</p>
+                        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/5 to-transparent"></div>
+                        <div className="absolute -top-24 -left-24 size-96 bg-primary/10 blur-[120px]"></div>
                     </div>
-                    <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/5 to-transparent"></div>
-                    <div className="absolute -top-24 -left-24 size-96 bg-primary/10 blur-[120px]"></div>
                 </div>
             </section>
 
@@ -488,43 +492,45 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* FAQ - Unchanged */}
-            <section id="faq" className="py-24 max-w-3xl mx-auto layout-padding w-full text-slate-100">
-                <h2 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
-                <div className="space-y-4">
-                    {faqData.map((faq, index) => (
-                        <div key={index} className="border-b border-white/5 pb-2">
-                            <button
-                                onClick={() => toggleFaq(index)}
-                                className="w-full flex justify-between items-center text-left py-6 hover:text-primary transition-colors group"
-                            >
-                                <span className={`text-lg font-medium transition-colors ${openFaq === index ? 'text-primary' : ''}`}>{faq.question}</span>
-                            {/* @ts-ignore */}
-                            <motion.span
-                                animate={{ rotate: openFaq === index ? 45 : 0 }}
-                                    className="material-symbols-outlined text-slate-500 group-hover:text-primary"
+            {/* FAQ - Standardized Wrapper */}
+            <section id="faq" className="py-24 w-full bg-surface-dark/5">
+                <div className="max-w-3xl mx-auto layout-padding text-slate-100">
+                    <h2 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
+                    <div className="space-y-4">
+                        {faqData.map((faq, index) => (
+                            <div key={index} className="border-b border-white/5 pb-2">
+                                <button
+                                    onClick={() => toggleFaq(index)}
+                                    className="w-full flex justify-between items-center text-left py-6 hover:text-primary transition-colors group"
                                 >
-                                    add
-                                </motion.span>
-                            </button>
-                            <AnimatePresence>
-                                {openFaq === index && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: "auto", opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                                        // @ts-ignore
-                                        className="overflow-hidden"
+                                    <span className={`text-lg font-medium transition-colors ${openFaq === index ? 'text-primary' : ''}`}>{faq.question}</span>
+                                    {/* @ts-ignore */}
+                                    <motion.span
+                                        animate={{ rotate: openFaq === index ? 45 : 0 }}
+                                        className="material-symbols-outlined text-slate-500 group-hover:text-primary"
                                     >
-                                        <div className="pb-6 text-slate-400 leading-relaxed text-sm pr-12">
-                                            {faq.answer}
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                    ))}
+                                        add
+                                    </motion.span>
+                                </button>
+                                <AnimatePresence>
+                                    {openFaq === index && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: "auto", opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                                            // @ts-ignore
+                                            className="overflow-hidden"
+                                        >
+                                            <div className="pb-6 text-slate-400 leading-relaxed text-sm pr-12">
+                                                {faq.answer}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
 
