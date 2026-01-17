@@ -41,13 +41,13 @@ export default function VehicleCard({ id, title, description, price, image, cate
                 <div className="mt-auto flex items-end justify-between">
                     <div>
                         <span className="text-2xl font-bold tracking-tighter text-white">৳{price}</span>
-                        <span className="text-xs text-slate-500 ml-1 uppercase font-bold tracking-widest">/day</span>
+                        <span className="text-xs text-slate-500 ml-1 font-bold tracking-widest">/day</span>
                     </div>
                     <Link
                         href={`/vehicles/${id}`}
-                        className="bg-primary text-background-dark px-4 py-2 rounded-xl text-xs font-bold hover:shadow-[0_0_20px_rgba(23,191,207,0.3)] transition-all"
+                        className="bg-primary text-background-dark px-2 py-1 rounded-lg text-xs font-bold hover:shadow-[0_0_20px_rgba(23,191,207,0.3)] transition-all"
                     >
-                        View Details
+                        View
                     </Link>
                 </div>
             </div>

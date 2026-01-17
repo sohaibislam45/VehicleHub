@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
+import {
+    PieChart, Pie, Cell, ResponsiveContainer,
+    AreaChart, Area, XAxis, YAxis, Tooltip
+} from "recharts";
 
 export default function AdminDashboardPage() {
     const [loading, setLoading] = useState(true);
@@ -9,18 +13,35 @@ export default function AdminDashboardPage() {
         totalUsers: 0,
         totalVehicles: 0,
         totalBookings: 0,
-        recentActivity: [] as any[]
+        recentActivity: [] as any[],
+        vehicleStats: [] as any[],
+        bookingStats: [] as any[]
     });
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
                 const response = await api.get("/admin/stats");
+
+                // Format vehicle stats for Pie Chart
+                const vehicleData = response.data.vehicleStats.map((item: any) => ({
+                    name: item._id,
+                    value: item.count
+                }));
+
+                // Format booking stats for Area Chart (Trend)
+                const bookingData = response.data.bookingStats.map((item: any) => ({
+                    date: item._id,
+                    bookings: item.count
+                }));
+
                 setStats({
                     totalUsers: response.data.users,
                     totalVehicles: response.data.vehicles,
                     totalBookings: response.data.bookings,
-                    recentActivity: response.data.recentBookings
+                    recentActivity: response.data.recentBookings,
+                    vehicleStats: vehicleData,
+                    bookingStats: bookingData
                 });
             } catch (error) {
                 console.error("Error fetching stats:", error);
@@ -31,6 +52,8 @@ export default function AdminDashboardPage() {
 
         fetchStats();
     }, []);
+
+    const COLORS = ['#00C853', '#2962FF', '#FF6D00', '#AA00FF', '#00D4FF'];
 
     if (loading) {
         return (
@@ -112,71 +135,48 @@ export default function AdminDashboardPage() {
                     </div>
                     <div className="flex items-center justify-between gap-8 h-[220px]">
                         {/* Pie Chart */}
-                        <div className="relative size-48">
-                            <svg className="size-full transform -rotate-90" viewBox="0 0 36 36">
-                                <path
-                                    className="stroke-primary/20"
-                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    fill="none"
-                                    strokeWidth="4"
-                                ></path>
-                                <path
-                                    className="stroke-primary"
-                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    fill="none"
-                                    strokeDasharray="40, 100"
-                                    strokeLinecap="round"
-                                    strokeWidth="4"
-                                ></path>
-                                <path
-                                    className="stroke-accent-blue"
-                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    fill="none"
-                                    strokeDasharray="25, 100"
-                                    strokeDashoffset="-40"
-                                    strokeLinecap="round"
-                                    strokeWidth="4"
-                                ></path>
-                                <path
-                                    className="stroke-accent-orange"
-                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    fill="none"
-                                    strokeDasharray="15, 100"
-                                    strokeDashoffset="-65"
-                                    strokeLinecap="round"
-                                    strokeWidth="4"
-                                ></path>
-                            </svg>
-                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <div className="relative size-48 flex-shrink-0">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={stats.vehicleStats}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={60}
+                                        outerRadius={80}
+                                        paddingAngle={5}
+                                        dataKey="value"
+                                        stroke="none"
+                                    >
+                                        {stats.vehicleStats.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        ))}
+                                    </Pie>
+                                </PieChart>
+                            </ResponsiveContainer>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                 <span className="text-2xl font-bold text-white">{stats.totalVehicles}</span>
                                 <span className="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Total</span>
                             </div>
                         </div>
-                        <div className="flex-1 space-y-4">
-                            <div className="flex items-center justify-between text-sm">
-                                <div className="flex items-center gap-2 font-medium">
-                                    <span className="size-3 rounded-full bg-primary"></span>Sedan
+                        <div className="flex-1 space-y-4 overflow-y-auto max-h-[220px] custom-scrollbar pr-2">
+                            {stats.vehicleStats.map((entry, index) => (
+                                <div key={entry.name} className="flex items-center justify-between text-sm">
+                                    <div className="flex items-center gap-2 font-medium">
+                                        <span className="size-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }}></span>
+                                        <span className="text-slate-300 capitalize">{entry.name}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="font-bold text-white">{entry.value}</span>
+                                        <span className="text-xs text-slate-500">
+                                            ({Math.round((entry.value / stats.totalVehicles) * 100)}%)
+                                        </span>
+                                    </div>
                                 </div>
-                                <span className="font-bold text-white">{(stats.totalVehicles * 0.4).toFixed(0)} (40%)</span>
-                            </div>
-                            <div className="flex items-center justify-between text-sm">
-                                <div className="flex items-center gap-2 font-medium">
-                                    <span className="size-3 rounded-full bg-accent-blue"></span>SUV
-                                </div>
-                                <span className="font-bold text-white">{(stats.totalVehicles * 0.25).toFixed(0)} (25%)</span>
-                            </div>
-                            <div className="flex items-center justify-between text-sm">
-                                <div className="flex items-center gap-2 font-medium">
-                                    <span className="size-3 rounded-full bg-accent-orange"></span>Luxury
-                                </div>
-                                <span className="font-bold text-white">{(stats.totalVehicles * 0.15).toFixed(0)} (15%)</span>
-                            </div>
-                            <div className="flex items-center justify-between text-sm text-slate-500">
-                                <div className="flex items-center gap-2 font-medium">
-                                    <span className="size-3 rounded-full bg-white/20"></span>Other
-                                </div>
-                                <span className="font-bold">{(stats.totalVehicles * 0.2).toFixed(0)} (20%)</span>
-                            </div>
+                            ))}
+                            {stats.vehicleStats.length === 0 && (
+                                <div className="text-slate-500 text-sm text-center">No vehicles found</div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -186,37 +186,44 @@ export default function AdminDashboardPage() {
                     <div className="flex justify-between items-center mb-8">
                         <div>
                             <h3 className="font-bold text-lg text-white">Bookings Trend</h3>
-                            <p className="text-sm text-slate-400">Weekly volume activity</p>
+                            <p className="text-sm text-slate-400">Activity over time</p>
                         </div>
                         <div className="flex gap-2">
-                            <button className="px-3 py-1.5 rounded-lg text-xs font-bold bg-primary/10 text-primary border border-primary/20">7 Days</button>
-                            <button className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500 border border-white/10">30 Days</button>
+                            <button className="px-3 py-1.5 rounded-lg text-xs font-bold bg-primary/10 text-primary border border-primary/20">30 Days</button>
                         </div>
                     </div>
-                    <div className="flex-1 flex flex-col min-h-[220px]">
-                        <div className="flex-1 relative">
-                            <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 400 100">
-                                <path
-                                    className="fill-primary/10"
-                                    d="M0,80 C50,70 80,90 120,40 C160,0 200,60 240,30 C280,10 320,50 360,20 L400,10 V100 H0 Z"
-                                ></path>
-                                <path
-                                    className="stroke-primary fill-none"
-                                    d="M0,80 C50,70 80,90 120,40 C160,0 200,60 240,30 C280,10 320,50 360,20 L400,10"
-                                    strokeLinecap="round"
-                                    strokeWidth="3"
-                                ></path>
-                            </svg>
-                        </div>
-                        <div className="flex justify-between mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                            <span>Mon</span>
-                            <span>Tue</span>
-                            <span>Wed</span>
-                            <span>Thu</span>
-                            <span>Fri</span>
-                            <span>Sat</span>
-                            <span>Sun</span>
-                        </div>
+                    <div className="flex-1 min-h-[220px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={stats.bookingStats}>
+                                <defs>
+                                    <linearGradient id="colorBookings" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#00C853" stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor="#00C853" stopOpacity={0} />
+                                    </linearGradient>
+                                </defs>
+                                <XAxis
+                                    dataKey="date"
+                                    tick={{ fill: '#64748b', fontSize: 10 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tickMargin={10}
+                                    minTickGap={30}
+                                />
+                                <Tooltip
+                                    contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', borderRadius: '8px' }}
+                                    itemStyle={{ color: '#fff' }}
+                                    labelStyle={{ color: '#94a3b8' }}
+                                />
+                                <Area
+                                    type="monotone"
+                                    dataKey="bookings"
+                                    stroke="#00C853"
+                                    strokeWidth={3}
+                                    fillOpacity={1}
+                                    fill="url(#colorBookings)"
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
                     </div>
                 </div>
             </div>
@@ -225,7 +232,7 @@ export default function AdminDashboardPage() {
             <div className="bg-surface-dark rounded-xl border border-white/10 overflow-hidden">
                 <div className="p-6 border-b border-white/10 flex justify-between items-center">
                     <h3 className="font-bold text-lg text-white">Recent System Activity</h3>
-                    <a className="text-primary text-sm font-bold hover:underline" href="#">
+                    <a className="text-primary text-sm font-bold hover:underline" href="/dashboard/admin/bookings">
                         View All Logs
                     </a>
                 </div>
@@ -260,7 +267,7 @@ export default function AdminDashboardPage() {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-right">
-                                        <button className="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">visibility</button>
+                                        <a href="/dashboard/admin/bookings" className="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">visibility</a>
                                     </td>
                                 </tr>
                             ))}

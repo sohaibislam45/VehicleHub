@@ -116,7 +116,26 @@ router.get('/stats', protect, adminOnly, async (req: AuthRequest, res: Response)
             users: userCount,
             vehicles: vehicleCount,
             bookings: bookingCount,
-            recentBookings
+            recentBookings,
+            vehicleStats: await Vehicle.aggregate([
+                { $group: { _id: "$category", count: { $sum: 1 } } }
+            ]),
+            bookingStats: await Booking.aggregate([
+                {
+                    $match: {
+                        createdAt: { 
+                            $gte: new Date(new Date().setDate(new Date().getDate() - 30)) 
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                        count: { $sum: 1 }
+                    }
+                },
+                { $sort: { "_id": 1 } }
+            ])
         });
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
