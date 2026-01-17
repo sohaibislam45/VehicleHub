@@ -1,6 +1,11 @@
 "use client";
 
-export default function ReviewsSection() {
+interface ReviewsSectionProps {
+    rating: number;
+    reviewsCount: number;
+}
+
+export default function ReviewsSection({ rating, reviewsCount }: ReviewsSectionProps) {
     return (
         <section>
             <div className="flex items-center justify-between mb-8">
@@ -12,16 +17,16 @@ export default function ReviewsSection() {
 
             <div className="flex flex-col md:flex-row gap-12 p-8 rounded-3xl bg-surface-dark border border-white/5">
                 <div className="flex flex-col items-center md:items-start">
-                    <p className="text-6xl font-black text-white">4.9</p>
+                    <p className="text-6xl font-black text-white">{rating.toFixed(1)}</p>
                     <div className="flex gap-1 my-3">
                         {[1, 2, 3, 4, 5].map((s) => (
-                            <span key={s} className="material-symbols-outlined text-primary fill-[1]">star</span>
+                            <span key={s} className={`material-symbols-outlined text-primary ${s <= Math.round(rating) ? 'fill-[1]' : ''}`}>star</span>
                         ))}
                     </div>
-                    <p className="text-slate-500 text-sm">Based on 128 reviews</p>
+                    <p className="text-slate-500 text-sm">Based on {reviewsCount} reviews</p>
                 </div>
 
-                {/* Progress Bars Mock */}
+                {/* Progress Bars - Using percentages based on real mock-up logic for now */}
                 <div className="flex-1 space-y-3">
                     {[
                         { star: 5, pct: "90%" },
@@ -39,7 +44,7 @@ export default function ReviewsSection() {
                 </div>
             </div>
 
-            {/* Mock Comment */}
+            {/* Mock Comment - Kept as requested until Review API is ready */}
             <div className="mt-8 space-y-6">
                 <div className="p-6 border-b border-white/5">
                     <div className="flex justify-between items-start mb-4">

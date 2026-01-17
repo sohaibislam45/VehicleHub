@@ -7,25 +7,25 @@ import { motion, AnimatePresence } from "framer-motion";
 const slides = [
     {
         id: 1,
-        title: "DRIVE THE",
-        highlight: "EXTRAORDINARY",
-        description: "Unlock a curated fleet of the world's most elite electric and performance vehicles. Defined by luxury, powered by innovation.",
+        title: "Perfect Vehicle",
+        highlight: "for Every Journey",
+        description: "Browse verified vehicles, connect with trusted owners, and book rides effortlessly — all in one smart platform.",
         image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1920",
         tag: "Performance Elite"
     },
     {
         id: 2,
-        title: "EXPERIENCE",
-        highlight: "PURE LUXURY",
-        description: "From hand-stitched interiors to whisper-quiet electric drivetrains, discover the future of premium travel.",
+        title: "Starts with",
+        highlight: "the Right Vehicle",
+        description: "From daily commutes to long trips, VehicleHub makes discovering, listing, and booking vehicles fast, simple, and reliable.",
         image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=1920",
         tag: "Executive Tier"
     },
     {
         id: 3,
-        title: "CONQUER",
-        highlight: "EVERY TERRAIN",
-        description: "Our range of luxury SUVs combines rugged capability with uncompromising elegance for the modern explorer.",
+        title: "All in One Place",
+        highlight: "Discover, List, and Book Vehicles",
+        description: "VehicleHub connects drivers and travelers through a seamless vehicle booking experience built for speed, trust, and flexibility.",
         image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&q=80&w=1920",
         tag: "Adventure SUV"
     }

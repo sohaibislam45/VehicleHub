@@ -1,7 +1,5 @@
 "use client";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import ImageGallery from "@/components/details/ImageGallery";
 import BookingWidget from "@/components/details/BookingWidget";
 import ReviewsSection from "@/components/details/ReviewsSection";
@@ -71,7 +69,7 @@ export default function VehicleDetailsPage() {
                 <nav className="flex items-center gap-2 mb-8 text-sm font-medium text-slate-500">
                     <Link href="/" className="hover:text-primary transition-colors">Home</Link>
                     <span className="material-symbols-outlined text-xs">chevron_right</span>
-                    <Link href="/explore" className="hover:text-primary transition-colors">Luxury Vehicles</Link>
+                    <Link href={`/explore?category=${vehicle.category}`} className="hover:text-primary transition-colors">{vehicle.category} Vehicles</Link>
                     <span className="material-symbols-outlined text-xs">chevron_right</span>
                     <span className="text-white">{vehicle.title}</span>
                 </nav>
@@ -86,10 +84,10 @@ export default function VehicleDetailsPage() {
                     {/* Left Column: Details */}
                     <div className="col-span-1 lg:col-span-8 space-y-12">
                         {/* Key Stats Grid */}
-                        {vehicle.specs && (
+                        {vehicle.specs && vehicle.specs.length > 0 && (
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                {vehicle.specs.map((spec) => (
-                                    <div key={spec.label} className="p-6 rounded-2xl bg-surface-dark border border-white/5 flex flex-col items-center text-center">
+                                {vehicle.specs.map((spec, idx) => (
+                                    <div key={idx} className="p-6 rounded-2xl bg-surface-dark border border-white/5 flex flex-col items-center text-center">
                                         <span className="material-symbols-outlined text-primary mb-3">{spec.icon}</span>
                                         <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">{spec.label}</p>
                                         <p className="text-white font-bold text-lg">{spec.value}</p>
@@ -101,13 +99,13 @@ export default function VehicleDetailsPage() {
                         {/* Vehicle Overview */}
                         <section>
                             <h2 className="text-2xl font-bold text-white mb-6">Vehicle Overview</h2>
-                            <p className="text-slate-400 leading-relaxed text-lg">
+                            <p className="text-slate-400 leading-relaxed text-lg whitespace-pre-wrap">
                                 {vehicle.description}
                             </p>
                         </section>
 
                         {/* Rules & Notes */}
-                        {vehicle.features && (
+                        {vehicle.features && vehicle.features.length > 0 && (
                             <section className="bg-surface-dark p-8 rounded-3xl border border-white/5">
                                 <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
                                     <span className="material-symbols-outlined text-primary">gavel</span> Rental Rules & Notes
@@ -125,7 +123,10 @@ export default function VehicleDetailsPage() {
                             </section>
                         )}
 
-                        <ReviewsSection />
+                        <ReviewsSection
+                            rating={vehicle.rating || 5}
+                            reviewsCount={vehicle.reviewsCount || 0}
+                        />
                     </div>
 
                     {/* Right Column: Booking Sidebar */}
@@ -133,12 +134,15 @@ export default function VehicleDetailsPage() {
                         <BookingWidget
                             price={vehicle.price}
                             reviews={vehicle.reviewsCount || 0}
-                            rating={vehicle.rating || 0}
+                            rating={vehicle.rating || 5}
                         />
                     </div>
                 </div>
 
-                <RelatedVehicles />
+                <RelatedVehicles
+                    category={vehicle.category}
+                    currentVehicleId={vehicle._id}
+                />
             </main>
         </div>
     );
