@@ -40,7 +40,7 @@ export default function VehicleCard({ id, title, description, price, image, cate
                 </div>
                 <div className="mt-auto flex items-end justify-between">
                     <div>
-                        <span className="text-2xl font-bold tracking-tighter text-white">${price}</span>
+                        <span className="text-2xl font-bold tracking-tighter text-white">৳{price}</span>
                         <span className="text-xs text-slate-500 ml-1 uppercase font-bold tracking-widest">/day</span>
                     </div>
                     <Link

@@ -24,5 +24,20 @@ export const vehicleService = {
     create: async (data: Partial<Vehicle>): Promise<Vehicle> => {
         const response = await api.post<Vehicle>("/vehicles", data);
         return response.data;
+    },
+
+    getReviews: async (vehicleId: string): Promise<any[]> => {
+        const response = await api.get(`/reviews/vehicle/${vehicleId}`);
+        return response.data;
+    },
+
+    submitReview: async (data: { vehicleId: string; rating: number; comment: string }): Promise<any> => {
+        const response = await api.post("/reviews", data);
+        return response.data;
+    },
+
+    getFeaturedReviews: async (): Promise<any[]> => {
+        const response = await api.get("/reviews/featured");
+        return response.data;
     }
 };

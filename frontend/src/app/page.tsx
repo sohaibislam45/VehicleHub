@@ -116,7 +116,7 @@ export default function HomePage() {
                                                         </div>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-primary font-bold text-2xl">${car.price}</p>
+                                                        <p className="text-primary font-bold text-2xl">৳{car.price}</p>
                                                         <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">/ Day</p>
                                                     </div>
                                                 </div>
@@ -182,7 +182,7 @@ export default function HomePage() {
                                                 <p className="text-slate-400 text-sm mt-1">{car.brand} {car.model} • {car.year}</p>
                                             </div>
                                             <div className="text-right">
-                                                <p className="text-primary font-bold text-xl">${car.price}</p>
+                                                <p className="text-primary font-bold text-xl">৳{car.price}</p>
                                                 <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest mt-1">Per Day</p>
                                             </div>
                                         </div>
@@ -324,7 +324,7 @@ export default function HomePage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
                     >
-                        <h2 className="text-3xl font-bold text-white mb-2">Global Elite Voice</h2>
+                        <h2 className="text-3xl font-bold text-white mb-2">Our Customers Voice</h2>
                         <p className="text-slate-400 mb-16">Trusted by innovators and leaders across 50 countries.</p>
                     </motion.div>
 

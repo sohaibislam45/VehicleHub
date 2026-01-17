@@ -152,7 +152,7 @@ export default function ExplorePage() {
                                 )}
                                 {(minPrice > 0 || maxPrice < 1000) && (
                                     <span className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-2 border border-primary/30">
-                                        ${minPrice} - ${maxPrice} <button
+                                        ৳{minPrice} - ৳{maxPrice} <button
                                             className="material-symbols-outlined text-[14px] cursor-pointer hover:bg-primary/20 rounded-full"
                                             onClick={() => updateFilters({ minPrice: 0, maxPrice: 1000 })}
                                         >close</button>

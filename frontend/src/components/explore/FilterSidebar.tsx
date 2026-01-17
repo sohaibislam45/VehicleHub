@@ -67,7 +67,7 @@ export default function FilterSidebar({ selectedCategory, onCategoryChange, pric
                         <div className="flex-1">
                             <label className="text-[10px] text-slate-500 uppercase font-bold mb-1 block">Min Price</label>
                             <div className="relative">
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">$</span>
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">৳</span>
                                 <input
                                     type="number"
                                     value={priceRange.min}
@@ -79,7 +79,7 @@ export default function FilterSidebar({ selectedCategory, onCategoryChange, pric
                         <div className="flex-1">
                             <label className="text-[10px] text-slate-500 uppercase font-bold mb-1 block">Max Price</label>
                             <div className="relative">
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">$</span>
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">৳</span>
                                 <input
                                     type="number"
                                     value={priceRange.max}
