@@ -25,7 +25,13 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(express.json());
+app.use((req, res, next) => {
+    if (req.originalUrl === '/api/bookings/webhook') {
+        next();
+    } else {
+        express.json()(req, res, next);
+    }
+});
 app.use(cors());
 app.use(helmet());
 if (process.env.NODE_ENV === 'development') {

@@ -1,11 +1,17 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
+import { vehicleService } from "@/services/vehicleService";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter, useParams } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 interface BookingWidgetProps {
     price: number;
     reviews: number;
     rating: number;
+    isConfirmed?: boolean;
+    confirmedBookingId?: string | null;
 }
 
 const DHAKA_LOCATIONS = [
@@ -21,12 +27,17 @@ const DHAKA_LOCATIONS = [
     "Banani / Kamal Ataturk Avenue"
 ];
 
-export default function BookingWidget({ price, reviews, rating }: BookingWidgetProps) {
+export default function BookingWidget({ price, reviews, rating, isConfirmed, confirmedBookingId }: BookingWidgetProps) {
     const today = new Date().toISOString().split('T')[0];
+    const { user } = useAuth();
+    const router = useRouter();
+    const params = useParams();
+    const vehicleId = params.id as string;
 
     const [startDate, setStartDate] = useState(today);
     const [endDate, setEndDate] = useState("");
     const [location, setLocation] = useState(DHAKA_LOCATIONS[0]);
+    const [isBooking, setIsBooking] = useState(false);
 
     // Calculate days between dates
     const days = useMemo(() => {
@@ -109,11 +120,64 @@ export default function BookingWidget({ price, reviews, rating }: BookingWidgetP
                 <span className="text-2xl font-bold text-primary">৳{total}</span>
             </div>
 
-            <button className="w-full py-4 rounded-2xl bg-primary text-background-dark font-black text-lg shadow-[0_0_20px_rgba(23,191,207,0.3)] hover:scale-[1.02] transition-transform active:scale-95 mb-4">
-                Confirm Booking
-            </button>
+            {isConfirmed ? (
+                <button
+                    disabled
+                    className="w-full py-4 rounded-2xl bg-green-500/20 text-green-500 border border-green-500/50 font-black text-lg cursor-not-allowed mb-4 flex items-center justify-center gap-2"
+                >
+                    <span className="material-symbols-outlined">check_circle</span>
+                    Confirmed
+                </button>
+            ) : (
+                <button
+                    onClick={async () => {
+                        if (!user) {
+                            toast.error("Please login to book a vehicle");
+                            router.push("/login");
+                            return;
+                        }
+
+                        if (!endDate) {
+                            toast.error("Please select an end date");
+                            return;
+                        }
+
+                        try {
+                            setIsBooking(true);
+                            const response = await vehicleService.createCheckoutSession({
+                                vehicleId,
+                                startDate,
+                                endDate,
+                                totalPrice: total,
+                                pickupLocation: location
+                            });
+
+                            if (response.url) {
+                                window.location.href = response.url;
+                            } else {
+                                throw new Error("Could not create payment session");
+                            }
+                        } catch (err: any) {
+                            console.error(err);
+                            toast.error(err.response?.data?.message || "Failed to initiate booking");
+                        } finally {
+                            setIsBooking(false);
+                        }
+                    }}
+                    disabled={isBooking}
+                    className="w-full py-4 rounded-2xl bg-primary text-background-dark font-black text-lg shadow-[0_0_20px_rgba(23,191,207,0.3)] hover:scale-[1.02] transition-transform active:scale-95 mb-4 disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2"
+                >
+                    {isBooking ? (
+                        <div className="w-6 h-6 border-4 border-background-dark border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                        "Confirm Booking"
+                    )}
+                </button>
+            )}
             <p className="text-center text-xs text-slate-500 px-4">
-                You won't be charged yet. Non-logged users will be redirected to the secure login portal.
+                {isConfirmed
+                    ? "Your booking has been secured. Our team will contact you shortly."
+                    : "You will be redirected to Stripe for secure payment processing."}
             </p>
         </div>
     );

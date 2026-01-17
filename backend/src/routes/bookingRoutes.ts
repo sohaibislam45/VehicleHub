@@ -1,5 +1,5 @@
 import express from 'express';
-import { createBooking, getMyBookings, updateBookingStatus } from '../controllers/bookingController.js';
+import { createBooking, getMyBookings, updateBookingStatus, createCheckoutSession, stripeWebhook } from '../controllers/bookingController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -9,6 +9,9 @@ router.route('/')
 
 router.route('/my')
     .get(protect, getMyBookings);
+
+router.post('/create-checkout-session', protect, createCheckoutSession);
+router.post('/webhook', express.raw({ type: 'application/json' }), stripeWebhook);
 
 router.route('/:id/status')
     .patch(protect, updateBookingStatus);

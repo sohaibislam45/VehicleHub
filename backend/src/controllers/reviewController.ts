@@ -50,10 +50,10 @@ export const createReview = async (req: AuthRequest, res: Response) => {
 export const getVehicleReviews = async (req: Request, res: Response) => {
     try {
         const { vehicleId } = req.params;
-        if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
+        if (!vehicleId || !mongoose.Types.ObjectId.isValid(vehicleId)) {
             return res.status(400).json({ message: 'Invalid vehicle ID' });
         }
-        const reviews = await Review.find({ vehicleId })
+        const reviews = await Review.find({ vehicleId: vehicleId as any })
             .populate('userId', 'name photoURL')
             .sort({ createdAt: -1 });
         res.json(reviews);

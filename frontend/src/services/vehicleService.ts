@@ -39,5 +39,15 @@ export const vehicleService = {
     getFeaturedReviews: async (): Promise<any[]> => {
         const response = await api.get("/reviews/featured");
         return response.data;
+    },
+
+    createCheckoutSession: async (data: { vehicleId: string; startDate: string; endDate: string; totalPrice: number; pickupLocation: string }): Promise<any> => {
+        const response = await api.post("/bookings/create-checkout-session", data);
+        return response.data;
+    },
+
+    getUserBookings: async (): Promise<any[]> => {
+        const response = await api.get("/bookings/my");
+        return response.data;
     }
 };

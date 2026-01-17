@@ -1,8 +1,10 @@
+import type { Request, Response } from 'express';
 import Booking from '../models/Booking.js';
 import Vehicle from '../models/Vehicle.js';
 import type { AuthRequest } from '../middleware/authMiddleware.js';
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
@@ -67,25 +69,28 @@ export const stripeWebhook = async (req: Request, res: Response) => {
     let event;
 
     try {
-        event = stripe.webhooks.constructEvent(req.body, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
+        event = stripe.webhooks.constructEvent(req.body, sig as string, process.env.STRIPE_WEBHOOK_SECRET!);
     } catch (err: any) {
+        console.error("Webhook Error:", err.message);
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
     if (event.type === 'checkout.session.completed') {
-        const session: any = event.data.object;
+        const session = event.data.object as Stripe.Checkout.Session;
         const bookingId = session.client_reference_id;
 
-        const booking = await Booking.findById(bookingId);
-        if (booking) {
-            booking.status = 'confirmed';
-            await booking.save();
+        if (bookingId && mongoose.Types.ObjectId.isValid(bookingId)) {
+            const booking = await Booking.findById(bookingId);
+            if (booking) {
+                booking.status = 'confirmed';
+                await booking.save();
 
-            // Update vehicle booking count
-            const vehicle = await Vehicle.findById(booking.vehicleId);
-            if (vehicle) {
-                vehicle.bookingCount = (vehicle.bookingCount || 0) + 1;
-                await vehicle.save();
+                // Update vehicle booking count
+                const vehicle = await Vehicle.findById(booking.vehicleId);
+                if (vehicle) {
+                    vehicle.bookingCount = (vehicle.bookingCount || 0) + 1;
+                    await vehicle.save();
+                }
             }
         }
     }

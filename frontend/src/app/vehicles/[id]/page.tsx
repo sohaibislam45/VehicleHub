@@ -5,14 +5,18 @@ import BookingWidget from "@/components/details/BookingWidget";
 import ReviewsSection from "@/components/details/ReviewsSection";
 import RelatedVehicles from "@/components/details/RelatedVehicles";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { vehicleService } from "@/services/vehicleService";
 import { Vehicle } from "@/types/vehicle";
+import { toast } from "react-hot-toast"; // assuming we want some feedback
 
 export default function VehicleDetailsPage() {
     const params = useParams();
+    const searchParams = useSearchParams();
     const id = params.id as string;
+    const isSuccess = searchParams.get('success') === 'true';
+    const confirmedBookingId = searchParams.get('bookingId');
 
     const [vehicle, setVehicle] = useState<Vehicle | null>(null);
     const [loading, setLoading] = useState(true);
@@ -135,6 +139,8 @@ export default function VehicleDetailsPage() {
                             price={vehicle.price}
                             reviews={vehicle.reviewsCount || 0}
                             rating={vehicle.rating || 5}
+                            isConfirmed={isSuccess}
+                            confirmedBookingId={confirmedBookingId}
                         />
                     </div>
                 </div>
