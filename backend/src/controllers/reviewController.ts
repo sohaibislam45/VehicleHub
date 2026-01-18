@@ -50,7 +50,7 @@ export const createReview = async (req: AuthRequest, res: Response) => {
 export const getVehicleReviews = async (req: Request, res: Response) => {
     try {
         const { vehicleId } = req.params;
-        if (!vehicleId || !mongoose.Types.ObjectId.isValid(vehicleId)) {
+        if (!vehicleId || !mongoose.Types.ObjectId.isValid(vehicleId as string)) {
             return res.status(400).json({ message: 'Invalid vehicle ID' });
         }
         const reviews = await Review.find({ vehicleId: vehicleId as any })

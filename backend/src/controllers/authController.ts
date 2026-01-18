@@ -26,7 +26,7 @@ export const syncUser = async (req: Request, res: Response) => {
         } else {
             // Update existing user with latest info from Firebase
             user.name = name || user.name;
-            user.photoURL = picture || user.photoURL;
+            user.photoURL = picture || user.photoURL || '';
             await user.save();
         }
 
