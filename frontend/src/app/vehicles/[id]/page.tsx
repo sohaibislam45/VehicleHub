@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
 import ImageGallery from "@/components/details/ImageGallery";
 import BookingWidget from "@/components/details/BookingWidget";

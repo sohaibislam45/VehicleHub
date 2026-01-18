@@ -1,0 +1,30 @@
+
+> frontend@0.1.0 build
+> next build
+
+▲ Next.js 16.1.2 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./src/app/globals.css:2682:8
+Parsing CSS source code failed
+[0m [90m 2680 |[39m
+ [90m 2681 |[39m [90m/* Import car loader styles */[39m
+[31m[1m>[22m[39m[90m 2682 |[39m [33m@[39m[36mimport[39m url([32m'../components/CarLoader.css'[39m)[33m;[39m
+ [90m      |[39m        [31m[1m^[22m[39m
+ [90m 2683 |[39m [33m.[39mplaceholder[37m[41m[1m\[22m[49m[39m[33m:[39mtext[33m-[39mslate[33m-[39m[35m500[39m[33m:[39m[33m:[39m[33m-[39mmoz[33m-[39mplaceholder {
+ [90m 2684 |[39m   [33m--[39mtw[33m-[39mtext[33m-[39mopacity[33m:[39m [35m1[39m[33m;[39m
+ [90m 2685 |[39m   color[33m:[39m rgb([35m100[39m [35m116[39m [35m139[39m [33m/[39m [36mvar[39m([33m--[39mtw[33m-[39mtext[33m-[39mopacity[33m,[39m [35m1[39m))[33m;[39m[0m
+
+@import rules must precede all rules aside from @charset and @layer statements
+
+Import trace:
+  Client Component Browser:
+    ./src/app/globals.css [Client Component Browser]
+    ./src/app/layout.tsx [Server Component]
+
+
+    at <unknown> (./src/app/globals.css:2682:8)

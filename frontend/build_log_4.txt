@@ -1,0 +1,32 @@
+
+> frontend@0.1.0 build
+> next build
+
+⚠ `eslint` configuration in next.config.mjs is no longer supported. See more info here: https://nextjs.org/docs/app/api-reference/cli/next#next-lint-options
+⚠ Invalid next.config.mjs options detected: 
+⚠     Unrecognized key(s) in object: 'eslint'
+⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+▲ Next.js 16.1.2 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.5s
+  Skipping validation of types
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/23) ...
+  Generating static pages using 11 workers (5/23) 
+  Generating static pages using 11 workers (11/23) 
+⨯ useSearchParams() should be wrapped in a suspense boundary at page "/payment/canceled". Read more: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+    at Q (C:\Projects\VehicleHub\frontend\.next\server\chunks\ssr\node_modules_next_920e7746._.js:2:2111)
+    at o (C:\Projects\VehicleHub\frontend\.next\server\chunks\ssr\node_modules_next_920e7746._.js:4:5284)
+    at f (C:\Projects\VehicleHub\frontend\.next\server\chunks\ssr\[root-of-the-server]__3e2f70c9._.js:1:827)
+    at an (C:\Projects\VehicleHub\frontend\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:2:84360)
+    at ai (C:\Projects\VehicleHub\frontend\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:2:86179)
+    at al (C:\Projects\VehicleHub\frontend\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:2:107953)
+    at as (C:\Projects\VehicleHub\frontend\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:2:105368)
+    at aa (C:\Projects\VehicleHub\frontend\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:2:84712)
+    at ai (C:\Projects\VehicleHub\frontend\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:2:86228)
+    at ai (C:\Projects\VehicleHub\frontend\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.prod.js:2:104708)
+Error occurred prerendering page "/payment/canceled". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /payment/canceled/page: /payment/canceled, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null

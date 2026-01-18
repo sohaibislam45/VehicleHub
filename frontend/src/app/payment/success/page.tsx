@@ -1,11 +1,12 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const vehicleId = searchParams.get("vehicleId");
@@ -60,5 +61,17 @@ export default function PaymentSuccessPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function PaymentSuccessPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-background-dark flex items-center justify-center layout-padding">
+                 <div className="text-white">Loading...</div>
+            </div>
+        }>
+            <PaymentSuccessContent />
+        </Suspense>
     );
 }

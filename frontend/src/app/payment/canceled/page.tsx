@@ -1,10 +1,12 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Suspense } from "react";
 
-export default function PaymentCanceledPage() {
+function PaymentCanceledContent() {
     const searchParams = useSearchParams();
     const vehicleId = searchParams.get("vehicleId");
 
@@ -42,5 +44,17 @@ export default function PaymentCanceledPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function PaymentCanceledPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-background-dark flex items-center justify-center layout-padding">
+                <div className="text-white">Loading...</div>
+            </div>
+        }>
+            <PaymentCanceledContent />
+        </Suspense>
     );
 }

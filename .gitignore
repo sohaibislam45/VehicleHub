@@ -44,3 +44,4 @@ VehicleHub/
 
 # Secrets
 backend/vehiclehub.json
+.vercel

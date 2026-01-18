@@ -7,7 +7,7 @@ interface CarLoaderProps {
 
 const CarLoader: React.FC<CarLoaderProps> = ({ fullScreen = false }) => {
     const containerClass = fullScreen
-        ? "fixed inset-0 z-50 flex items-center justify-center bg-[#121416]/90 backdrop-blur-sm"
+        ? "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
         : "flex items-center justify-center";
 
     return (

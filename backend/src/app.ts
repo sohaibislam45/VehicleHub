@@ -1,0 +1,42 @@
+import express from 'express';
+import type { Request, Response } from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
+import authRoutes from './routes/authRoutes.js';
+import vehicleRoutes from './routes/vehicleRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
+
+dotenv.config();
+
+const app = express();
+
+// Middleware
+app.use(express.json({
+    verify: (req: any, res, buf) => {
+        if (req.originalUrl.includes('/webhook')) {
+            req.rawBody = buf;
+        }
+    }
+}));
+app.use(cors());
+app.use(helmet());
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
+
+// Routes
+app.use('/api/admin', adminRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/reviews', reviewRoutes);
+
+app.get('/', (req: Request, res: Response) => {
+    res.send('VehicleHub API is running...');
+});
+
+export default app;

@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import FilterSidebar from "@/components/explore/FilterSidebar";
 import VehicleCard from "@/components/explore/VehicleCard";
 import CardSkeleton from "@/components/explore/CardSkeleton";
@@ -8,7 +9,7 @@ import { vehicleService } from "@/services/vehicleService";
 import { Vehicle } from "@/types/vehicle";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
-export default function ExplorePage() {
+function ExploreContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
@@ -219,5 +220,23 @@ export default function ExplorePage() {
                 </div>
             </main>
         </div>
+    );
+}
+
+export default function ExplorePage() {
+    return (
+        <Suspense fallback={
+            <div className="bg-background-dark min-h-screen py-8">
+               <div className="max-w-[1440px] mx-auto layout-padding">
+                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+                        {[1, 2, 3, 4].map((i) => (
+                             <CardSkeleton key={i} />
+                        ))}
+                   </div>
+               </div>
+            </div>
+        }>
+            <ExploreContent />
+        </Suspense>
     );
 }
