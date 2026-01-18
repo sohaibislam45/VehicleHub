@@ -4,6 +4,8 @@ import { useState, useEffect, useMemo } from "react";
 import { vehicleService } from "@/services/vehicleService";
 import { useParams } from "next/navigation";
 
+import { useSweetAlert } from "@/hooks/useSweetAlert";
+
 interface Review {
     _id: string;
     userId: {
@@ -24,6 +26,7 @@ interface ReviewsSectionProps {
 export default function ReviewsSection({ rating: initialRating, reviewsCount: initialCount }: ReviewsSectionProps) {
     const params = useParams();
     const vehicleId = params.id as string;
+    const { showSuccess, showError } = useSweetAlert();
 
     const [showForm, setShowForm] = useState(false);
     const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
@@ -82,9 +85,10 @@ export default function ReviewsSection({ rating: initialRating, reviewsCount: in
             setNewReview({ rating: 5, comment: "" });
             setShowForm(false);
             fetchReviews(); // Refresh list
+            showSuccess("Review Submitted", "Thank you for sharing your experience!");
         } catch (err) {
             console.error("Failed to submit review", err);
-            alert("Failed to submit review. Please ensure you are logged in.");
+            showError("Submission Failed", "Failed to submit review. Please ensure you are logged in.");
         }
     };
 

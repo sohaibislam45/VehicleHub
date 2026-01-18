@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { Eye, EyeOff } from "lucide-react";
 import * as z from "zod";
+import { useSweetAlert } from "@/hooks/useSweetAlert";
 
 const loginSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -34,9 +35,9 @@ export default function LoginPage() {
 function LoginContent() {
     const router = useRouter();
     const { user } = useAuth();
-    const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const { showError, showSuccess, showLoading, closeLoading, showToast } = useSweetAlert();
 
     const {
         register,
@@ -76,9 +77,13 @@ function LoginContent() {
 
     const onSubmit = async (data: LoginFormValues) => {
         setLoading(true);
-        setError(null);
+        // We can use showLoading if we want a full screen loader, or keep the button loader.
+        // Let's use the button loader for the initial "signing in" feedback, 
+        // but rely on SweetAlert for errors.
+        
         try {
             const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
+            showToast('success', 'Successfully logged in!');
             // Wait a moment for AuthContext to sync user data
             await new Promise(resolve => setTimeout(resolve, 500));
             // Only redirect admins to dashboard, regular users stay on current page
@@ -87,9 +92,9 @@ function LoginContent() {
             console.error("Login error:", err);
             // Customize error messages based on Firebase error codes if needed
             if (err.code === 'auth/invalid-login-credentials' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-                setError("Invalid email or password.");
+                showError("Login Failed", "Invalid email or password.");
             } else {
-                setError("Failed to sign in. Please try again.");
+                showError("Login Failed", "Failed to sign in. Please try again.");
             }
         } finally {
             setLoading(false);
@@ -98,15 +103,15 @@ function LoginContent() {
 
     const handleGoogleLogin = async () => {
         setLoading(true);
-        setError(null);
         try {
             await signInWithPopup(auth, googleProvider);
+            showToast('success', 'Successfully logged in with Google!');
             // Wait a moment for AuthContext to sync user data
             await new Promise(resolve => setTimeout(resolve, 500));
             // Only redirect admins to dashboard, regular users stay on current page
         } catch (err: any) {
             console.error("Google login error:", err);
-            setError("Failed to sign in with Google.");
+            showError("Google Login Failed", "Failed to sign in with Google.");
         } finally {
             setLoading(false);
         }
@@ -126,12 +131,6 @@ function LoginContent() {
                         <h1 className="text-3xl font-bold text-slate-100 mb-2">Welcome Back</h1>
                         <p className="text-slate-400">Sign in to access your premium dashboard.</p>
                     </div>
-
-                    {error && (
-                        <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
-                            {error}
-                        </div>
-                    )}
 
                     <button
                         onClick={handleGoogleLogin}

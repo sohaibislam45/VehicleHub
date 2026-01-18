@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import Pagination from "@/components/dashboard/Pagination";
+import { useSweetAlert } from "@/hooks/useSweetAlert";
 
 interface User {
     _id: string;
@@ -22,6 +23,7 @@ export default function ManageUsersPage() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+    const { showConfirm, showSuccess, showError } = useSweetAlert();
     const itemsPerPage = 10;
 
     useEffect(() => {
@@ -39,38 +41,67 @@ export default function ManageUsersPage() {
     }, []);
 
     const handleRoleChange = async (userId: string, newRole: string) => {
-        if (!window.confirm(`Are you sure you want to change this user's role to ${newRole}?`)) return;
+        const confirmed = await showConfirm(
+            "Change User Role?",
+            `Are you sure you want to change this user's role to ${newRole}?`,
+            "Yes, Change Role",
+            "Cancel"
+        );
+        
+        if (!confirmed) return;
+
         try {
             const response = await api.patch(`/admin/users/${userId}/role`, { role: newRole });
             setUsers(users.map(u => u._id === userId ? { ...u, role: response.data.role } : u));
+            showSuccess("Role Updated", `User role has been updated to ${newRole}.`);
         } catch (error) {
             console.error("Error updating role:", error);
-            alert("Failed to update user role");
+            showError("Update Failed", "Failed to update user role. Please try again.");
         }
     };
 
     const toggleStatus = async (userId: string, currentStatus: string) => {
         const newStatus = currentStatus === 'enabled' ? 'disabled' : 'enabled';
-        if (!window.confirm(`Are you sure you want to ${newStatus === 'enabled' ? 'enable' : 'disable'} this user?`)) return;
+        const action = newStatus === 'enabled' ? 'enable' : 'disable';
+        
+        const confirmed = await showConfirm(
+            `${action.charAt(0).toUpperCase() + action.slice(1)} User?`,
+            `Are you sure you want to ${action} this user?`,
+            `Yes, ${action.charAt(0).toUpperCase() + action.slice(1)}`,
+            "Cancel"
+        );
+
+        if (!confirmed) return;
 
         try {
             const response = await api.patch(`/admin/users/${userId}/status`, { status: newStatus });
             setUsers(users.map(u => u._id === userId ? { ...u, status: response.data.status } : u));
+            showSuccess("Status Updated", `User has been ${newStatus}.`);
         } catch (error) {
             console.error("Error updating status:", error);
-            alert("Failed to update user status");
+            showError("Update Failed", "Failed to update user status. Please try again.");
         }
     };
 
     const handleDelete = async (userId: string) => {
         if (userId === currentUser?._id) return;
-        if (!window.confirm("Are you sure you want to PERMANENTLY delete this user? This cannot be undone.")) return;
+        
+        const confirmed = await showConfirm(
+            "Delete User Permanently?",
+            "Are you sure you want to PERMANENTLY delete this user? This action cannot be undone.",
+            "Yes, Delete User",
+            "Cancel"
+        );
+
+        if (!confirmed) return;
+
         try {
             await api.delete(`/admin/users/${userId}`);
             setUsers(users.filter(u => u._id !== userId));
+            showSuccess("User Deleted", "User has been permanently removed.");
         } catch (error) {
             console.error("Error deleting user:", error);
-            alert("Failed to delete user");
+            showError("Delete Failed", "Failed to delete user. Please try again.");
         }
     };
 

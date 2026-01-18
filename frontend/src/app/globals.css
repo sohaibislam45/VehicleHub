@@ -63,3 +63,100 @@
   --accent-orange: 240 101 32;
   --border-dark: 45 51 57;
 }
+
+/* SweetAlert2 Custom Styles */
+.swal-custom-popup {
+  border: 1px solid #2d3339 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+.swal-custom-title {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+}
+
+.swal-custom-html {
+  color: #d1d5db !important;
+  font-size: 0.95rem !important;
+}
+
+.swal-custom-confirm {
+  background: linear-gradient(135deg, #17bfcf 0%, #0ea5b5 100%) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 10px 24px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(23, 191, 207, 0.3) !important;
+}
+
+.swal-custom-confirm:hover {
+  background: linear-gradient(135deg, #0ea5b5 0%, #0c8a98 100%) !important;
+  box-shadow: 0 6px 16px rgba(23, 191, 207, 0.4) !important;
+  transform: translateY(-1px) !important;
+}
+
+.swal-custom-cancel {
+  background: #2d3339 !important;
+  border: 1px solid #3d4349 !important;
+  border-radius: 8px !important;
+  padding: 10px 24px !important;
+  font-weight: 500 !important;
+  color: #ffffff !important;
+  transition: all 0.3s ease !important;
+}
+
+.swal-custom-cancel:hover {
+  background: #3d4349 !important;
+  border-color: #4d5359 !important;
+}
+
+.swal-toast-popup {
+  border: 1px solid #2d3339 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+.swal-show-animation {
+  animation: swalSlideIn 0.3s ease-out !important;
+}
+
+.swal-hide-animation {
+  animation: swalSlideOut 0.2s ease-in !important;
+}
+
+@keyframes swalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes swalSlideOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* Car Loader in SweetAlert */
+.swal-car-loader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  transform: scale(0.6);
+}
+
+/* Import car loader styles */
+@import url('../components/CarLoader.css');
+

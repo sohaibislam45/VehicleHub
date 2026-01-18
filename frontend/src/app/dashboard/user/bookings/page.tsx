@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
+import { useSweetAlert } from "@/hooks/useSweetAlert";
 
 interface Booking {
     _id: string;
@@ -19,6 +20,7 @@ interface Booking {
 export default function MyBookingsPage() {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
+    const { showToast } = useSweetAlert();
 
     useEffect(() => {
         fetchBookings();
@@ -123,7 +125,7 @@ export default function MyBookingsPage() {
                                 <button
                                     onClick={() => {
                                         navigator.clipboard.writeText(booking._id);
-                                        alert('Booking ID copied to clipboard!');
+                                        showToast('success', 'Booking ID copied to clipboard!');
                                     }}
                                     className="p-3 rounded-lg border border-border-dark text-slate-400 hover:text-white hover:bg-surface-dark transition-all"
                                     title="Copy Booking ID"

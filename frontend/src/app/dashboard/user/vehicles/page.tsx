@@ -5,15 +5,14 @@ import Link from "next/link";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { Vehicle } from "@/types/vehicle";
+import { useSweetAlert } from "@/hooks/useSweetAlert";
 
 export default function MyVehiclesPage() {
     const { user } = useAuth();
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [loading, setLoading] = useState(true);
-    const [deleteModal, setDeleteModal] = useState<{ show: boolean; vehicle: Vehicle | null }>({
-        show: false,
-        vehicle: null,
-    });
+    const { showConfirm, showSuccess, showError, showLoading, closeLoading } = useSweetAlert();
+    
     const [statsModal, setStatsModal] = useState<{ show: boolean; vehicle: Vehicle | null }>({
         show: false,
         vehicle: null,
@@ -38,16 +37,26 @@ export default function MyVehiclesPage() {
         }
     };
 
-    const handleDelete = async () => {
-        if (!deleteModal.vehicle) return;
+    const handleDelete = async (vehicle: Vehicle) => {
+        const confirmed = await showConfirm(
+            "Delete Vehicle?",
+            `Are you sure you want to remove "${vehicle.title}"? This action cannot be undone.`,
+            "Yes, Delete It",
+            "Cancel"
+        );
 
+        if (!confirmed) return;
+
+        showLoading("Deleting Vehicle", "Removing your listing...");
         try {
-            await api.delete(`/vehicles/${deleteModal.vehicle._id}`);
-            setVehicles(vehicles.filter((v) => v._id !== deleteModal.vehicle!._id));
-            setDeleteModal({ show: false, vehicle: null });
+            await api.delete(`/vehicles/${vehicle._id}`);
+            setVehicles(vehicles.filter((v) => v._id !== vehicle._id));
+            closeLoading();
+            showSuccess("Vehicle Deleted", "Your listing has been removed successfully.");
         } catch (error) {
             console.error("Error deleting vehicle:", error);
-            alert("Failed to delete vehicle");
+            closeLoading();
+            showError("Delete Failed", "Failed to delete vehicle. Please try again.");
         }
     };
 
@@ -175,7 +184,7 @@ export default function MyVehiclesPage() {
                                                     <span className="material-symbols-outlined text-[20px]">edit</span>
                                                 </Link>
                                                 <button
-                                                    onClick={() => setDeleteModal({ show: true, vehicle })}
+                                                    onClick={() => handleDelete(vehicle)}
                                                     className="size-9 rounded-lg flex items-center justify-center border border-border-dark text-slate-400 hover:text-red-500 hover:border-red-500/50 transition-all"
                                                 >
                                                     <span className="material-symbols-outlined text-[20px]">delete</span>
@@ -189,39 +198,6 @@ export default function MyVehiclesPage() {
                     </table>
                 </div>
             </div>
-
-            {/* Delete Confirmation Modal */}
-            {deleteModal.show && deleteModal.vehicle && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background-dark/80 backdrop-blur-sm">
-                    <div className="bg-surface-dark border border-border-dark w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-                        <div className="p-8">
-                            <div className="size-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mb-6 mx-auto">
-                                <span className="material-symbols-outlined text-3xl">warning</span>
-                            </div>
-                            <h3 className="text-2xl font-bold text-white text-center mb-2">Delete Vehicle?</h3>
-                            <p className="text-slate-400 text-center mb-8">
-                                This action will permanently remove <span className="text-white font-bold">{deleteModal.vehicle.title}</span> from your listings. This cannot be undone.
-                            </p>
-                            <div className="flex flex-col gap-3">
-                                <button
-                                    onClick={handleDelete}
-                                    className="w-full py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition-colors"
-                                >
-                                    Delete Listing
-                                </button>
-                                <button
-                                    onClick={() => setDeleteModal({ show: false, vehicle: null })}
-                                    className="w-full py-3 bg-transparent text-slate-400 font-bold rounded-xl hover:text-white transition-colors border border-transparent hover:border-border-dark"
-                                >
-                                    Cancel, Keep It
-                                </button>
-                                {/* Stats Modal */}
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {/* Stats Modal */}
             {statsModal.show && statsModal.vehicle && (

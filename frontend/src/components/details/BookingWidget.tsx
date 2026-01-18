@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { vehicleService } from "@/services/vehicleService";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, useParams } from "next/navigation";
-import { toast } from "react-hot-toast";
+import { useSweetAlert } from "@/hooks/useSweetAlert";
 
 interface BookingWidgetProps {
     price: number;
@@ -33,6 +33,7 @@ export default function BookingWidget({ price, reviews, rating, isConfirmed, con
     const router = useRouter();
     const params = useParams();
     const vehicleId = params.id as string;
+    const { showError, showLoading, closeLoading } = useSweetAlert();
 
     const [startDate, setStartDate] = useState(today);
     const [endDate, setEndDate] = useState("");
@@ -132,18 +133,20 @@ export default function BookingWidget({ price, reviews, rating, isConfirmed, con
                 <button
                     onClick={async () => {
                         if (!user) {
-                            toast.error("Please login to book a vehicle");
+                            showError("Login Required", "Please login to book a vehicle");
                             router.push("/login");
                             return;
                         }
 
                         if (!endDate) {
-                            toast.error("Please select an end date");
+                            showError("Date Required", "Please select an end date");
                             return;
                         }
 
                         try {
                             setIsBooking(true);
+                            showLoading("Initiating Booking", "Preparing your secure checkout session...");
+                            
                             const response = await vehicleService.createCheckoutSession({
                                 vehicleId,
                                 startDate,
@@ -159,16 +162,21 @@ export default function BookingWidget({ price, reviews, rating, isConfirmed, con
                             }
                         } catch (err: any) {
                             console.error(err);
-                            toast.error(err.response?.data?.message || "Failed to initiate booking");
+                            closeLoading();
+                            showError("Booking Failed", err.response?.data?.message || "Failed to initiate booking");
                         } finally {
                             setIsBooking(false);
+                            // Safety check
+                            if (!window.location.href.includes('stripe')) {
+                                closeLoading(); 
+                            }
                         }
                     }}
                     disabled={isBooking}
                     className="w-full py-4 rounded-2xl bg-primary text-background-dark font-black text-lg shadow-[0_0_20px_rgba(23,191,207,0.3)] hover:scale-[1.02] transition-transform active:scale-95 mb-4 disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2"
                 >
                     {isBooking ? (
-                        <div className="w-6 h-6 border-4 border-background-dark border-t-transparent rounded-full animate-spin"></div>
+                        "Processing..."
                     ) : (
                         "Confirm Booking"
                     )}

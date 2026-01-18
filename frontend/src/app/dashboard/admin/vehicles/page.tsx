@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import Pagination from "@/components/dashboard/Pagination";
+import { useSweetAlert } from "@/hooks/useSweetAlert";
 
 interface Vehicle {
     _id: string;
@@ -24,6 +25,7 @@ export default function ManageVehiclesPage() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+    const { showConfirm, showSuccess, showError } = useSweetAlert();
     const itemsPerPage = 10;
 
     useEffect(() => {
@@ -41,13 +43,22 @@ export default function ManageVehiclesPage() {
     }, []);
 
     const handleDelete = async (id: string) => {
-        if (!window.confirm("Are you sure you want to delete this vehicle? This action cannot be undone.")) return;
+        const confirmed = await showConfirm(
+            "Delete Vehicle?",
+            "Are you sure you want to delete this vehicle listing? This action cannot be undone.",
+            "Yes, Delete Vehicle",
+            "Cancel"
+        );
+
+        if (!confirmed) return;
+
         try {
             await api.delete(`/vehicles/${id}`);
             setVehicles(vehicles.filter(v => v._id !== id));
+            showSuccess("Vehicle Deleted", "The vehicle listing has been permanently removed.");
         } catch (error) {
             console.error("Error deleting vehicle:", error);
-            alert("Failed to delete vehicle");
+            showError("Delete Failed", "Failed to delete vehicle. Please try again.");
         }
     };
 

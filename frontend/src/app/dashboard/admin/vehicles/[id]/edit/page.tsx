@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { uploadMultipleToImgBB } from "@/services/imgbbService";
 import api from "@/lib/api";
+import { useSweetAlert } from "@/hooks/useSweetAlert";
 
 const DHAKA_LOCATIONS = [
     "Gulshan Circle 1",
@@ -22,6 +23,7 @@ export default function EditVehiclePage() {
     const router = useRouter();
     const params = useParams();
     const vehicleId = params.id as string;
+    const { showError, showSuccess, showWarning, showLoading, closeLoading, showToast } = useSweetAlert();
 
     const [loading, setLoading] = useState(false);
     const [fetchingVehicle, setFetchingVehicle] = useState(true);
@@ -72,7 +74,7 @@ export default function EditVehiclePage() {
                 setUploadedImages(vehicle.images || []);
             } catch (error) {
                 console.error("Error fetching vehicle:", error);
-                alert("Failed to load vehicle data");
+                showError("Load Failed", "Failed to load vehicle data. Please try again.");
                 router.push("/dashboard/admin/vehicles");
             } finally {
                 setFetchingVehicle(false);
@@ -80,7 +82,7 @@ export default function EditVehiclePage() {
         };
 
         fetchVehicle();
-    }, [vehicleId, router]);
+    }, [vehicleId, router, showError]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -91,12 +93,17 @@ export default function EditVehiclePage() {
         if (!files || files.length === 0) return;
 
         setUploadingImages(true);
+        showLoading("Uploading Images", "Processing vehicle photos...");
+        
         try {
             const fileArray = Array.from(files);
             const urls = await uploadMultipleToImgBB(fileArray);
             setUploadedImages([...uploadedImages, ...urls]);
+            closeLoading();
+            showToast('success', `${urls.length} images uploaded`);
         } catch (error) {
-            alert("Failed to upload images. Please try again.");
+            closeLoading();
+            showError("Upload Failed", "Failed to upload images. Please check your connection and try again.");
         } finally {
             setUploadingImages(false);
         }
@@ -110,11 +117,13 @@ export default function EditVehiclePage() {
         e.preventDefault();
 
         if (uploadedImages.length < 3) {
-            alert("Please upload at least 3 images");
+            showWarning("More Photos Needed", "Please keep at least 3 images to showcase the vehicle.");
             return;
         }
 
         setLoading(true);
+        showLoading("Updating Vehicle", "Saving listing changes...");
+        
         try {
             await api.patch(`/vehicles/${vehicleId}`, {
                 ...formData,
@@ -124,10 +133,13 @@ export default function EditVehiclePage() {
                 seats: formData.seats ? parseInt(formData.seats) : undefined,
             });
 
+            closeLoading();
+            showSuccess("Vehicle Updated", "Vehicle listing has been successfully updated.");
             router.push("/dashboard/admin/vehicles");
         } catch (error: any) {
             console.error("Error updating vehicle:", error);
-            alert(error.response?.data?.message || "Failed to update vehicle");
+            closeLoading();
+            showError("Update Failed", error.response?.data?.message || "Failed to update vehicle details. Please try again.");
         } finally {
             setLoading(false);
         }

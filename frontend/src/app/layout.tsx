@@ -4,7 +4,6 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Toaster } from "react-hot-toast";
 
 const spaceGrotesk = Space_Grotesk({
     subsets: ["latin"],
@@ -32,7 +31,6 @@ export default function RootLayout({
                     <Navbar />
                     <main className="min-h-screen bg-[#121416] font-sans">{children}</main>
                     <Footer />
-                    <Toaster position="bottom-right" />
                 </AuthProvider>
             </body>
         </html>

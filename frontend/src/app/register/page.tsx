@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { Eye, EyeOff } from "lucide-react";
 import * as z from "zod";
+import { useSweetAlert } from "@/hooks/useSweetAlert";
 
 const registerSchema = z.object({
     fullName: z.string().min(2, "Full name must be at least 2 characters"),
@@ -25,10 +26,10 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
     const router = useRouter();
-    const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const { showError, showSuccess, showToast } = useSweetAlert();
 
     const {
         register,
@@ -40,22 +41,21 @@ export default function RegisterPage() {
 
     const onSubmit = async (data: RegisterFormValues) => {
         setLoading(true);
-        setError(null);
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
             await updateProfile(userCredential.user, {
                 displayName: data.fullName,
             });
-            // Optional: Sync user to your DB here if needed
+            showToast('success', 'Account created successfully!');
             router.push("/dashboard/user");
         } catch (err: any) {
             console.error("Registration error:", err);
             if (err.code === 'auth/email-already-in-use') {
-                setError("Email is already in use.");
+                showError("Registration Failed", "Email is already in use.");
             } else if (err.code === 'auth/weak-password') {
-                setError("Password is too weak.");
+                showError("Registration Failed", "Password is too weak.");
             } else {
-                setError("Failed to create account. Please try again.");
+                showError("Registration Failed", "Failed to create account. Please try again.");
             }
         } finally {
             setLoading(false);
@@ -64,13 +64,13 @@ export default function RegisterPage() {
 
     const handleGoogleLogin = async () => {
         setLoading(true);
-        setError(null);
         try {
             await signInWithPopup(auth, googleProvider);
+            showToast('success', 'Successfully signed in with Google!');
             router.push("/dashboard/user");
         } catch (err: any) {
             console.error("Google login error:", err);
-            setError("Failed to sign in with Google.");
+            showError("Google Login Failed", "Failed to sign in with Google.");
         } finally {
             setLoading(false);
         }
@@ -90,12 +90,6 @@ export default function RegisterPage() {
                         <h1 className="text-3xl font-bold text-slate-100 mb-2">Create Account</h1>
                         <p className="text-slate-400">Join the elite community of modern explorers.</p>
                     </div>
-
-                    {error && (
-                        <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
-                            {error}
-                        </div>
-                    )}
 
                     <button
                         onClick={handleGoogleLogin}

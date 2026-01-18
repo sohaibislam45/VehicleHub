@@ -4,10 +4,13 @@ import { useState, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
 import { uploadToImgBB } from "@/services/imgbbService";
+import { useSweetAlert } from "@/hooks/useSweetAlert";
 
 export default function ProfileForm() {
     const { user, setUser } = useAuth();
+    const { showSuccess, showError, showLoading, closeLoading } = useSweetAlert();
     const [isEditing, setIsEditing] = useState(false);
+    // keeping local states for button disabling if needed, though loader covers screen
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -22,6 +25,7 @@ export default function ProfileForm() {
 
     const handleSave = async () => {
         setLoading(true);
+        showLoading("Updating Profile", "Please wait while we save your changes...");
         try {
             const response = await api.patch('/auth/profile', {
                 displayName: formData.name,
@@ -33,9 +37,12 @@ export default function ProfileForm() {
             // Update local user context
             setUser({ ...user, ...response.data });
             setIsEditing(false);
+            closeLoading();
+            showSuccess("Profile Updated", "Your profile has been updated successfully.");
         } catch (error) {
             console.error("Error updating profile:", error);
-            alert("Failed to update profile. Please try again.");
+            closeLoading();
+            showError("Update Failed", "Failed to update profile. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -52,12 +59,16 @@ export default function ProfileForm() {
         if (!file) return;
 
         setUploading(true);
+        showLoading("Uploading Photo", "Optimizing and uploading your profile picture...");
         try {
             const url = await uploadToImgBB(file);
             setFormData(prev => ({ ...prev, photoURL: url }));
+            closeLoading();
+            showSuccess("Photo Uploaded", "Your profile picture has been uploaded.");
         } catch (error) {
             console.error("Error uploading photo:", error);
-            alert("Failed to upload photo.");
+            closeLoading();
+            showError("Upload Failed", "Failed to upload photo. Please check your connection and try again.");
         } finally {
             setUploading(false);
         }

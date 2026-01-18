@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import Pagination from "@/components/dashboard/Pagination";
+import { useSweetAlert } from "@/hooks/useSweetAlert";
 
 interface Booking {
     _id: string;
@@ -27,6 +28,7 @@ export default function ManageBookingsPage() {
     const [loading, setLoading] = useState(true);
     const [filterStatus, setFilterStatus] = useState("all");
     const [currentPage, setCurrentPage] = useState(1);
+    const { showConfirm, showSuccess, showError } = useSweetAlert();
     const itemsPerPage = 10;
 
     useEffect(() => {
@@ -44,12 +46,22 @@ export default function ManageBookingsPage() {
     }, []);
 
     const handleStatusChange = async (bookingId: string, newStatus: string) => {
+        const confirmed = await showConfirm(
+            "Change Booking Status?",
+            `Are you sure you want to change this booking status to ${newStatus.toUpperCase()}?`,
+            `Yes, Mark as ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`,
+            "Cancel"
+        );
+
+        if (!confirmed) return;
+
         try {
             await api.patch(`/bookings/${bookingId}/status`, { status: newStatus });
             setBookings(bookings.map(b => b._id === bookingId ? { ...b, status: newStatus } : b));
+            showSuccess("Status Updated", `Booking status has been updated to ${newStatus}.`);
         } catch (error) {
             console.error("Error updating status:", error);
-            alert("Failed to update booking status");
+            showError("Update Failed", "Failed to update booking status. Please try again.");
         }
     };
 

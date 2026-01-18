@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { uploadMultipleToImgBB } from "@/services/imgbbService";
 import api from "@/lib/api";
+import { useSweetAlert } from "@/hooks/useSweetAlert";
 
 const DHAKA_LOCATIONS = [
     "Gulshan Circle 1",
@@ -20,6 +21,7 @@ const DHAKA_LOCATIONS = [
 
 export default function AddVehiclePage() {
     const router = useRouter();
+    const { showError, showSuccess, showWarning, showLoading, closeLoading, showToast } = useSweetAlert();
     const [loading, setLoading] = useState(false);
     const [uploadingImages, setUploadingImages] = useState(false);
     const [uploadedImages, setUploadedImages] = useState<string[]>([]);
@@ -51,12 +53,16 @@ export default function AddVehiclePage() {
         if (!files || files.length === 0) return;
 
         setUploadingImages(true);
+        showLoading("Uploading Images", "Processing your photos...");
         try {
             const fileArray = Array.from(files);
             const urls = await uploadMultipleToImgBB(fileArray);
             setUploadedImages([...uploadedImages, ...urls]);
+            closeLoading();
+            showToast('success', `${urls.length} images uploaded!`);
         } catch (error) {
-            alert("Failed to upload images. Please try again.");
+            closeLoading();
+            showError("Upload Failed", "Failed to upload images. Please check your connection and try again.");
         } finally {
             setUploadingImages(false);
         }
@@ -70,11 +76,12 @@ export default function AddVehiclePage() {
         e.preventDefault();
 
         if (uploadedImages.length < 3) {
-            alert("Please upload at least 3 images");
+            showWarning("More Photos Needed", "Please upload at least 3 images to showcase your vehicle.");
             return;
         }
 
         setLoading(true);
+        showLoading("Creating Listing", "Adding your vehicle to our fleet...");
         try {
             await api.post("/vehicles", {
                 ...formData,
@@ -85,10 +92,13 @@ export default function AddVehiclePage() {
                 status: "active",
             });
 
+            closeLoading();
+            showSuccess("Vehicle Listed!", "Your vehicle has been successfully added to your fleet.");
             router.push("/dashboard/user/vehicles");
         } catch (error: any) {
             console.error("Error creating vehicle:", error);
-            alert(error.response?.data?.message || "Failed to create vehicle");
+            closeLoading();
+            showError("Listing Failed", error.response?.data?.message || "Failed to create vehicle listing. Please try again.");
         } finally {
             setLoading(false);
         }
